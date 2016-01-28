@@ -1699,12 +1699,12 @@
                                                                                     //  alert("columns "+columns.toSource());    
                                                                                     var dataAdapterItemMaster = new $.jqx.dataAdapter(potential_source);
 
-                                                                                    /*var cellvaluechanging = function (row, datafield, columntype, oldvalue, newvalue) {
-                                                                                                    if (newvalue < oldvalue)
-                                                                                                        { alert("Revised Potential should be greater than the actual potential");
+                                                                                    var cellvaluechanging = function (row, datafield, columntype, oldvalue, newvalue) {
+                                                                                                    if (newvalue =="")
+                                                                                                        { alert("Revised Potential cannot be a Null value");
                                                                                                             return oldvalue;
                                                                                                         }
-                                                                                                    }*/
+                                                                                                    }
                                                                                     $("#jqxgrid_productpotential").jqxGrid(
                                                                                             {
                                                                                                 width: '100%',
@@ -1791,9 +1791,9 @@
                                                                                           
                                                                                           if(args.value!="" && act_pot!= g_new_pot)
                                                                                           {
-                                                                                             if(g_new_pot<act_pot)
+                                                                                             if(g_new_pot=="")
                                                                                               {
-                                                                                               alert("Revised Potential should be greater than the actual potential");
+                                                                                               alert("Revised Potential cannot be Null Value");
                                                                                                return  false;
                                                                                               }
                                                                                               else
@@ -2381,8 +2381,8 @@
 
                                                             //  alert("columns "+columns.toSource());   
                                                               var cellvaluechanging = function (row, datafield, columntype, oldvalue, newvalue) {
-                                                                    if (newvalue < oldvalue)
-                                                                        { alert("Revised Potential should be greater than the actual potential");
+                                                                    if (newvalue =="")
+                                                                        { alert("Revised Potential cannot be null value");
                                                                             return oldvalue;
                                                                         }
                                                                     } 
@@ -2467,9 +2467,9 @@
                                                                                           
                                                                                           if(args.value!="" && act_pot!= g_new_pot)
                                                                                           {
-                                                                                             if(g_new_pot<act_pot)
+                                                                                             if(g_new_pot=="")
                                                                                               {
-                                                                                               alert("Revised Potential should be greater than the actual potential");
+                                                                                               alert("Revised Potential cannot be a Null value");
                                                                                                return  false;
                                                                                               }
                                                                                               else
