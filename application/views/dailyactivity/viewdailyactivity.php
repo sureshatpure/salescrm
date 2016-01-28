@@ -1699,12 +1699,12 @@
                                                                                     //  alert("columns "+columns.toSource());    
                                                                                     var dataAdapterItemMaster = new $.jqx.dataAdapter(potential_source);
 
-                                                                                    var cellvaluechanging = function (row, datafield, columntype, oldvalue, newvalue) {
+                                                                                    /*var cellvaluechanging = function (row, datafield, columntype, oldvalue, newvalue) {
                                                                                                     if (newvalue < oldvalue)
                                                                                                         { alert("Revised Potential should be greater than the actual potential");
                                                                                                             return oldvalue;
                                                                                                         }
-                                                                                                    }
+                                                                                                    }*/
                                                                                     $("#jqxgrid_productpotential").jqxGrid(
                                                                                             {
                                                                                                 width: '100%',
