@@ -1,0 +1,6 @@
+body {padding: 20px 40px;}
+table {width:50% !important;}
+#form  span.error {
+    color:red;
+    padding-left:10px;
+    }
