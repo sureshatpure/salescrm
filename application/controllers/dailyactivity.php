@@ -220,10 +220,11 @@ class dailyactivity extends CI_Controller {
          $sales_type_flag="R";
        
         //echo "current_date ".$_POST[0]['currentdate'];
-        //echo"<pre> _POST data";print_r($_POST);echo"</pre>";
+   //     echo"<pre> _POST data";print_r($_POST);echo"</pre>";
         $hrd_currentdate = $_POST[0]['currentdate'];
         $grid_data = array_slice($_POST, 1, null, true);
-       // echo"<pre> grid data";print_r($grid_data);echo"</pre>"; 
+      //  echo"<pre> grid data";print_r($grid_data);echo"</pre>"; 
+      //  die;
         $check_duplicates = $this->dailyactivity_model->check_dailyhdr_duplicates($hrd_currentdate, $user1);
         //  echo $check_duplicates; die;
         $today_date = date('Y-m-d:H:i:s');
@@ -710,6 +711,25 @@ class dailyactivity extends CI_Controller {
                             );
 
                             $id = $this->Leads_model->update_lead($leaddetails, $lead_id);
+
+                /* update LMS potential when selected an exisitng lead start*/
+
+                  $leadproducts = array(
+                        'quantity' => $val['quantity'],
+                        'last_modified' => date('Y-m-d:H:i:s'),
+                        'last_updated_user' => $login_user_id
+                    );
+                $id = $this->Leads_model->update_leadproducts($leadproducts, $lead_id);  
+
+                $sales_type_id = $this->dailyactivity_model->get_salestypeid_byname($val['division']);  
+                                                    
+
+                             $lead_prod_poten_type_update = array(
+                                'potential' => $val['actualpotenqty']
+                            );
+                        $lead_pord_poten_id = $this->Leads_model->dcupdate_leadprodpotentypes($lead_prod_poten_type_update, $lead_id,$sales_type_id);
+                /* update LMS potential when selected an exisitng lead  end*/                    
+
 
                 /* Start of substatus validations */
 
