@@ -1,0 +1,175 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 26, 2014, 3:30:08 PM
+    Author     : periyasamy
+*/
+
+body{
+      background:#f7f7f7; 
+      font-family: sans-serif;
+      font-size: 12px;
+    margin: 0 auto;
+    width: 100%;
+    
+	
+}
+#page {
+  
+    margin: 0 auto;
+  
+   
+  
+}
+.navbar-bg{
+    width: 100%;
+    margin: 0 auto;
+    background: #3E3E42;
+    height: 30px;
+        border: 2px solid #3E3E42; 
+
+    }
+    
+.companyLogo
+{
+    float:left;
+}
+    
+.companyLogo img {
+  height: 2.5em;
+  width: 10em !important;
+}
+
+.top-menu{
+    float:right;
+    margin:0;
+    padding:0;color:#000099;
+}
+
+.top-menu li{
+    float:left;
+    list-style: none;
+        padding:0px 10px 0px 10px;
+}
+
+.top-menu li a
+{
+    color:#f7f7f7;
+    text-decoration: none;
+}
+
+.bodyContents {
+       
+
+ width: 1190px;
+ 
+}
+
+.contentsDiv{
+    width: 600px;
+    float: right;
+}
+
+.contentsDivleft{
+    width: 200px;
+    float: left;
+}
+.mainContainer{
+   
+width:1000px;
+   float:right;
+}
+
+.LMSpageheader{
+    margin: 0 auto;
+    }
+    .clear{
+        clear:both;              
+    }
+    .floatleft{
+        float: left;
+    }
+    
+    .sidebar{
+        width: 180px;
+        float: left;
+         background:#d2d2d2;
+        border-right:2px solid #d1d1d1;
+        
+    }
+    .sidebar-menu{
+        padding: 0px;
+         margin: 0px;
+    }
+    
+    .sidebar-menu li{
+        list-style: none;
+        padding: 2px 2px;
+       
+    }
+    
+    .sidebar-menu li a{
+        
+        color:#F2f2f2;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        line-height: 30px;
+        background: #3686BE;
+        
+        
+    }
+    .sidebar-menu li a:hover{
+        background: #d2d2d2;
+        color: #000;
+        
+    }
+    .LMSpageheader{
+            background: #3686BE;
+          border-bottom:1px solid #19486A;
+    }
+    
+    .fieldLabel{
+        width: 150px;
+    }
+    .buleboder-bottom
+    {
+         border-bottom:1px dotted #3686BE;
+        
+    }
+    .buleboder-full
+    {
+         border:1px solid #3686BE;
+         line-height: 30px;
+         color: #f7f7f7;
+         background:#19486A;
+        
+    }
+    .error{
+        color:#F00;
+         display: inherit;
+        font-size: 10px;
+        
+    }
+    .floatRight{
+        float:right;
+    }
+    .footer
+    {
+        clear: both;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 40px;
+        font-size: 10px;
+        background: #003bb3;
+        color: #fff;
+    }
+    .footer p a
+    {
+color: #fff;
+text-decoration:none;
+    }
+    
