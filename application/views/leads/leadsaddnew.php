@@ -486,6 +486,7 @@
     
 
 //  return value from item master start
+                $("#jqxgrid_selectItemMaster").jqxTooltip();
                 $("#jqxgrid_selectItemMaster").on('cellselect', function (event)
                 {
                     var rowindex = $("#jqxgrid_selectItemMaster").jqxGrid('getselectedrowindex', event.args.rowindex);
@@ -1683,6 +1684,7 @@
                                 datafields: [
                                     {name: 'id', type: 'number'},
                                     {name: 'description', type: 'text'},
+                                    {name: 'itemname', type: 'text'},
                                 ],
                                 id: 'id',
                                 localdata: rows
@@ -1699,12 +1701,33 @@
                                 pageable: true,
                                 columnsresize: true,
                                 sortable: true,
-                                        showfilterrow: true,
+                                showfilterrow: true,
                                 filterable: true,
+/*                                 cellhover: function (element, pageX, pageY)
+                                    {
+                                        // update tooltip.
+                                        $("#jqxgrid_selectItemMaster").jqxTooltip({ content: element.innerHTML });
+                                        // open tooltip.
+                                        $("#jqxgrid_selectItemMaster").jqxTooltip('open', pageX + 15, pageY + 15);
+                                    },*/
+                                   cellhover: function (element, pageX, pageY)
+                                    {
+                                        // update tooltip.
+                                        var cellValue = $(element.innerHTML).text();
+                                        var tooltipContent = "<div style='color: Green;'>" + cellValue + "</div>";
+                                        $("#jqxgrid_selectItemMaster").jqxTooltip('open', pageX + 15, pageY + 15);
+                                        $("#jqxgrid_selectItemMaster").jqxTooltip({ content: tooltipContent });
+                                        // open tooltip.
+                                    },
+
+
+                                    // update tooltip.
+
                                 columns:
                                         [
-                                            {text: 'Id', dataField: 'id', width: 100},
-                                            {text: 'Product Group', dataField: 'description', width: 500, height: 600},
+                                            {text: 'Id', dataField: 'id', width: 50},
+                                            {text: 'Product Group', dataField: 'description', width: 300, height: 600},
+                                            {text: 'Product Name', dataField: 'itemname', width: 300, height: 600},
                                         ]
                             });
 
