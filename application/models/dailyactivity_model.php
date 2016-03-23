@@ -328,7 +328,11 @@ class dailyactivity_model extends CI_Model
 						LEFT JOIN leadsubstatus sub ON sub.lst_sub_id=ld.ldsubstatus 
              WHERE d.id=".$header_id;
 
+<<<<<<< HEAD
             // echo $sql; die;
+=======
+             //echo $sql; die;
+>>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 				$result = $this->db->query($sql);
 				$activitydetails = $result->result_array();
 				$all_record_count = count($activitydetails);
@@ -601,7 +605,11 @@ class dailyactivity_model extends CI_Model
 				else
 				{
 					//$poten_val = $result->result_array();
+<<<<<<< HEAD
 					$poten_val['0']['potential']=isset($result_bp['0']['potential']) ? $result_bp['0']['potential']:'0';
+=======
+					$poten_val['0']['potential']=isset($result_bp['0']['potential']) ? $resutl_arrary['0']['potential']:'0';
+>>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 					$poten_val['0']['noofleads']=$no_of_leads;
 					$poten_val['0']['result_type']='Select';
 
@@ -695,7 +703,11 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 					$poten_val = $result->result_array();
 				}
 
+<<<<<<< HEAD
 			//	print_r($poten_val);
+=======
+				//print_r($poten_val);
+>>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 				$arr =  json_encode($poten_val);
 				$arr =	 '{ "rows" :'.$arr.' }';
 				return $arr;
@@ -1360,7 +1372,10 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 		        return @$cust_grpid[0]['header_id'];
 			}
 
+<<<<<<< HEAD
 			
+=======
+>>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 			function getproductgroup_id($prodgrp)
 			{
 				$this->db->select('header_id');
@@ -1482,6 +1497,7 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
                return $daily_potenid_detail;
 
 			}
+<<<<<<< HEAD
 
 			function get_customerhdr_id($custgrp)
 			{
@@ -1496,6 +1512,8 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 				$arr =	 '{ "rows" :'.$arr.' }';
 				return $arr;
 			}
+=======
+>>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 }
 ?>
 
