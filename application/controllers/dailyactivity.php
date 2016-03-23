@@ -220,18 +220,11 @@ class dailyactivity extends CI_Controller {
          $sales_type_flag="R";
        
         //echo "current_date ".$_POST[0]['currentdate'];
-<<<<<<< HEAD
    //     echo"<pre> _POST data";print_r($_POST);echo"</pre>";
         $hrd_currentdate = $_POST[0]['currentdate'];
         $grid_data = array_slice($_POST, 1, null, true);
       //  echo"<pre> grid data";print_r($grid_data);echo"</pre>"; 
       //  die;
-=======
-        //echo"<pre> _POST data";print_r($_POST);echo"</pre>";
-        $hrd_currentdate = $_POST[0]['currentdate'];
-        $grid_data = array_slice($_POST, 1, null, true);
-       // echo"<pre> grid data";print_r($grid_data);echo"</pre>"; 
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
         $check_duplicates = $this->dailyactivity_model->check_dailyhdr_duplicates($hrd_currentdate, $user1);
         //  echo $check_duplicates; die;
         $today_date = date('Y-m-d:H:i:s');
@@ -261,11 +254,7 @@ class dailyactivity extends CI_Controller {
                 /* Start for inserting into leaddetails*/
                   foreach ($grid_data as $key => $val) 
                   { 
-<<<<<<< HEAD
                     if($val['lead_appointmentdt']=='null' or $val['lead_appointmentdt']=='undefined' ||  $val['lead_appointmentdt']=="" || $val['lead_appointmentdt']=='--')
-=======
-                    if($val['lead_appointmentdt']=='null' or $val['lead_appointmentdt']=='undefined' ||  $val['lead_appointmentdt']=="")
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                          {
                             $appiontment_date=NULL;
                          }
@@ -723,7 +712,6 @@ class dailyactivity extends CI_Controller {
 
                             $id = $this->Leads_model->update_lead($leaddetails, $lead_id);
 
-<<<<<<< HEAD
                 /* update LMS potential when selected an exisitng lead start*/
 
                   $leadproducts = array(
@@ -743,8 +731,6 @@ class dailyactivity extends CI_Controller {
                 /* update LMS potential when selected an exisitng lead  end*/                    
 
 
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                 /* Start of substatus validations */
 
                                 /* Start for Managing and implementation*/
@@ -1263,11 +1249,7 @@ class dailyactivity extends CI_Controller {
                                 $ld_converted = 1;
                              }
                             
-<<<<<<< HEAD
                          if($val['lead_appointmentdt']=='null' or $val['lead_appointmentdt']=='undefined' ||  $val['lead_appointmentdt']=="" || $val['lead_appointmentdt']=="--")
-=======
-                         if($val['lead_appointmentdt']=='null' or $val['lead_appointmentdt']=='undefined' ||  $val['lead_appointmentdt']=="")
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                             {
                                 
                               $appiontment_date=NULL;
@@ -2629,17 +2611,13 @@ class dailyactivity extends CI_Controller {
             echo $message;
             }
 
-<<<<<<< HEAD
         
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 
 
      
          
      
      }
-<<<<<<< HEAD
 
      function getcustomerhdr_id($custgrp) 
             {
@@ -2653,8 +2631,6 @@ class dailyactivity extends CI_Controller {
                 echo $cust_id;
             }
 
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
      function test()
      {
         $sales_type_id = $this->dailyactivity_model->get_salestypeid_byname('Part Tanker');

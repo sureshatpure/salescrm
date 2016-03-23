@@ -32,11 +32,7 @@ class Excelreportbranch extends CI_Controller {
         
                 @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
                 @$reportingto= $this->session->userdata['reportingto'];
-<<<<<<< HEAD
               $branch=urldecode($branch);
-=======
-              
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
        $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch', 'Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','lead_created_date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
         if ($reportingto == "") {
             if ($user_id == "") {

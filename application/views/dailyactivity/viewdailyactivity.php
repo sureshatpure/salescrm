@@ -95,11 +95,8 @@
                     var base_url = '<?php echo site_url(); ?>';
                     function _createElements()
                     {
-<<<<<<< HEAD
                         $('#customWindow').jqxWindow({ maxWidth: 1000 });
                         $('#addWindow').jqxWindow({ maxWidth: 1000 });
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                         // alert("action mode in _createElements  "+actionmode);
                         // code start for view formdetail window
                         $('#customWindow').jqxWindow({theme: 'energyblue', showCollapseButton: true, autoOpen: false, width: 1013, height: 400, resizable: true, title: 'View Daily Call Activity&nbsp;&nbsp;<input id="update_add_row"  class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue" type="button" class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue" value="Add New Row" />&nbsp;&nbsp;<input id="update_delete_row" type="button" class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue" value="Delete Selected Row" />&nbsp;&nbsp;<input id="addnewprod_add"   class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue addnewprod_add" type="button" value="Add New Product" />&nbsp;&nbsp;<input id="update_data"  class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue"  type="button" value="Update" />&nbsp;&nbsp;<input id="excelExport"  class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue" type="button" class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue" title="Currently you cannot export all the data,instead filter the data and try to use Export to Excel option"   alt="Currently you cannot export all the data,instead filter the data and try to use Export to Excel option" value="Export to Excel"/>',
@@ -114,11 +111,7 @@
                         // code start for add window
                         $('#addWindow').jqxWindow({theme: 'energyblue', autoOpen: false, showCollapseButton: true, height: 400, resizable: true, title: 'Add Daily Call Activity&nbsp;&nbsp; <input id="addrowbutton"  class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue" type="button" value="Add New Row" />&nbsp;&nbsp;<input id="deleterowbutton"  class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue" type="button" value="Delete Selected Row" />&nbsp;&nbsp;<input id="addnewprod"  class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue addnewprod" type="button" value="Add New Product" />&nbsp;&nbsp;<input id="save"  class="jqx-rc-all jqx-rc-all-energyblue jqx-button jqx-button-energyblue jqx-widget jqx-widget-energyblue jqx-fill-state-normal jqx-fill-state-normal-energyblue" type="button" value="Save Data" />',
                             initContent: function () {
-<<<<<<< HEAD
                                 $('#jqxgrid_add').jqxGrid({disabled: false, width: 1000, theme: 'energyblue'});
-=======
-                                $('#jqxgrid_add').jqxGrid({disabled: false, width: 790, theme: 'energyblue'});
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                             },position: 'top, left'
                         });
                         // code end for add window
@@ -295,13 +288,10 @@
                                    }*/
                                     var cust_grp = data.custgroup;
                                     var prod_grp = data.itemgroup;
-<<<<<<< HEAD
                                     if (prod_grp=='No Itemgroup')
                                     {
                                       prod_grp="undefined";
                                     }
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                     var curr_poten = data.Potential_Quantity;
                                    
                                     if(cust_grp!="" && prod_grp!="")
@@ -485,13 +475,10 @@
                                    var data = $('#jqxgrid_add').jqxGrid('getrowdata', row);
                                    var cust_grp = $('#jqxgrid_add').jqxGrid('getcellvalue', row, "custgroup");
                                    var prod_grp = $('#jqxgrid_add').jqxGrid('getcellvalue', row, "itemgroup");
-<<<<<<< HEAD
                                     if (prod_grp=='No Itemgroup')
                                     {
                                       prod_grp="undefined";
                                     }
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                  /*  alert(" jqxgrid_add_row_index "+jqxgrid_add_row_index);
                                    alert(" row value is  "+row);*/
                                   switch(data.result_type){
@@ -877,13 +864,10 @@
                             var cust_grp = rowdata.custgroup;
                             var prod_grp = rowdata.itemgroup;
                             var curr_poten = rowdata.potentialqty;
-<<<<<<< HEAD
                             if (prod_grp=='No Itemgroup')
                                     {
                                       prod_grp="undefined";
                                     }
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                            
                             if(cust_grp!="" && prod_grp!="")
                             {
@@ -974,10 +958,7 @@
                                             this.columntype = 'dropdownlist';
                                             validateProductName.html('<font color="green"> Lead Already Exists </font>');
                                            }
-<<<<<<< HEAD
 
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                 
                             }
                             else
@@ -1021,11 +1002,7 @@
                                     var prod_grp = data.itemgroup;
                                     var curr_poten = data.potentialqty;
                                     var leadstatus = data.leadstatusid;
-<<<<<<< HEAD
                                    /* alert("leadstatus "+leadstatus);*/
-=======
-                                    //alert("leadstatus "+leadstatus);
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                     if (leadstatus=='No Status')
                                     {
 
@@ -1310,7 +1287,6 @@
                                     {
                                         alert("null not matching");
                                     }*/
-<<<<<<< HEAD
                                   //  alert("leadid in resultsEditorldst_update "+leadid);
                                   // alert("type of leadid resultsEditorldst_update "+typeof(data.leadid));
                                    if(data.leadid=='No Leads')
@@ -1318,17 +1294,11 @@
                                     data.leadid=0;
                                    }
                                   // alert("data.leadid in resultsEditorldst_update "+data.leadid);
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                    if (data.leadid===null && leadid!='No Leads' || typeof(data.leadid)==="undefined") 
                                     {
                                        geturl=base_url + "dailyactivity/getldstatusupdate"
                                     }
-<<<<<<< HEAD
                                     else if (typeof(data.leadid)==="string" && data.leadid.length >0 )
-=======
-                                    else if (typeof(data.leadid)==="string" && data.leadid.length >0)
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                     {
                                         
                                          geturl=base_url + "dailyactivity/getldstatusfor/"+leadid;
@@ -1384,11 +1354,7 @@
                                        
                                             
                                },
-<<<<<<< HEAD
                                resultsEditorldsubst_update: function(row, cellvalue, editor){
-=======
-                               resultsEditorldsubst: function(row, cellvalue, editor){
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                    var data = $('#jqxgrid_n').jqxGrid('getrowdata', row);
                                 //   var substatus_name = data.leadsubstatusid;
                                     jqxgrid_n_row =row;
@@ -1396,13 +1362,8 @@
                                      status_name = status_name.replace(/\//gi, "-");
 
                                    var leadid =data.leadid;
-<<<<<<< HEAD
                                  /*  alert("in initeditor for update substatus "+status_name);
                                    alert("in initeditor for update leadid "+leadid);
-=======
-                                  // alert("in initeditor for update substatus "+status_name);
-                                  /* alert("in initeditor for update leadid "+leadid);
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                    alert("in initeditor for update typeof leadid "+typeof(leadid));
                                    alert("in initeditor for update length leadid "+data.leadid.length);*/
                                    
@@ -1416,11 +1377,7 @@
                                         geturl=base_url + "dailyactivity/getldsubstatusbynameid/"+status_name+"/"+leadid;
                                        
                                     }
-<<<<<<< HEAD
                                     else if ( typeof(data.leadid)==="string" && (data.leadid.length==0 || data.leadid.length=="undefined") || (typeof(data.leadid)==="number" && data.leadid==0 ))
-=======
-                                    else if (typeof(data.leadid)==="string" && data.leadid.length==0)
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                     {
                                         geturl=base_url + "dailyactivity/getldsubstatusbyname/"+status_name;
                                     }
@@ -1700,10 +1657,7 @@
                                                             height: 300,
                                                             source: dataAdapter,
                                                             theme: 'energyblue',
-<<<<<<< HEAD
                                                             rowsheight: 30,
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                             columnsresize: true,
                                                             selectionmode: 'rowselect',
                                                             editable: true,
@@ -1715,13 +1669,8 @@
                                                             showfilterrow: false,
                                                             filterable: true,
                                                             columns: [
-<<<<<<< HEAD
                                                                 {text: 'UID', datafield: 'id', width: 50, cellsalign: 'left', hidden: true},
                                                                 {text: 'LineId', datafield: 'line_id', width: 30, cellsalign: 'left', hidden: true},
-=======
-                                                                {text: 'UID', datafield: 'id', width: 150, cellsalign: 'left', hidden: true},
-                                                                {text: 'LineId', datafield: 'line_id', width: 150, cellsalign: 'left', hidden: true},
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                                 {text: 'Customer Group', datafield: 'custgroup', width: 150, editable: false},
                                                                 { text: 'Show products', datafield: 'Edit', columntype: 'button', cellsrenderer: function () {
                                                                             return "Show Potentials";
@@ -1808,11 +1757,7 @@
                                                                                  
                                                                                 // Source for Potential grid END
                                                                                 editrow = row;
-<<<<<<< HEAD
                                                                                 $('#popupWindowPotential').jqxWindow({theme: 'energyblue', autoOpen: false, width: 700, height: 400, resizable: true, title: 'BP Potential Details (Potential to be updated MTs per annum basis)'});
-=======
-                                                                                $('#popupWindowPotential').jqxWindow({theme: 'energyblue', autoOpen: false, width: 700, height: 400, resizable: true, title: 'BP Potential Details'});
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                                                   var x = ($(window).width() - $("#popupWindowPotential").jqxWindow('width')) / 2 + $(window).scrollLeft();
                                                                                     var y = ($(window).height() - $("#popupWindowPotential").jqxWindow('height')) / 2 + $(window).scrollTop();
 
@@ -1923,11 +1868,8 @@
                                                                 {text: 'noofleads', datafield: 'noofleads',hidden:true, width: 20, cellsalign: 'left', editable: false},
                                                                 {text: 'result_type', datafield: 'result_type',hidden:true, width: 75, cellsalign: 'left', editable: false},
                                                                 { text: 'Create Lead', datafield: 'create_lead', hidden:true, width: 20, cellsalign: 'left', editable: false},
-<<<<<<< HEAD
                                                                 {text: 'Activity Type', datafield: 'subactivity', width: 110, cellsalign: 'left', cellbeginedit:Resultsupdate.initResultsEditorat_update, initeditor: Resultsupdate.resultsEditorat_update, cellsrenderer: Resultsupdate.renderUnitsat
                                                                 },
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                                 {text: 'Status', datafield: 'leadstatusid', width: 150, cellsalign: 'center', cellbeginedit:Resultsupdate.initResultsEditorldst_update, initeditor: Resultsupdate.resultsEditorldst_update, cellsrenderer: Resultsupdate.renderUnitsldst_update,promptText:'Select Status',
                                                                                     cellvaluechanging: function (row, datafield, columntype, oldvalue, newvalue) 
                                                                                     {
@@ -2082,11 +2024,7 @@
 
                                                                       
                                                                     },
-<<<<<<< HEAD
                                                                     {text: 'SubStatus', datafield: 'leadsubstatusid', width: 200, cellsalign: 'left',readonly:false,cellbeginedit:Resultsupdate.initResultsEditorldsubst, initeditor: Resultsupdate.resultsEditorldsubst_update, cellsrenderer: Resultsupdate.renderUnitsldsubst,cellvaluechanging: function (row, datafield, columntype, oldvalue, newvalue) 
-=======
-                                                                    {text: 'SubStatus', datafield: 'leadsubstatusid', width: 200, cellsalign: 'left',readonly:false,cellbeginedit:Resultsupdate.initResultsEditorldsubst, initeditor: Resultsupdate.resultsEditorldsubst, cellsrenderer: Resultsupdate.renderUnitsldsubst,cellvaluechanging: function (row, datafield, columntype, oldvalue, newvalue) 
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                                                 {
                                                                                    // alert("oldvalue "+oldvalue); alert("newvalue "+newvalue);
                                                                                  //  alert(" jqxgrid_n_row_index"+jqxgrid_n_row_index);
@@ -2202,20 +2140,11 @@
                                                                                 }
                                                                    
                                                                     },
-<<<<<<< HEAD
-=======
-                                                                {text: 'Activity Type', datafield: 'subactivity', width: 110, cellsalign: 'left', cellbeginedit:Resultsupdate.initResultsEditorat_update, initeditor: Resultsupdate.resultsEditorat_update, cellsrenderer: Resultsupdate.renderUnitsat
-                                                                },
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                                 
                                                                 {text: 'BP Potential', datafield: 'potentialqty', width: 75, cellsalign: 'left', editable: false},
                                                                 {text: 'LMS Potential', datafield: 'actualpotenqty', width: 75, cellsalign:'left', editable: true,hidden:false},
 
-<<<<<<< HEAD
                                                                 {text: 'Immediate Requirements',datafield: 'quantity', width: 75, cellsalign: 'left',
-=======
-                                                                {text: 'Required Quantity',datafield: 'quantity', width: 75, cellsalign: 'left',
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                                         cellbeginedit: function (row, datafield, columntype) {
                                                                                     var rowdata = $("#jqxgrid_n").jqxGrid('getrowdata', row);
                                                                                     var leadid = rowdata.leadid;
@@ -2282,11 +2211,7 @@
 
                                 });
                                   
-<<<<<<< HEAD
                               
-=======
-                                
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 
                         // toolbar functions start
                         var toolbarfunc = function (toolbar)
@@ -2328,11 +2253,7 @@
                         // toolbar functions end
                         // Source for add grid start
                         var dataadd = {};
-<<<<<<< HEAD
                         var theme = 'energyblue';
-=======
-                        var theme = 'classic';
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                         jQuery.ajax({
                             dataType: "html",
                             url: 'dailyactivity/get_data_addgrid',
@@ -2349,39 +2270,7 @@
                             }
                         });
 
-<<<<<<< HEAD
                         
-=======
-                        var generaterow = function (i) {
-                            var row = {};
-                            row["id"] = '';
-                            row["itemgroup"] = '';
-                            row["customgroup"] = '';
-                            row["subactivity"] = '';
-                            row["balqnty"] = '';
-                            row["created_date"] = '';
-                            row["division"] = '';
-                            row["potentialqty"] = '0';
-                            row["customgroup"] = '';
-                            row["balqnty"] = '';
-                            row["leadid"] = parseInt(0);
-                            row["noofleads"] = '0';
-                            row["result_type"] = '';
-                            row["appiontmnt_dt"] = '';
-                            row["not_able_to_get_appointment"] = '';
-                            row['statusid']='No Status';
-                            row['leadsubstatusid']='No SubStatus';
-                            
-                            return row;
-
-                        }
-
-                        for (var i = 0; i < 1; i++) {
-                            var row = generaterow(i);
-                            dataadd[i] = row;
-
-                        }
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                         var addgridsource =
                                 {
                                     datatype: "local",
@@ -2410,21 +2299,12 @@
                                     cache: false,
                                     //  url: 'crud/showdata',
                                     localdata: dataadd,
-<<<<<<< HEAD
-=======
-                                    addrow: function (rowid, rowdata, position, commit) {
-                                        //alert("addrow leadid"+rowdata.leadid);
-                                        //alert("rowdata"+rowdata.toSource());
-                                        commit(true);
-                                    },
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                     deleterow: function (rowid, commit) {
                                         commit(true);
                                     },
                                 };
 
                         var dataAdapterAdd = new $.jqx.dataAdapter(addgridsource);
-<<<<<<< HEAD
                        
                         $("#jqxgrid_add").jqxGrid(
                                 {
@@ -2432,13 +2312,6 @@
                                     width:992,
                                     selectionmode: 'rowselect',
                                     rowsheight: 30,
-=======
-                        
-                        $("#jqxgrid_add").jqxGrid(
-                                {
-                                    height: 200,
-                                    selectionmode: 'rowselect',
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                     source: dataAdapterAdd,
                                     theme: theme,
                                     editable: true,
@@ -2535,11 +2408,7 @@
                                                              
                                                         // Source for Potential grid END
                                                             editrow = row;
-<<<<<<< HEAD
                                                             $('#popupWindowPotential').jqxWindow({theme: 'energyblue', autoOpen: false, width: 700, height: 500, resizable: true, title: 'BP Potential Details (Potential to be updated MTs per annum basis)'});
-=======
-                                                            $('#popupWindowPotential').jqxWindow({theme: 'energyblue', autoOpen: false, width: 700, height: 500, resizable: true, title: 'BP Potential Details'});
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                               var x = ($(window).width() - $("#popupWindowPotential").jqxWindow('width')) / 2 + $(window).scrollLeft();
                                                                 var y = ($(window).height() - $("#popupWindowPotential").jqxWindow('height')) / 2 + $(window).scrollTop();
                                                                 $("#popupWindowPotential").jqxWindow({ position: { x: x, y: y} });
@@ -2647,15 +2516,11 @@
 
                                         {text: 'noofleads', datafield: 'noofleads', hidden:true, width: 20, cellsalign: 'left', editable: false},
                                         {text: 'result_type', datafield: 'result_type',hidden:true, width: 75, cellsalign: 'left', editable: false},
-<<<<<<< HEAD
                                         {text: 'Create Lead', datafield: 'create_lead', hidden:true, width: 20, cellsalign: 'left', editable: false},
                                         {text: 'Activity Type', datafield: 'Sub_Activity', width: 110, cellsalign: 'left', cellbeginedit:Results.initResultsEditorat, initeditor: Results.resultsEditorat, cellsrenderer: Results.renderUnitsat
                                         },
                                         {text: 'Sales Type', datafield: 'division', width: 110, cellsalign: 'left',readonly:true,cellbeginedit:Results.initResultsEditorst, initeditor: Results.resultsEditorst, cellsrenderer: Results.renderUnitsstleadsubstatusid
                                         },
-=======
-                                        { text: 'Create Lead', datafield: 'create_lead', hidden:true, width: 20, cellsalign: 'left', editable: false},
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                         {text: 'Status', datafield: 'statusid', width: 150, cellsalign: 'center', cellbeginedit:Results.initResultsEditorldst, initeditor: Results.resultsEditorldst, cellsrenderer: Results.renderUnitsldst,promptText:'Select Status',
                                                         cellvaluechanging: function (row, datafield, columntype, oldvalue, newvalue) 
                                                         {
@@ -2946,19 +2811,11 @@
                                                     }
                                        
                                         },
-<<<<<<< HEAD
                                         {text: 'Mode of Contact', datafield: 'Mode_Of_Contact', width: 100, cellsalign: 'left', cellbeginedit:Results.initResultsEditorcon, initeditor: Results.resultsEditorcon, cellsrenderer: Results.renderUnitsst
                                         },
                                         {text: 'BP Potential', datafield: 'Potential_Quantity', width: 75, cellsalign: 'left', editable: false},
                                         {text: 'LMS Potential', datafield: 'actualpotenqty', width: 75, cellsalign: 'left', editable: true,hidden:false},
                                         {text: 'Immediate Requirements', datafield: 'Quantity_Requirement', width: 75, cellsalign: 'left',
-=======
-                                        {text: 'Activity Type', datafield: 'Sub_Activity', width: 110, cellsalign: 'left', cellbeginedit:Results.initResultsEditorat, initeditor: Results.resultsEditorat, cellsrenderer: Results.renderUnitsat
-                                        },
-                                        {text: 'BP Potential', datafield: 'Potential_Quantity', width: 75, cellsalign: 'left', editable: false},
-                                        {text: 'LMS Potential', datafield: 'actualpotenqty', width: 75, cellsalign: 'left', editable: true,hidden:false},
-                                        {text: 'Required Quantity', datafield: 'Quantity_Requirement', width: 75, cellsalign: 'left',
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                             cellbeginedit: function (row, datafield, columntype) {
                                                         var rowdata = $("#jqxgrid_add").jqxGrid('getrowdata', row);
                                                         var leadid = rowdata.leadid;
@@ -2974,12 +2831,7 @@
 
                                                     }
                                         },
-<<<<<<< HEAD
                                         
-=======
-                                        {text: 'Sales Type', datafield: 'division', width: 110, cellsalign: 'left',readonly:true,cellbeginedit:Results.initResultsEditorst, initeditor: Results.resultsEditorst, cellsrenderer: Results.renderUnitsstleadsubstatusid
-                                        },
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                         
                                          
                                         {text: 'PrevStatus', datafield: 'prevstatusid', width: 150, cellsalign: 'center',readonly:true,editable:false, hidden:true
@@ -2994,12 +2846,7 @@
                                          {text: 'Order Cancel', datafield: 'order_cancelled_reason', width: 110, align: 'left', hidden:true, editable:false},
                                         {text: 'SOC No', datafield: 'crm_soc_number', width: 110, align: 'left', hidden:true, editable:false},
 
-<<<<<<< HEAD
                                        
-=======
-                                        {text: 'Mode of Contact', datafield: 'Mode_Of_Contact', width: 100, cellsalign: 'left', cellbeginedit:Results.initResultsEditorcon, initeditor: Results.resultsEditorcon, cellsrenderer: Results.renderUnitsst
-                                        },
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                         {text: 'Time Spent (Hrs)', datafield: 'hour', width: 75, cellsalign: 'left', columntype: 'dropdownlist',
                                             createeditor: function (row, cellvalue, editor) {
                                                 editor.jqxDropDownList({source: ["00 Hr", "01 Hrs", "02 Hrs", "03 Hrs", "04 Hrs", "05 Hrs", "06 Hrs", "07 Hrs", "08 Hrs", "09 Hrs", "10 Hrs"]});
@@ -3015,13 +2862,10 @@
                                     ]
 
                                 });
-<<<<<<< HEAD
                         $('#jqxgrid_add').on('cellclick', function (event) {
                         //  alert("test");
                              $("#jqxgrid_add").jqxGrid('hidevalidationpopups');
                         });
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                 
                         $("#jqxgrid_add").on("celldoubleclick", function (event)
                         {
@@ -3207,11 +3051,7 @@
                                                         pageable: true,
                                                         columnsresize: true,
                                                         sortable: true,
-<<<<<<< HEAD
                                                         showfilterrow: true,
-=======
-                                                                showfilterrow: true,
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                         filterable: true,
                                                         columns: [
                                                                   {text: 'id', dataField: 'id', width: 100, height: 600},
@@ -3288,7 +3128,6 @@
                         });
 
                         $("#addrowbutton").bind('click', function () {
-<<<<<<< HEAD
                             //var max_len= $('#jqxgrid_add').jqxGrid('selectrow',rows.length-1);
                             var max_len = $("#jqxgrid_add").jqxGrid('getdatainformation').rowscount;
                             max_len =max_len-1;
@@ -3314,9 +3153,6 @@
                             
                             var commit = $('#jqxgrid_add').jqxGrid('addrow', null, datarow);
                            // var commit = $("#jqxgrid_add").jqxGrid('addrow', null, {});
-=======
-                            var commit = $("#jqxgrid_add").jqxGrid('addrow', null, {});
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                         });
                           $("#addnewprod, #addnewprod_add").bind('click', function () {
                             
@@ -3400,10 +3236,7 @@
                             var valid_lead_substatus=0;
                             var valid_crm_soc =0;
                             var valid_select_lead=0;
-<<<<<<< HEAD
                             var valid_lms_pot=0;
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                             var entrydate = $('#addcurrentdate').val();
                             entrydate = convertdmy_ymd(entrydate);
                             for (var k = 0; k < rowscount; k++)
@@ -3491,11 +3324,7 @@
                                         }
                                         else
                                         {
-<<<<<<< HEAD
                                            
-=======
-                                            //alert("in else of undefined");
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                             valid_lead_status = 1;
                                         }
                                 }
@@ -3619,7 +3448,6 @@
                                     valid_moc = 1;
                                 }
 
-<<<<<<< HEAD
                                 var lms_potential = $('#jqxgrid_add').jqxGrid('getcellvalue', k, "actualpotenqty");
                     /*            alert("lms_potential "+lms_potential);
                                 alert("lms_potential type  "+typeof(lms_potential));
@@ -3649,12 +3477,6 @@
 
                             }
                             // alert (" valid_lms_pot is after k loop"+valid_lms_pot);
-=======
-
-                            }
-                            //  alert (" date flag after k loop "+valid_dtflag);
-                            //  alert (" Pg flag is after k loop"+valid_pgflag);
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                             if (valid_custgrp == 0)
                             {
                                 return false;
@@ -3704,13 +3526,10 @@
                             {
                                 return false;
                             }
-<<<<<<< HEAD
                             if (valid_lms_pot==0)
                             {
                              return false;   
                             }
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 
 
                             var currentdate = $('#addcurrentdate').val();
@@ -3725,13 +3544,8 @@
                                 var rowval = {};
                                 griddata = $('#jqxgrid_add').jqxGrid('getrowdata', i);
                                	//alert("griddata  create_lead "+griddata.create_lead);
-<<<<<<< HEAD
                                // alert(" gird row  "+i+" appiontmnt_dt "+griddata.appiontmnt_dt);
                                // alert("type of object "+typeof(griddata.appiontmnt_dt));
-=======
-             /*                   alert(" gird row  "+i+" appiontmnt_dt "+griddata.appiontmnt_dt);
-                                alert("type of object "+typeof(griddata.appiontmnt_dt));*/
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                 var objType= typeof(griddata.appiontmnt_dt);
                                 if(objType=='string')
                                 {   
@@ -3763,7 +3577,6 @@
                                 rowval["hdn_prod_id"] = griddata.itemid;
                                 rowval["itemgroup"] = griddata.itemgroup;
                                 rowval["potentialqty"] = griddata.Potential_Quantity;
-<<<<<<< HEAD
                                 if(typeof(griddata.actualpotenqty)=='undefined')
                                 {
                                    
@@ -3774,9 +3587,6 @@
                                   rowval["actualpotenqty"] = griddata.actualpotenqty;  
                                 }
                                 
-=======
-                                rowval["actualpotenqty"] = griddata.actualpotenqty;
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                 rowval["subactivity"] = griddata.Sub_Activity;
                                 //alert("currentdate  "+currentdate);
                                 rowval["hour_s"] = griddata.hour;
@@ -3852,7 +3662,6 @@
                         });
                         // end of Save Click function
                         $("#update_add_row").bind('click', function () {
-<<<<<<< HEAD
 
                             var max_len = $("#jqxgrid_n").jqxGrid('getdatainformation').rowscount;
                             max_len =max_len-1;
@@ -3898,9 +3707,6 @@
                             datarow_update['minit']=cp_minute;
                             var commit = $("#jqxgrid_n").jqxGrid('addrow', null, datarow_update);
                             //var commit = $("#jqxgrid_n").jqxGrid('addrow', null, {});
-=======
-                            var commit = $("#jqxgrid_n").jqxGrid('addrow', null, {});
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                         });
                         // Start of Update Click function
                         $("#update_data").click(function (event)
@@ -3922,10 +3728,7 @@
                             var valid_lead_substatus=0;
                             var valid_crm_soc=0;
                             var valid_select_lead=0;
-<<<<<<< HEAD
                             var valid_lms_pot
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 
                             var hdr_id = $('#hdn_hdr_id').val();
 
@@ -3948,7 +3751,6 @@
                                 var noofleads = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "noofleads");
                                 var select_leadid = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "leadid");
                                 var prod_grp = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "itemgroup");
-<<<<<<< HEAD
                                 var line_id = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "line_id");
                                 var create_lead = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "create_lead");
                                /*  alert(" type of line_id in update "+k+" is "+typeof(line_id));
@@ -3960,29 +3762,16 @@
                                 alert("select_leadid in update "+select_leadid);*/
 
 
-=======
-                               /* alert("typeof prodgroup in update  "+typeof(prod_grp));
-                                alert(" prodgroup in update "+prod_grp);
-                                alert("noofleads in update "+noofleads);
-                                alert("select_leadid in update "+select_leadid);*/
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                 if (typeof(prod_grp)=='undefined')
                                 {
                                     valid_select_lead = 1; 
                                 }
                                 else
                                 {
-<<<<<<< HEAD
                                     if(typeof(line_id)=='undefined' && typeof(create_lead)=='undefined')
                                     {
 
                                        $("#jqxgrid_n").jqxGrid('showvalidationpopup', k, "leadid", "Please check for existing leads");
-=======
-                                  if(noofleads>0 && select_leadid==0 || typeof(select_leadid)=='undefined' )
-                                    {
-
-                                       $("#jqxgrid_n").jqxGrid('showvalidationpopup', k, "leadid", "Please Check for the leads ");
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                         valid_select_lead = 0;
                                         break;   
                                     }
@@ -3993,10 +3782,6 @@
                                 }
 
                                 var subact_value = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "subactivity");
-<<<<<<< HEAD
-=======
-
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                 if (subact_value == null || typeof(subact_value) == 'undefined')
                                 {
                                     $("#jqxgrid_n").jqxGrid('showvalidationpopup', k, "subactivity", "Please Select the Activity Type");
@@ -4022,13 +3807,9 @@
 
                                 var lead_status = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "leadstatusid");
                                 var create_lead = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "create_lead");
-<<<<<<< HEAD
                                /* alert("create_lead for the "+k+" is" +create_lead);
                                 alert("status id "+lead_status);
                                 alert("typeof status id "+typeof(status));*/
-=======
-                               // alert("status "+lead_status);
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                 
                                 if (create_lead==1)
                                 {
@@ -4052,11 +3833,8 @@
                                 
                                 var lead_substatus = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "leadsubstatusid");
                                 var create_lead = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "create_lead");
-<<<<<<< HEAD
                              /*   alert("lead_substatus id "+k+" is"+lead_substatus);
                                 alert("typeof lead_substatus id "+k+" is"+typeof(lead_substatus));*/
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                 if (create_lead==1)
                                 {
                                     if (lead_substatus == null || typeof(lead_substatus) == 'undefined' || lead_substatus == 'Select Substatus')
@@ -4126,11 +3904,6 @@
                                 if (mins_value == null || typeof(mins_value) == 'undefined') {
                                     $("#jqxgrid_n").jqxGrid('showvalidationpopup', k, "minit", "Please Select the Minutes");
                                     valid_mins = 0;
-<<<<<<< HEAD
-=======
-
-
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                     break;
                                 }
                                 else
@@ -4138,7 +3911,6 @@
                                     valid_mins = 1;
                                 }
 
-<<<<<<< HEAD
                                 var lms_potential = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "actualpotenqty");
                            /*     alert("lms_potential in update "+k+" is"+lms_potential);
                                 alert("lms_potential type in update "+k+" is "+typeof(lms_potential));
@@ -4174,13 +3946,6 @@
                               alert (" in update valid_lead_status flag is after k loop"+valid_lead_status);
                               alert (" in update valid_lead_substatus flag is after k loop"+valid_lead_substatus);*/
                               
-=======
-                               
-
-                            }
-                            //  alert (" date flag after k loop "+valid_dtflag);
-                            //  alert (" Pg flag is after k loop"+valid_pgflag);
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                             if (valid_custgrp == 0)
                             {
                                 return false;
@@ -4223,14 +3988,11 @@
                             {
                                 return false;
                             }
-<<<<<<< HEAD
                              if (valid_lms_pot == 0)
                             {
                                 return false;
                             }
 
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                             
 
                             var currentdate = $('#update_header_date').val();
@@ -4286,11 +4048,7 @@
                                 rowval["Remarks"] = griddata.remarks;
                                 rowval["statusid"] = griddata.leadstatusid;
                                 rowval["leadsubstatusid"] = griddata.leadsubstatusid;
-<<<<<<< HEAD
                                 //alert("hdn_cust_id "+griddata.custid);
-=======
-                               // alert("statusid "+griddata.leadstatusid);
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                // alert("substatusid  "+griddata.leadsubstatusid);
                                 if (typeof(griddata.prevstatusid)=='undefined')
                                 {
@@ -4346,14 +4104,10 @@
                             });
 
                         // view grid double click function start
-<<<<<<< HEAD
                          $('#jqxgrid_n').on('cellclick', function (event) {
                         //  alert("test");
                              $("#jqxgrid_n").jqxGrid('hidevalidationpopups');
                          });
-=======
-
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                         $("#jqxgrid_n").on("celldoubleclick", function (event)
                         {
                             var column = event.args.column;
@@ -4592,13 +4346,10 @@
                                 $("#jqxgrid_add").jqxGrid('setcellvalue', jqxgrid_add_row_index, "Potential_Quantity", potential_quantity);
                                 $("#jqxgrid_add").jqxGrid('setcellvalue', jqxgrid_add_row_index, "noofleads", noofleads);
                                 $("#jqxgrid_add").jqxGrid('setcellvalue', jqxgrid_add_row_index, "result_type", resulttype);
-<<<<<<< HEAD
                                 if (noofleads==0)
                                 {
                                    $("#jqxgrid_add").jqxGrid('setcellvalue', jqxgrid_add_row_index, "leadid", "No Leads"); 
                                 }
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 
                             }
                             if (actionmode == 'update')
@@ -4610,13 +4361,10 @@
                                  $("#jqxgrid_n").jqxGrid('setcellvalue', jqxgrid_n_row_index, "subactivity", "LEADS");
                                  
                                 }
-<<<<<<< HEAD
                                 if (noofleads==0)
                                 {
                                    $("#jqxgrid_n").jqxGrid('setcellvalue', jqxgrid_n_row_index, "leadid", "No Leads"); 
                                 }
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
 
                                 $("#jqxgrid_n").jqxGrid('setcellvalue', jqxgrid_n_row_index, "potentialqty", potential_quantity);
                                 $("#jqxgrid_n").jqxGrid('setcellvalue', jqxgrid_n_row_index, "result_type", resulttype);
@@ -4755,11 +4503,7 @@
                                                 lead_curr_substsid =rows[0].curr_substats_id;
                                             }
                                         });
-<<<<<<< HEAD
                                          $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "actualpotenqty", lead_poten);
-=======
-                                         $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "Potential_Quantity", lead_poten);
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                          $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "Quantity_Requirement", lead_req);
                                          $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "division", lead_salestype);
                                          $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "Mode_Of_Contact", lead_email_id);
@@ -5003,10 +4747,7 @@
                                             <input id='update_header_date'/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="username"/>&nbsp;&nbsp;&nbsp;<input type="text" id="branch"/>
                                         </div>
                                         <div id='collector_update'></div> 
-<<<<<<< HEAD
                                         <div style="float: left;color:red;">Enter LMS Potential and Immediate Requirements in MT / Month</div>
-=======
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                         <div id="jqxgrid_n" style="posistion:relative; float: left; width:100%;" ></div>
                                         <input id="update_add_row" type="hidden" value="Add New Row" />
                                         <input id="update_delete_row" type="hidden" value="Delete Selected Row" />
@@ -5022,21 +4763,12 @@
                                         <div id="addWindow" style="width:100%; margin-left:200px; display:none;" >
                                                 <div id="addWindowContent" style="float: left; width:100%;">
                                                     <span id="validateProductName_add"></span>
-<<<<<<< HEAD
                                                     <div style="float: left; "><label>Entry Date: (you can add entries for the past one week only) </label>
                                                         <div id="addcurrentdate"></div>
                                                         <div id='collector'></div>
                                                     </div>
                                                     <div style="float: left;color:red;">Enter LMS Potential and Immediate Requirements in MT / Month</div>
                                                     <div id="jqxgrid_add" style="float: left; width:100%;" ></div>
-=======
-                                                    <div style=" float: left; "><label>Entry Date: (you can add entries for the past one week only) </label>
-                                                        <div id="addcurrentdate"></div>
-                                                        <div id='collector'></div>
-                                                    </div>
-
-                                                    <div id="jqxgrid_add" style="; float: left; width:100%;" ></div>
->>>>>>> cff797a85190895168222e9ccd4c1540cf140f2e
                                                     <input id="addrowbutton" type="hidden" value="Add New Row" />
                                                     <input id="deleterowbutton" type="hidden" value="Delete Selected Row" />
                                                     <input id="save" type="hidden" value="save data" />
