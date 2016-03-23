@@ -261,6 +261,17 @@ class Product extends CI_Controller {
         }
     }
 
+
+
+    function checkproducts()
+    {
+
+        $data['userid'] = $this->uri->segment(3);
+
+        $this->load->view('product/listproductnames', $data);
+
+    }
+
 }
 
 ?>

@@ -49,8 +49,8 @@
 <link rel="stylesheet" href="<?= base_url() ?>public/jqwidgets/styles/jqx.energyblue.css" type="text/css" />
 <link rel="stylesheet" href="<?= base_url() ?>public/jqwidgets/styles/jqx.black.css" type="text/css" />
 <script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/globalization/globalize.js"></script> 
-    <script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxvalidator.js"></script> 
-    <script src="<?= base_url() ?>public/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxvalidator.js"></script> 
+ <script src="<?= base_url() ?>public/js/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>public/js/additional-methods.js"></script>
 <script src="<?= base_url() ?>public/js/validation_rules.js"></script> 
 
@@ -190,6 +190,7 @@
                     var row = {};
 
                     row["product_name"] = "";
+                    row["item_name"] = "";
                     row["product_id"] = "";
                     row["bulk"] = "";
                     row["repack"] = "";
@@ -217,6 +218,7 @@
                             datafields:
                                     [
                                         {name: 'product_name', type: 'string'},
+                                        {name: 'item_name', type: 'string'},
                                         {name: 'product_id', type: 'string'},
                                         {name: 'bulk', type: 'string'},
                                         {name: 'repack', type: 'string'},
@@ -432,7 +434,8 @@
                                 }
                             },
                             columns: [
-                                {text: 'Product Group', datafield: 'product_name', width: 300, editable: false},
+                                {text: 'Product Group', datafield: 'product_name', width: 150, editable: false},
+                                {text: 'Product Name', datafield: 'item_name', width: 150, editable: false},
                                 {text: 'Product id', datafield: 'product_id', width: 50, editable: false, hidden:true},
                                 {text: 'Bulk', datafield: 'bulk', width: 50,hidden:false},
                                 {text: 'Repack', datafield: 'repack', width: 65,hidden:false},
@@ -464,6 +467,7 @@
                     var columnname = column.datafield;
                     var columntext = column.text;
                     var displayValue = event.args.value;
+                    var proditemname;
                     if (customer_id == "")
                     {
                         alert("Please select the customer before selecting the product");
@@ -477,6 +481,18 @@
                             $('#win_selectItemMaster').jqxWindow({theme: 'darkblue', autoOpen: false, isModal: true, width: 400, height: 500, resizable: true, modalOpacity: 0.01, title: 'Select the Product Group'});
                             $('#win_selectItemMaster').jqxWindow({position: {x: 500, y: 100}});
                             $('#win_selectItemMaster').jqxWindow('open');
+
+                        }
+
+                        if (columnname == 'item_name')
+                        {
+                             
+                          var proditemname = $("#custprodgrid").jqxGrid('getcellvalue', jqxgrid_add_row_index, 'product_name');
+                         // alert("proditemname "+proditemname);
+                            loadproductnames(proditemname);
+                            $('#win_selectItemNames').jqxWindow({theme: 'darkblue', autoOpen: false, isModal: true, width: 400, height: 500, resizable: true, modalOpacity: 0.01, title: 'Select the Item Name'});
+                            $('#win_selectItemNames').jqxWindow({position: {x: 500, y: 100}});
+                            $('#win_selectItemNames').jqxWindow('open');
 
                         }
                     }
@@ -528,6 +544,59 @@
                 });
 //  return value from item master end
 
+//  return value from item names start
+                $("#jqxgrid_selectItemNames").jqxTooltip();
+                $("#jqxgrid_selectItemNames").on('cellselect', function (event)
+                {
+                    var rowindex = $("#jqxgrid_selectItemNames").jqxGrid('getselectedrowindex', event.args.rowindex);
+                    //alert(" rowindex "+rowindex);
+                    var prodName = $("#jqxgrid_selectItemNames").jqxGrid('getcellvalue', event.args.rowindex, 'description');
+                    var prodid = $("#jqxgrid_selectItemNames").jqxGrid('getcellvalue', event.args.rowindex, 'id');
+                    var prod_item_name = $("#jqxgrid_selectItemNames").jqxGrid('getcellvalue', event.args.rowindex, 'itemname');
+                    //alert(" product group in jqxgrid_selectItemNames "+prodName);
+                    //alert(" Item name in jqxgrid_selectItemNames "+prod_item_name);
+                    $("#custprodgrid").jqxGrid('setcellvalue', jqxgrid_add_row_index, "item_name", prod_item_name);
+                    $('#win_selectItemNames').jqxWindow('close');
+                    /*code to check product duplicates start */
+                    
+                  /*  prodid_g = prodid;
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'leads/checkduplicate_product_name/' + prodid + '/' + customer_id+'/'+prod_item_name,
+                        data: 'prodid=' + prodid + '&customerid=' + customer_id +'&prodname=' + prod_item_name,
+                        dataType: 'json',
+                        success: function (response)
+                        {
+
+                            if (response.ok == false)
+                            {
+                                //  datevalidation=false;
+                                validateProductName.html(response.msg);
+                                //     alert("Oh..!, this Product Group has already added for this customer.")
+                            }
+                            else
+                            {
+                                // datevalidation=true;
+                                validateProductName.html(response.msg);
+                                $("#custprodgrid").jqxGrid('setcellvalue', jqxgrid_add_row_index, "product_name", prodName);
+                                $("#custprodgrid").jqxGrid('setcellvalue', jqxgrid_add_row_index, "product_id", prodid);
+                                $("#custprodgrid").jqxGrid('setcellvalue', jqxgrid_add_row_index, "item_name", prod_item_name);
+                                $('#win_selectItemMaster').jqxWindow('close');
+
+                            }
+
+                        }
+                    })
+                    */
+                    /*code to check product dupliates end*/
+
+
+                });
+//  return value from item names end
+
+
 
 
 
@@ -551,6 +620,7 @@
                         var griddata;
                         var valid_prodname = 0;
                         var pr_name;
+                        var pr_item_name;
                         var req;
                         var valid_req = 0;
 
@@ -558,6 +628,7 @@
                         for (var i = 0; i < rowscount; i++)
                         {
                             var pr_name = $('#custprodgrid').jqxGrid('getcellvalue', i, "product_name");
+                            var pr_item_name = $('#custprodgrid').jqxGrid('getcellvalue', i, "item_name");
                             var req = $('#custprodgrid').jqxGrid('getcellvalue', i, "requirment");
                             var bulkPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "bulk");
                             var repackPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "repack");
@@ -637,7 +708,7 @@
                             griddata = $('#custprodgrid').jqxGrid('getrowdata', i);
 
                             var start_str = "{";
-                            var json_str = "\"productname\":\"" + griddata.product_name + "\",\"product_id\":\"" + griddata.product_id + "\",\"bulk\":\"" + griddata.bulk + "\",\"repack\":\"" + griddata.repack + "\",\"small_packing\":\"" + griddata.small_packing + "\",\"intact\":\"" + griddata.intact + "\",\"part_tanker\":\"" + griddata.part_tanker + "\",\"single_tanker\":\"" + griddata.single_tanker + "\",\"indent_bulk\":\"" + griddata.indent_bulk + "\",\"fcl\":\"" + griddata.fcl + "\",\"iso_container\":\"" + griddata.iso_container + "\",\"requirment\":\"" + griddata.requirment + "\"";
+                            var json_str = "\"productname\":\"" + griddata.product_name + "\",\"prod_item_name\":\"" + griddata.item_name + "\",\"product_id\":\"" + griddata.product_id + "\",\"bulk\":\"" + griddata.bulk + "\",\"repack\":\"" + griddata.repack + "\",\"small_packing\":\"" + griddata.small_packing + "\",\"intact\":\"" + griddata.intact + "\",\"part_tanker\":\"" + griddata.part_tanker + "\",\"single_tanker\":\"" + griddata.single_tanker + "\",\"indent_bulk\":\"" + griddata.indent_bulk + "\",\"fcl\":\"" + griddata.fcl + "\",\"iso_container\":\"" + griddata.iso_container + "\",\"requirment\":\"" + griddata.requirment + "\"";
 
                             var end_str = "}";
                             rowstr = start_str + json_str + end_str;
@@ -1059,6 +1130,7 @@
                                                         'id' => 'selid0',
                                                         'class' => 'mySelClass'
                                                     );
+
                                                     ?>
                                                     <table class="table table-bordered blockContainer showInlineTable">
                                                         <tbody>
@@ -1118,6 +1190,16 @@
                                                                                 'screeny' => '0'
                                                                             );
 
+                                                                             $atts_prod = array(
+                                                                                'width' => '700',
+                                                                                'height' => '500',
+                                                                                'scrollbars' => 'yes',
+                                                                                'status' => 'yes',
+                                                                                'resizable' => 'yes',
+                                                                                'screenx' => '500',
+                                                                                'screeny' => '20'
+                                                                            );
+
                                                                             echo form_dropdown('company', $optionscmp, '', 'id="company" name="company" class="dropdowncmp"');
                                                                             echo form_error('company');
                                                                             echo anchor_popup('leads/addnewcustomer', 'Add New Customer', $atts);
@@ -1141,6 +1223,12 @@
                                                                         echo anchor_popup('product/addnewitem/' . $this->session->userdata['user_id'], 'Add New Products', $selattrs);
                                                                         ?>
                                                                     </span> 
+
+                                                                   <!--  <span>&nbsp;&nbsp;<?php
+                                                                        echo form_error('product');
+                                                                        echo anchor_popup('product/checkproducts/' . $this->session->userdata['user_id'], 'Check Product Name', $atts_prod);
+                                                                        ?>
+                                                                    </span> --> 
                                                                 </th>
                                                             </tr>
                                                              <tr>
@@ -1619,6 +1707,14 @@
                                                         </div>
                                                     </div>
                                                     <!-- Select Itemmaster popup end -->
+                                                    <!-- Select item name popup start -->
+                                                    <div id="win_selectItemNames" style="width: 50%" >
+                                                        <span id="validateItemName"></span>
+                                                        <div style="margin: 10px">
+                                                            <div id="jqxgrid_selectItemNames" style="width: 400px;"></div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Select item name popup end -->
                                                     <div class="clearfix">
                                                     </div>
 
@@ -1684,7 +1780,6 @@
                                 datafields: [
                                     {name: 'id', type: 'number'},
                                     {name: 'description', type: 'text'},
-                                    {name: 'itemname', type: 'text'},
                                 ],
                                 id: 'id',
                                 localdata: rows
@@ -1727,6 +1822,71 @@
                                         [
                                             {text: 'Id', dataField: 'id', width: 50},
                                             {text: 'Product Group', dataField: 'description', width: 300, height: 600},
+                                        ]
+                            });
+
+
+
+                }
+                /* function to load product names based on the group start*/
+                function loadproductnames(proditemname)
+                {
+                    var url = base_url + 'leads/list_prodgroups_names/'+proditemname
+                    var rows = {};
+                    jQuery.ajax({
+                        dataType: "html",
+                        url: url,
+                        type: "POST",
+                        async: false,
+                        error: function (xhr, status) {
+                        },
+                        success: function (result) {
+                            var obj = jQuery.parseJSON(result);
+                            rows = obj.rows;
+                        }
+                    });
+
+                    var item_source_names =
+                            {
+                                datatype: "json",
+                                datafields: [
+                                    {name: 'id', type: 'number'},
+                                    {name: 'description', type: 'text'},
+                                    {name: 'itemname', type: 'text'},
+                                ],
+                                id: 'id',
+                                localdata: rows
+                            };
+
+                    var dataAdapterItemNames = new $.jqx.dataAdapter(item_source_names);
+                    $("#jqxgrid_selectItemNames").jqxGrid(
+                            {
+                                width: '100%',
+                                source: dataAdapterItemNames,
+                                theme: 'energyblue',
+                                selectionmode: 'singlecell',
+                                pageable: true,
+                                columnsresize: true,
+                                sortable: true,
+                                showfilterrow: true,
+                                filterable: true,
+                                cellhover: function (element, pageX, pageY)
+                                    {
+                                        // update tooltip.
+                                        var cellValue = $(element.innerHTML).text();
+                                        var tooltipContent = "<div style='color: Green;'>" + cellValue + "</div>";
+                                        $("#jqxgrid_selectItemNames").jqxTooltip('open', pageX + 15, pageY + 15);
+                                        $("#jqxgrid_selectItemNames").jqxTooltip({ content: tooltipContent });
+                                        // open tooltip.
+                                    },
+
+
+                                    // update tooltip.
+
+                                columns:
+                                        [
+                                            {text: 'Id', dataField: 'id', width: 50},
+                                            {text: 'Product Group', dataField: 'description', width: 150, height: 600,hidden:true},
                                             {text: 'Product Name', dataField: 'itemname', width: 300, height: 600},
                                         ]
                             });
@@ -1734,6 +1894,10 @@
 
 
                 }
+
+                /* function to load product names based on the group end */
+
+
 </script>
 <?php $this->load->view('include_idletimeout.php'); ?> 
 

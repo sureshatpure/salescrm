@@ -671,7 +671,8 @@ class Leads extends CI_Controller {
      
 
         $hdn_grid_row_data = json_decode($_POST['hdn_grid_row_data'], TRUE);
-        /*echo"<pre>";print_r($_POST);echo"</pre>";
+
+      /*  echo"<pre>";print_r($_POST);echo"</pre>";
         echo"<pre>";print_r($hdn_grid_row_data);echo"</pre>"; 
         
         $potential_arry = array();
@@ -697,6 +698,7 @@ class Leads extends CI_Controller {
         echo"date_visit_time ".$date_visit_time."<br>";
 
         die;*/
+
         $customFieldPoten = array();
         $leaddata = array();
 
@@ -1120,6 +1122,7 @@ class Leads extends CI_Controller {
                         }
                         $leadproducts = array('leadid' => $lead_id,
                             'productid' => $hdn_grid_row_data[$key]['product_id'],
+                            'product_itemname' => $hdn_grid_row_data[$key]['prod_item_name'],
                             'quantity' => $hdn_grid_row_data[$key]['requirment'],
                             'product_group' => $itemgroup_name,
                             'created_date' => date('Y-m-d:H:i:s'),
@@ -1361,9 +1364,9 @@ class Leads extends CI_Controller {
                 redirect($url . 'dailycall');
             } else {
 
-               //redirect('leads/add',$leaddata);
+               
                redirect('leads/add');
-              //  echo"<pre>";print_r($leaddata);echo"</pre>";
+              
 
 
             }
@@ -3427,8 +3430,8 @@ select  cast(customermasterhdr.id as varchar(50)), customermasterhdr.tempcustnam
     }
 
     function selectproducts_all() {
-        $sql='SELECT  min(id) as id, itemgroup as description,itemname FROM  view_tempitemmaster_pg_pname WHERE length(itemgroup) >1 GROUP BY itemgroup,itemname  ORDER BY itemgroup asc';  
-        //$sql='SELECT  min(id) as id, itemgroup as description FROM view_tempitemmaster_pg   GROUP BY itemgroup ORDER BY itemgroup asc';
+        //$sql='SELECT  min(id) as id, itemgroup as description,itemname FROM  view_tempitemmaster_pg_pname WHERE length(itemgroup) >1 GROUP BY itemgroup,itemname  ORDER BY itemgroup asc';  
+        $sql='SELECT  min(id) as id, itemgroup as description FROM view_tempitemmaster_pg   GROUP BY itemgroup ORDER BY itemgroup asc';
        // $sql = 'SELECT  DISTINCT on (description) id, description FROM view_tempitemmaster ORDER BY description asc';
         //$sql='SELECT    itemgroup as id,  itemgroup as description FROM itemmaster  WHERE length(itemgroup) >1  GROUP BY itemgroup  ORDER BY itemgroup asc';
         //		$sql='SELECT    id,  itemgroup as description FROM itemmaster  WHERE length(itemgroup) >1  GROUP BY itemgroup  ORDER BY itemgroup asc';
@@ -3438,6 +3441,21 @@ select  cast(customermasterhdr.id as varchar(50)), customermasterhdr.tempcustnam
         header('Content-Type: application/x-json; charset=utf-8');
         echo $viewdata;
     }
+    function list_prodgroups_names($proditemname) {
+        $proditemname = urldecode($proditemname);
+        $sql="SELECT  min(id) as id, itemgroup as description,itemname FROM  view_tempitemmaster_pg_pname WHERE itemgroup='".$proditemname."' AND length(itemgroup) >1   GROUP BY itemgroup,itemname  ORDER BY itemgroup asc";  
+        //$sql='SELECT  min(id) as id, itemgroup as description FROM view_tempitemmaster_pg   GROUP BY itemgroup ORDER BY itemgroup asc';
+       // $sql = 'SELECT  DISTINCT on (description) id, description FROM view_tempitemmaster ORDER BY description asc';
+        //$sql='SELECT    itemgroup as id,  itemgroup as description FROM itemmaster  WHERE length(itemgroup) >1  GROUP BY itemgroup  ORDER BY itemgroup asc';
+        //      $sql='SELECT    id,  itemgroup as description FROM itemmaster  WHERE length(itemgroup) >1  GROUP BY itemgroup  ORDER BY itemgroup asc';
+        $activitydata['dataitemmaster'] = $this->Leads_model->get_all_products($sql);
+        //  $viewdata = '['.$activitydata['dataitemmaster'].']'; 
+        $viewdata = $activitydata['dataitemmaster'];
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $viewdata;
+    }
+
+    
 
     
 

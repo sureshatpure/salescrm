@@ -1316,6 +1316,7 @@ class Leads_model extends CI_Model {
             leadproducts.productid,
             leadproducts.product_group,
             view_tempitemmaster.description AS productname,
+            leadproducts.product_itemname,
             vw_web_user_login.empname as assign_from_name,
             assignedfrom.empname,
             view_tempcustomermaster.tempcustname,
@@ -1365,7 +1366,12 @@ class Leads_model extends CI_Model {
             $row["lead_close_status"] = $closed;
             $row["lead_close_option"] = $jTableResult['leaddetails'][$i]["lead_close_option"];
             $row["lead_close_comments"] = $jTableResult['leaddetails'][$i]["lead_close_comments"];
-            $row["productname"] = $jTableResult['leaddetails'][$i]["productname"];
+
+            $row["productname"] = (empty($jTableResult['leaddetails'][$i]["product_itemname"])) ? $jTableResult['leaddetails'][$i]["productname"] : $jTableResult['leaddetails'][$i]["product_itemname"];
+           
+            
+           // $row["productname"] = $jTableResult['leaddetails'][$i]["productname"];
+            
             $row["product_group"] = $jTableResult['leaddetails'][$i]["product_group"];
             $row["productid"] = $jTableResult['leaddetails'][$i]["productid"];
             $row["branch"] = $jTableResult['leaddetails'][$i]["user_branch"];
@@ -2095,7 +2101,7 @@ class Leads_model extends CI_Model {
     }*/
 
     function get_lead_product_details_view_detail($id) {
-        $sql = "SELECT  
+      /*  $sql = "SELECT  
                     * 
                     FROM  (
                         SELECT 
@@ -2106,9 +2112,26 @@ class Leads_model extends CI_Model {
                             lead_prod_potential_types lp 
                             WHERE lp.leadid=". $id."
                             )  g WHERE  sal_flag  in (SELECT  sales_type_flag FROM leaddetails WHERE leadid=". $id."
+                        )";*/
+
+         $sql = "SELECT  
+                    * 
+                    FROM  (
+                        SELECT 
+                            (SELECT description FROM view_tempitemmaster_grp j WHERE j.id = lp.productid) as description ,
+                            (SELECT itemgroup FROM view_tempitemmaster_grp j WHERE j.id = lp.productid) as itemgroup , 
+                            (SELECT product_itemname FROM leadproducts  p WHERE p.leadid = lp.leadid) as product_item_name ,
+                            (SELECT n_value_displayname FROM lead_sale_type j WHERE j.n_value_id = lp.product_type_id ) as n_value ,
+                            (SELECT quantity FROM leadproducts j WHERE j.leadid = lp.leadid and lp .productid = j.productid ) as quantity , potential, CASE WHEN product_type_id IN (4, 5, 6) THEN 'I' ELSE 'R' END AS sal_flag 
+                            FROM 
+                            lead_prod_potential_types lp 
+                            WHERE lp.leadid=". $id."
+                            )  g WHERE  sal_flag  in (SELECT  sales_type_flag FROM leaddetails WHERE leadid=". $id."
                         )";
 
-        //echo $sql; die;
+        echo $sql; die;
+
+                 
         $result = $this->db->query($sql);
         $productdetails = $result->result_array();
         return $productdetails;

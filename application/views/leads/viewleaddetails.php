@@ -404,7 +404,11 @@
                                 <table class="table table-bordered equalSplit detailview-table">
                                     <thead>
                                         <tr>
-                                            <th class="blockHeader" colspan="8"><img class="cursorPointer alignMiddle blockToggle  hide  " src="<?= base_url() ?>public/vdfiles/arrowRight.png" data-mode="hide" data-id="13"><img class="cursorPointer alignMiddle blockToggle " src="<?= base_url() ?>public/vdfiles/arrowDown.png" data-mode="show" data-id="13">&nbsp;&nbsp;Product Name : <?php echo $leadproducts[0]['description']; ?>&nbsp;&nbsp;&nbsp;&nbsp;Current Requirment : <?php echo $leadproducts[0]['quantity']; ?> (MT/Mon)
+                                            <th class="blockHeader" colspan="8"><img class="cursorPointer alignMiddle blockToggle  hide  " src="<?= base_url() ?>public/vdfiles/arrowRight.png" data-mode="hide" data-id="13"><img class="cursorPointer alignMiddle blockToggle " src="<?= base_url() ?>public/vdfiles/arrowDown.png" data-mode="show" data-id="13"><font color="#ffd700">&nbsp;&nbsp;Product Group :</font>
+                                             <?php echo $leadproducts[0]['itemgroup']; ?> <font color="#ffd700">&nbsp;&nbsp;Product Name :
+                                             </font><?php echo $leadproducts[0]['product_item_name']; ?><font color="#ffd700"> &nbsp;&nbsp;Product Description :
+                                             </font><?php echo $leadproducts[0]['description']; ?><font color="#ffd700">
+                                             &nbsp;&nbsp;&nbsp;&nbsp;Current Requirment : </font><?php echo $leadproducts[0]['quantity']; ?> (MT/Mon)
                                             </th>
                                         </tr>
                                     </thead>
