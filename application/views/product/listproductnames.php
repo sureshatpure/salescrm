@@ -59,7 +59,7 @@
             function listallprod_groups_names()
             {
 
-                var url = base_url + 'leads/list_prodgroups_names'
+                var url = base_url + 'leads/list_allprodgroups_names'
                 var rows = {};
                 jQuery.ajax({
                     dataType: "html",

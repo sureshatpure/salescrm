@@ -1792,6 +1792,7 @@ class Leads_model extends CI_Model {
             leadproducts.productid,
             leadproducts.product_group,
             view_tempitemmaster.description AS productname,
+            leadproducts.product_itemname,
             vw_web_user_login.empname as assign_from_name,
             assignedfrom.empname,
             view_tempcustomermaster.tempcustname,
@@ -1845,7 +1846,10 @@ class Leads_model extends CI_Model {
             $row["lead_close_status"] = $closed;
             $row["lead_close_option"] = $jTableResult['leaddetails'][$i]["lead_close_option"];
             $row["lead_close_comments"] = $jTableResult['leaddetails'][$i]["lead_close_comments"];
-            $row["productname"] = $jTableResult['leaddetails'][$i]["productname"];
+            
+            $row["productname"] = (empty($jTableResult['leaddetails'][$i]["product_itemname"])) ? $jTableResult['leaddetails'][$i]["productname"] : $jTableResult['leaddetails'][$i]["product_itemname"];
+            //$row["productname"] = $jTableResult['leaddetails'][$i]["productname"];
+            
             $row["productid"] = $jTableResult['leaddetails'][$i]["productid"];
             $row["product_group"] = $jTableResult['leaddetails'][$i]["product_group"];
             $row["branch"] = $jTableResult['leaddetails'][$i]["user_branch"];
@@ -2129,7 +2133,7 @@ class Leads_model extends CI_Model {
                             )  g WHERE  sal_flag  in (SELECT  sales_type_flag FROM leaddetails WHERE leadid=". $id."
                         )";
 
-        echo $sql; die;
+     //   echo $sql; die;
 
                  
         $result = $this->db->query($sql);

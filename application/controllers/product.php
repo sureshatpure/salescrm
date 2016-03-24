@@ -263,7 +263,7 @@ class Product extends CI_Controller {
 
 
 
-    function checkproducts()
+    function lisallproducts()
     {
 
         $data['userid'] = $this->uri->segment(3);

@@ -66,6 +66,7 @@
                 white-space: normal;
                 width: 9em;
             }
+
         </style>
 
         <!-- -->
@@ -467,7 +468,7 @@
                     var columnname = column.datafield;
                     var columntext = column.text;
                     var displayValue = event.args.value;
-                    var proditemname;
+                    var prod_item_group;
                     if (customer_id == "")
                     {
                         alert("Please select the customer before selecting the product");
@@ -487,12 +488,20 @@
                         if (columnname == 'item_name')
                         {
                              
-                          var proditemname = $("#custprodgrid").jqxGrid('getcellvalue', jqxgrid_add_row_index, 'product_name');
-                         // alert("proditemname "+proditemname);
-                            loadproductnames(proditemname);
+                          var prod_item_group = $("#custprodgrid").jqxGrid('getcellvalue', jqxgrid_add_row_index, 'product_name');
+                          //alert("prod_item_group "+prod_item_group);
+                          if(prod_item_group=="")
+                          {
+                           alert("Please select the product group first"); 
+                          }
+                          else
+                          {
+                            loadproductnames(prod_item_group);
                             $('#win_selectItemNames').jqxWindow({theme: 'darkblue', autoOpen: false, isModal: true, width: 400, height: 500, resizable: true, modalOpacity: 0.01, title: 'Select the Item Name'});
                             $('#win_selectItemNames').jqxWindow({position: {x: 500, y: 100}});
                             $('#win_selectItemNames').jqxWindow('open');
+                          }
+                            
 
                         }
                     }
@@ -619,6 +628,7 @@
                         $("#hdn_saveleads").val("saveYesleads");
                         var griddata;
                         var valid_prodname = 0;
+                        var valid_prod_item_name
                         var pr_name;
                         var pr_item_name;
                         var req;
@@ -639,12 +649,12 @@
                             var indent_bulkPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "indent_bulk");
                             var fclPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "fcl");
                             var iso_containerPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "iso_container");
-                            //  alert("requirment "+req);
+                             // alert("pr_item_name "+pr_item_name);
 
 
                             if (pr_name == "" || pr_name == 'undefined')
                             {
-                                $("#custprodgrid").jqxGrid('showvalidationpopup', i, "product_name", "Please Select the Product Name");
+                                $("#custprodgrid").jqxGrid('showvalidationpopup', i, "product_name", "Please Select the Product Group");
                                 valid_prodname = 0;
 
                             }
@@ -652,7 +662,21 @@
                             {
                                 valid_prodname = 1;
                             }
-                            if (valid_prodname == 0)
+
+                            /* Emd for making product item name as compulsory*/
+                            if (pr_item_name == "" || pr_item_name == 'undefined')
+                            {
+                                $("#custprodgrid").jqxGrid('showvalidationpopup', i, "item_name", "Please Select the Product Name");
+                                valid_prod_item_name = 0;
+
+                            }
+                            else
+                            {
+                                valid_prod_item_name = 1;
+                            }
+                            /* End for making product item name as compulsory*/
+
+                            if (valid_prodname == 0 || valid_prod_item_name==0 )
                             {
                                 return false;
                             }
@@ -1224,11 +1248,11 @@
                                                                         ?>
                                                                     </span> 
 
-                                                                   <!--  <span>&nbsp;&nbsp;<?php
+                                                                     <span style="margin-left:400px;" ><?php
                                                                         echo form_error('product');
-                                                                        echo anchor_popup('product/checkproducts/' . $this->session->userdata['user_id'], 'Check Product Name', $atts_prod);
+                                                                        echo anchor_popup('product/lisallproducts/' . $this->session->userdata['user_id'], 'Check Product Names / Groups', $atts_prod);
                                                                         ?>
-                                                                    </span> --> 
+                                                                    </span> 
                                                                 </th>
                                                             </tr>
                                                              <tr>
@@ -1798,26 +1822,6 @@
                                 sortable: true,
                                 showfilterrow: true,
                                 filterable: true,
-/*                                 cellhover: function (element, pageX, pageY)
-                                    {
-                                        // update tooltip.
-                                        $("#jqxgrid_selectItemMaster").jqxTooltip({ content: element.innerHTML });
-                                        // open tooltip.
-                                        $("#jqxgrid_selectItemMaster").jqxTooltip('open', pageX + 15, pageY + 15);
-                                    },*/
-                                   cellhover: function (element, pageX, pageY)
-                                    {
-                                        // update tooltip.
-                                        var cellValue = $(element.innerHTML).text();
-                                        var tooltipContent = "<div style='color: Green;'>" + cellValue + "</div>";
-                                        $("#jqxgrid_selectItemMaster").jqxTooltip('open', pageX + 15, pageY + 15);
-                                        $("#jqxgrid_selectItemMaster").jqxTooltip({ content: tooltipContent });
-                                        // open tooltip.
-                                    },
-
-
-                                    // update tooltip.
-
                                 columns:
                                         [
                                             {text: 'Id', dataField: 'id', width: 50},
@@ -1829,9 +1833,9 @@
 
                 }
                 /* function to load product names based on the group start*/
-                function loadproductnames(proditemname)
+                function loadproductnames(prod_item_group)
                 {
-                    var url = base_url + 'leads/list_prodgroups_names/'+proditemname
+                    var url = base_url + 'leads/list_prodgroups_names/'+prod_item_group
                     var rows = {};
                     jQuery.ajax({
                         dataType: "html",
@@ -1870,19 +1874,6 @@
                                 sortable: true,
                                 showfilterrow: true,
                                 filterable: true,
-                                cellhover: function (element, pageX, pageY)
-                                    {
-                                        // update tooltip.
-                                        var cellValue = $(element.innerHTML).text();
-                                        var tooltipContent = "<div style='color: Green;'>" + cellValue + "</div>";
-                                        $("#jqxgrid_selectItemNames").jqxTooltip('open', pageX + 15, pageY + 15);
-                                        $("#jqxgrid_selectItemNames").jqxTooltip({ content: tooltipContent });
-                                        // open tooltip.
-                                    },
-
-
-                                    // update tooltip.
-
                                 columns:
                                         [
                                             {text: 'Id', dataField: 'id', width: 50},

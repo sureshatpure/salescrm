@@ -3455,6 +3455,20 @@ select  cast(customermasterhdr.id as varchar(50)), customermasterhdr.tempcustnam
         echo $viewdata;
     }
 
+    function list_allprodgroups_names() {
+       
+        $sql="SELECT  min(id) as id, itemgroup as description,itemname FROM  view_tempitemmaster_pg_pname WHERE length(itemgroup) >1  GROUP BY itemgroup,itemname  ORDER BY itemgroup asc";  
+        //$sql='SELECT  min(id) as id, itemgroup as description FROM view_tempitemmaster_pg   GROUP BY itemgroup ORDER BY itemgroup asc';
+       // $sql = 'SELECT  DISTINCT on (description) id, description FROM view_tempitemmaster ORDER BY description asc';
+        //$sql='SELECT    itemgroup as id,  itemgroup as description FROM itemmaster  WHERE length(itemgroup) >1  GROUP BY itemgroup  ORDER BY itemgroup asc';
+        //      $sql='SELECT    id,  itemgroup as description FROM itemmaster  WHERE length(itemgroup) >1  GROUP BY itemgroup  ORDER BY itemgroup asc';
+        $activitydata['dataitemmaster'] = $this->Leads_model->get_all_products($sql);
+        //  $viewdata = '['.$activitydata['dataitemmaster'].']'; 
+        $viewdata = $activitydata['dataitemmaster'];
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $viewdata;
+    }
+
     
 
     
