@@ -327,14 +327,16 @@ class Leads_model extends CI_Model {
         //global $get_assign_to_user_id;
         //   echo"the value is ".$get_assign_to_user_id."<br>"; 
         @$this->session->set_userdata($get_assign_to_user_id);
-        //	print_r($this->session->userdata);
+        
         $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
-        //print_r($get_assign_to_user_id);die;
-        //	$sql="select header_user_id,displayname from (select  header_user_id, upper(location_user) || '-' || upper(empname) as displayname from  vw_web_user_login ) a where header_user_id IN (".$get_assign_to_user_id.") order by displayname";
+       
 
-        $sql = "select header_user_id,displayname,branch from (select  header_user_id,upper(location_user) as branch, upper(location_user) || '-' || upper(empname) as displayname from  vw_web_user_login ) a where header_user_id IN (" . $get_assign_to_user_id . ") and upper(branch)='" . $branch . "' order by displayname";
+       /* $sql = "select header_user_id,displayname,branch from (select  header_user_id,upper(location_user) as branch, upper(location_user) || '-' || upper(empname) as displayname from  vw_web_user_login ) a where header_user_id IN (" . $get_assign_to_user_id . ") and upper(branch)='" . $branch . "' order by displayname";
+*/
+        $sql = "select header_user_id,displayname,branch from (select  header_user_id,upper(location_user) as branch, upper(location_user) || '-' || upper(empname) as displayname1,upper(empname) || '-' || upper(location_user) as displayname from  vw_web_user_login ) a where header_user_id IN (" . $get_assign_to_user_id . ") and upper(branch)='" . $branch . "' order by displayname";        
 
 
+   // echo sql; die;
         $result = $this->db->query($sql);
         $options = $result->result_array();
 
@@ -687,7 +689,7 @@ class Leads_model extends CI_Model {
         return $options_arr;
     }
 
-    function get_assigned_tobranch() {
+    function get_assigned_tobranch_old() {
         //echo " check ".$this->brach_sel; die;
         @$this->session->set_userdata($get_assign_to_user_id);
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
@@ -705,6 +707,40 @@ class Leads_model extends CI_Model {
         //	echo $sql;
         $result = $this->db->query($sql);
         //	print_r($result->result_array());
+        $options = $result->result_array();
+
+        $options_arr;
+        $options_arr[''] = '-Please Select User-';
+        if (count($options) > 0) {
+            foreach ($options as $option) {
+                $options_arr[$option['header_user_id']] = $option['displayname'];
+            }
+        } else {
+            $user_id = $this->session->userdata['user_id'];
+            $name = $this->session->userdata['username'];
+            $options_arr[$user_id] = $name;
+        }
+        return $options_arr;
+    }
+
+    function get_assigned_tobranch() {
+        //echo " check ".$this->brach_sel; die;
+        @$this->session->set_userdata($get_assign_to_user_id);
+        @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+        //if ($get_assign_to_user_id == "") {
+        if (@$this->session->userdata['reportingto'] == "") {
+            $sql = "select header_user_id,displayname , branch from 
+                                (select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname1,upper(empname) || '-' || upper(location_user) as displayname from 
+                                 vw_web_user_login ) a where upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";
+        } else {
+            $sql = "select header_user_id,displayname , branch from 
+                                (select header_user_id,upper(location_user) as branch ,upper(location_user) || '-' || upper(empname) as displayname1,upper(empname) || '-' || upper(location_user) as displayname from 
+                                 vw_web_user_login ) a where header_user_id IN (" . $get_assign_to_user_id . ")  and upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";
+        }
+
+        //echo $sql; die;
+        $result = $this->db->query($sql);
+        //  print_r($result->result_array());
         $options = $result->result_array();
 
         $options_arr;
