@@ -59,8 +59,6 @@
                                 addrow: function (rowid, rowdata, position, commit) {
                                     // synchronize with the server - send insert command
                                     var data = "insert=true&" + $.param(rowdata);
-
-
                                     $.ajax({
                                         dataType: 'json',
                                         type: 'post',
