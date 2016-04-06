@@ -238,6 +238,7 @@ class Leads extends CI_Controller {
         //$data['optionscmp'] = $this->Leads_model->get_all_company();
        // $data['optionscmp'] = $this->Leads_model->getleadcustomers($def_collector);
         $data['optionscmp'] = $this->Leads_model->getleadcustomers();
+        $data['optionsmc'] = $this->Leads_model->getmarketcircles();
         
         
         $data['optionscnt'] = $this->Leads_model->get_country();
@@ -588,14 +589,33 @@ class Leads extends CI_Controller {
         header('Content-Type: application/x-json; charset=utf-8');
         echo json_encode($substatus);
     }
-    function getleadcustomersadd($collector) {
+    function getleadcustomersadd($marketcircle) {
 
-        $this->Leads_model->collector = $collector;
+        $this->Leads_model->collector = $marketcircle;
 
-        $customers = $this->Leads_model->get_lead_customersadd($collector);
+        $customers = $this->Leads_model->get_lead_customersadd($marketcircle);
         header('Content-Type: application/x-json; charset=utf-8');
         echo json_encode($customers);
     }
+
+
+     function getleadcustomersaddmc($collector,$marketcircle) {
+
+        $this->Leads_model->collector = $marketcircle;
+
+        $customers = $this->Leads_model->get_lead_customersadd_mc($collector,$marketcircle);
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo json_encode($customers);
+    }
+    function getmarketcirclesadd($collector) {
+
+        $this->Leads_model->collector = $collector;
+        //echo"collector ".$collector; die;
+        $marketcircle = $this->Leads_model->get_lead_marketcircles($collector);
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo json_encode($marketcircle);
+    }
+    
 
     function getassignedtobranch($brach_sel) {
 

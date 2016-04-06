@@ -823,12 +823,45 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
                 FROM vw_web_user_login 
                  JOIN market_circle_hdr on market_circle_hdr.gc_executive_code= vw_web_user_login.header_user_id AND vw_web_user_login.header_user_id in (".$reporting_user_id.") ) GROUP BY collector";
         }
-       
+       //echo $sql;
        
         $result = $this->db->query($sql);
         $arr = "{\"rows\":" .json_encode($result->result_array()). "}";
         return $arr;
     }
+
+     public function get_marketcircles() {
+      
+      // $sql="SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=1015 GROUP BY  collector_id,mc_code,mc_zone,mc_sub_id";
+     	 $sql="SELECT 'MarketCircle' as mc_sub_id FROM market_circle_hdr LIMIT 1";
+        $result = $this->db->query($sql);
+        $arr = "{\"rows\":" .json_encode($result->result_array()). "}";
+        return $arr;
+
+    }
+
+    public function get_collector_mc($collector) {
+
+        $collector = urldecode($collector);
+        $sql_collector = "SELECT id as collector_id  FROM collectormaster WHERE upper(collectorname) ='".strtoupper($collector)."'";
+        $result_collector = $this->db->query($sql_collector);
+        $collectorid = $result_collector->result_array();
+        //echo "collector_id".$collectorid['0']['collector_id'];
+        $collector_id =$collectorid['0']['collector_id'];
+        
+
+        $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";
+       // echo $sql; die;
+        $result = $this->db->query($sql);
+       	$market_circles = $result->result_array();
+		$arr =  json_encode($market_circles); 
+		return $arr;
+
+    }
+
+  
+
+
 
 /* functions added for merging start*/
 

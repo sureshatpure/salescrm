@@ -136,6 +136,23 @@ class dailyactivity extends CI_Controller {
         header('Content-Type: application/x-json; charset=utf-8');
         echo $viewdata;
     }
+    function get_data_customermaster_coll_mc($collector,$market_circle) {
+
+        //$sql='SELECT  distinct on (view_tempcustomermaster.tempcustname) view_tempcustomermaster.id,view_tempcustomermaster.tempcustname FROM     view_tempcustomermaster ORDER BY  tempcustname ASC';
+        $collector = urldecode($collector);
+        /* $sql = "SELECT distinct  replace(customergroup,'''','')   as customergroup,id  FROM customermasterhdr WHERE 
+        collector ='".$collector."' or collector is NULL order by customergroup";*/
+     /*   $sql = "SELECT distinct  replace(customergroup,'''','')   as customergroup FROM customermasterhdr WHERE 
+        collector ='".$collector."' or collector is NULL order by customergroup";*/
+
+        $sql = "SELECT min(id) as id,replace(customergroup,'''','')   as customergroup,mc_code FROM customermasterhdr WHERE   collector ='".$collector."'  AND mc_code='".$market_circle."' or collector is NULL  GROUP BY customergroup,mc_code order by customergroup ";
+
+     //  echo $sql; die;
+        $activitydata['datacustomermaster'] = $this->dailyactivity_model->get_customers($sql);
+        $viewdata = $activitydata['datacustomermaster'];
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $viewdata;
+    }
 
     function get_potentialquantity() {
         $item = html_entity_decode($this->uri->segment(4));
@@ -2180,6 +2197,19 @@ class dailyactivity extends CI_Controller {
         print_r($data);
     }
   
+    function getmarketcircles()
+    {
+        $data = array();
+        $data = $this->dailyactivity_model->get_marketcircles();
+        print_r($data);
+    }
+    
+     function getcollectormc($collector) {
+        $this->dailyactivity_model->brach_sel = urldecode($collector);
+        $market_circles = $this->dailyactivity_model->get_collector_mc($collector);
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $market_circles;
+    }
 
     function checkentrydate($hrd_currentdate){
      $user1 = $this->session->userdata['loginname'];

@@ -247,6 +247,159 @@
                     selectedIndex: -1, source: collectordataAdapter,theme: 'energyblue',
       placeHolder: "Select Collector", displayMember: "collector",autoDropDownHeight:true, valueMember: "collector", width: 200, height: 25
                 });
+
+
+           /* Market circle for add form start*/        
+           var br = "SelectMarketCircle";
+            if (br == 'SelectMarketCircle')
+            {
+                var url = base_url + "dailyactivity/getmarketcircles";
+            }
+            else
+            {
+                var url = base_url + "dailyactivity/getmarketcircles/" + br;
+            }
+
+            mcsource =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'mc_sub_id'},
+                            {name: 'mc_sub_id'}
+                        ],
+                        url: url,
+                        async: false
+                    };
+            var mcsourcedataAdapter = new $.jqx.dataAdapter(mcsource);
+ 
+            $("#marketcircle").jqxDropDownList({
+                selectedIndex: 1,
+                source: mcsourcedataAdapter,
+                displayMember: "mc_sub_id",
+                valueMember: "mc_sub_id",
+                height: 10,
+                width:262,
+                theme: theme,
+                placeHolder: '– Market Circle –'
+            });
+                    $("#marketcircle").jqxDropDownList({
+                    selectedIndex: 1, source: mcsourcedataAdapter,theme: 'energyblue',
+      placeHolder: "Market Circle", displayMember: "mc_sub_id",autoDropDownHeight:true, valueMember: "mc_sub_id", width: 200, height: 25
+                });
+
+                 $("#collector").on('select', function (event) {
+                      
+                        updateMarketcircle(event.args.item.value);
+                       
+                 }); 
+                 /*Start of function for updating market circle */
+                 var updateMarketcircle = function (datafield) {
+                    //   alert('testing'+datafield);
+
+                    var url = base_url + "dailyactivity/getcollectormc/" + datafield;
+
+                    // prepare the data
+                    mc_coll_source =
+                            {
+                                datatype: "json",
+                                datafields: [
+                                    {name: 'mc_sub_id'},
+                                    {name: 'mc_sub_id'}
+                                ],
+                                url: url,
+                                async: false
+                            };
+
+                    var mc_coll_sourcedataAdapter = new $.jqx.dataAdapter(mc_coll_source);
+                    // Create a jqxDropDownList
+
+                      $("#marketcircle").jqxDropDownList({
+                    selectedIndex: 0, source: mc_coll_sourcedataAdapter,theme: 'energyblue',
+      placeHolder: "Market Circle", displayMember: "mc_sub_id",autoDropDownHeight:true, valueMember: "mc_sub_id", width: 200, height: 25
+                });
+
+                    
+                     
+                 }   // end of updateFilterBo
+                 /*End of function for updating market circle*/ 
+            /* Market circle for add form end*/       
+
+             /* Market circle for update form start*/        
+           var brupdate = "SelectMarketCircle";
+            if (brupdate == 'SelectMarketCircle')
+            {
+                var url = base_url + "dailyactivity/getmarketcircles";
+            }
+            else
+            {
+                var url = base_url + "dailyactivity/getmarketcircles/" + br;
+            }
+
+            mcsource_update =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'mc_sub_id'},
+                            {name: 'mc_sub_id'}
+                        ],
+                        url: url,
+                        async: false
+                    };
+            var mcsource_updatedataAdapter = new $.jqx.dataAdapter(mcsource_update);
+ 
+            $("#marketcircle_update").jqxDropDownList({
+                selectedIndex: 1,
+                source: mcsource_updatedataAdapter,
+                displayMember: "mc_sub_id",
+                valueMember: "mc_sub_id",
+                height: 10,
+                width:262,
+                theme: theme,
+                placeHolder: '– Market Circle –'
+            });
+                $("#marketcircle_update").jqxDropDownList({ selectedIndex: 1, source: mcsource_updatedataAdapter,theme: 'energyblue',
+      placeHolder: "Market Circle", displayMember: "mc_sub_id",autoDropDownHeight:true, valueMember: "mc_sub_id", width: 200, height: 25
+                });
+
+                 $("#collector_update").on('select', function (event) {
+                      
+                        updateMarketcircle_up(event.args.item.value);
+                       
+                 }); 
+                 /*Start of function for updating market circle */
+                 var updateMarketcircle_up = function (datafield) {
+                    //   alert('testing'+datafield);
+
+                    var url = base_url + "dailyactivity/getcollectormc/" + datafield;
+
+                    // prepare the data
+                    mc_coll_source_up =
+                            {
+                                datatype: "json",
+                                datafields: [
+                                    {name: 'mc_sub_id'},
+                                    {name: 'mc_sub_id'}
+                                ],
+                                url: url,
+                                async: false
+                            };
+
+                    var mc_coll_sourcedataAdapter_up = new $.jqx.dataAdapter(mc_coll_source_up);
+                    // Create a jqxDropDownList
+
+                      $("#marketcircle_update").jqxDropDownList({
+                    selectedIndex: 0, source: mc_coll_sourcedataAdapter_up,theme: 'energyblue',
+      placeHolder: "Market Circle", displayMember: "mc_sub_id",autoDropDownHeight:true, valueMember: "mc_sub_id", width: 200, height: 25
+                });
+
+                    
+                     
+                 }   // end of updateFilterBo
+                 /*End of function for updating market circle*/ 
+            /* Market circle for update  form end*/  
+
+
+
                         /* change column type dynamic start*/
                         var g_create_lead_add=0;
                         var noofleads=0;
@@ -2910,7 +3063,9 @@
                             var columnindex = event.args.columnindex;
                             var columnname = column.datafield;
                             var collector = $("#collector").jqxDropDownList('getSelectedItem'); 
+                            
                            // alert("collector_val"+collector.value);
+                
                             if (dup_date==1)
                             {
                                 if (columnname == 'itemgroup')
@@ -3010,9 +3165,10 @@
                                     }
                                     else
                                     {
+                                        var marketcircle = $("#marketcircle").jqxDropDownList('getSelectedItem'); 
                                         $("#jqxgrid_selectCustomMaster").jqxGrid('clear');
                                          // Source for Customer Master grid start
-                                            var url = "dailyactivity/get_data_customermaster_coll/"+collector.value;
+                                            var url = "dailyactivity/get_data_customermaster_coll_mc/"+collector.value+"/"+marketcircle.value;
                                             var rows = {};
                                             jQuery.ajax({
                                                 dataType: "html",
@@ -3062,7 +3218,7 @@
 
                         // source for Customer Master grid end
                                         // $('#addWindow').hide();
-                                        $('#win_selectCustMaster').jqxWindow({theme: 'energyblue', autoOpen: false, width: 400, height: 500, resizable: true, title: 'Select Customer'});
+                                        $('#win_selectCustMaster').jqxWindow({theme: 'energyblue', autoOpen: false, width: 400, height: 500, resizable: true, title: '<font color="blue" weight="bold">Customers in Market Cirlce -'+marketcircle.value+' & New Customers'});
                                         $('#win_selectCustMaster').jqxWindow('open');
 
                                         var x = ($(window).width() - $("#win_selectCustMaster").jqxWindow('width')) / 2 + $(window).scrollLeft();
@@ -4202,9 +4358,10 @@
                                         }
                                         else
                                         {
+                                            var marketcircle_up = $("#marketcircle_update").jqxDropDownList('getSelectedItem'); 
                                             $("#jqxgrid_selectCustomMaster").jqxGrid('clear');
                                          // Source for Customer Master grid start
-                                            var url = "dailyactivity/get_data_customermaster_coll/"+collector.value;
+                                            var url = "dailyactivity//get_data_customermaster_coll_mc/"+collector.value+"/"+marketcircle_up.value;
                                             var rows = {};
                                             jQuery.ajax({
                                                 dataType: "html",
@@ -4252,10 +4409,10 @@
                                                     });
 
                         // source for Customer Master grid end
-                                            $('#win_selectCustMaster').jqxWindow({theme: 'energyblue', autoOpen: false, width: 400, height: 500, resizable: true, title: 'Select Customer'});
+                                            $('#win_selectCustMaster').jqxWindow({theme: 'energyblue', autoOpen: false, width: 400, height: 500, resizable: true, title: '<font color="blue" weight="bold">Customers in Market Cirlce -'+marketcircle_up.value+' & New Customers'});
                                                 $('#win_selectCustMaster').jqxWindow('open');
-                                            var x = ($(window).width() - $("#win_selectCustMaster").jqxWindow('width')) / 2 + $(window).scrollLeft();
-                                            var y = ($(window).height() - $("#win_selectCustMaster").jqxWindow('height')) / 2 + $(window).scrollTop();
+                                                var x = ($(window).width() - $("#win_selectCustMaster").jqxWindow('width')) / 2 + $(window).scrollLeft();
+                                                var y = ($(window).height() - $("#win_selectCustMaster").jqxWindow('height')) / 2 + $(window).scrollTop();
                                                 $("#win_selectCustMaster").jqxWindow({ position: { x: x, y: y} });
                                                 $('#win_selectCustMaster').jqxWindow({ zIndex: 99999}); 
                                                 $('#win_selectCustMaster').jqxWindow('bringToFront');
@@ -4747,6 +4904,7 @@
                                             <input id='update_header_date'/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="username"/>&nbsp;&nbsp;&nbsp;<input type="text" id="branch"/>
                                         </div>
                                         <div id='collector_update'></div> 
+                                        <div id='marketcircle_update'></div> 
                                         <div style="float: left;color:red;">Enter LMS Potential and Immediate Requirements in MT / Month</div>
                                         <div id="jqxgrid_n" style="posistion:relative; float: left; width:100%;" ></div>
                                         <input id="update_add_row" type="hidden" value="Add New Row" />
@@ -4766,6 +4924,7 @@
                                                     <div style="float: left; "><label>Entry Date: (you can add entries for the past one week only) </label>
                                                         <div id="addcurrentdate"></div>
                                                         <div id='collector'></div>
+                                                        <div id='marketcircle'></div>
                                                     </div>
                                                     <div style="float: left;color:red;">Enter LMS Potential and Immediate Requirements in MT / Month</div>
                                                     <div id="jqxgrid_add" style="float: left; width:100%;" ></div>

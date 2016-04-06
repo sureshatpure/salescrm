@@ -838,15 +838,76 @@
 
                 });
 
-                /**/
                 $('#collector').change(function ()
                 {
-                     $("#company > option").remove();
+                     $("#market_circle > option").remove();
                     var option = $('#collector').val();
-                 //   alert("collector change");
+                    alert("collector change"+option);
+                    if(option=='NO COLLECTOR')
+                    {
+                            $.ajax({
+                            type: "POST",
+                            url: "getleadcustomersadd/" + option,
+                            success: function (customers)
+                            {
+                                $.each(customers, function (id, value)
+                                {
+                                    var opt = $('<option />');
+                                    opt.val(id);
+                                    opt.text(value);
+                                    $('#company').append(opt);
+                                });
+                                selected_customer = $("#company option:selected").val();
+                                
+                                var sel = $('#company');
+                                var opts_list = sel.find('option');
+                                opts_list.sort(function(a, b) { return $(a).text() > $(b).text() ? 1 : -1; });
+                                sel.html('').append(opts_list);
+
+                            }
+
+                        });
+                    }
+                    else
+                    {
+                        $.ajax({
+                        type: "POST",
+                        url: "getmarketcirclesadd/" + option,
+                        success: function (market_circle)
+                            {
+                                $.each(market_circle, function (id, value)
+                                {
+                                    var opt = $('<option />');
+                                    opt.val(id);
+                                    opt.text(value);
+                                    $('#market_circle').append(opt);
+                                });
+                                selected_customer = $("#market_circle option:selected").val();
+                                
+                                var sel = $('#market_circle');
+                                var opts_list = sel.find('option');
+                                opts_list.sort(function(a, b) { return $(a).text() > $(b).text() ? 1 : -1; });
+                                sel.html('').append(opts_list);
+
+                            }
+
+                        });
+
+                    }
+
+
+                });
+                /**/
+                $('#market_circle').change(function ()
+                {
+                     $("#company > option").remove();
+                    var option = $('#market_circle').val();
+                    var option_c = $('#collector').val();
+                   // alert("market_circle change");
+                  //  alert("collector"+option_c);
                     $.ajax({
                         type: "POST",
-                        url: "getleadcustomersadd/" + option,
+                        url: "getleadcustomersaddmc/" + option_c +"/"+option,
                         success: function (customers)
                         {
                             $.each(customers, function (id, value)
@@ -1182,6 +1243,32 @@
 
                                                                             echo form_dropdown('collector', $optionscollector, '', 'id="collector" name="collector" class="dropdowncmp"');
                                                                             echo form_error('collector');
+                                                                            ?> 
+                                                                        </span>
+
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table class="table table-bordered blockContainer showInlineTable">
+                                                        <tbody>
+
+                                                            <tr>
+                                                                <th colspan="4" class="blockHeader buleboder-full">Select Market Circle</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="fieldLabel narrowWidthType" style="width:2%;">
+                                                                    <label class="muted pull-right marginRight10px">Market Circle<font color="red"> *</font></label>
+                                                                </td>
+                                                                <td class="fieldValue narrowWidthType">
+                                                                    <div class="row-fluid">
+                                                                        <span class="span10">
+                                                                            <?php
+
+                                                                            echo form_dropdown('market_circle', $optionsmc, '', 'id="market_circle" name="market_circle" class="dropdowncmp"');
+                                                                            echo form_error('market_circle');
+
                                                                             ?> 
                                                                         </span>
 
