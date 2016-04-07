@@ -830,10 +830,21 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
         return $arr;
     }
 
-     public function get_marketcircles() {
+     public function get_marketcircles($reporting_user_id) 
+     {
+     	
+     	if (@$this->session->userdata['reportingto'] == "")
+        {
+        	 $sql="SELECT 'MarketCircle' as mc_sub_id FROM market_circle_hdr LIMIT 1";
+        }
+        else
+        {
+        	
+        	 $sql="SELECT mc_sub_id as mc_sub_id FROM market_circle_hdr WHERE gc_executive_code=".$this->session->userdata['user_id'];
+        }
       
       // $sql="SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=1015 GROUP BY  collector_id,mc_code,mc_zone,mc_sub_id";
-     	 $sql="SELECT 'MarketCircle' as mc_sub_id FROM market_circle_hdr LIMIT 1";
+     	// $sql="SELECT 'MarketCircle' as mc_sub_id FROM market_circle_hdr LIMIT 1";
         $result = $this->db->query($sql);
         $arr = "{\"rows\":" .json_encode($result->result_array()). "}";
         return $arr;

@@ -244,7 +244,7 @@
       placeHolder: "Select Collector", displayMember: "collector",autoDropDownHeight:true, valueMember: "collector", width: 200, height: 25
                 });
                    $("#collector_update").jqxDropDownList({
-                    selectedIndex: -1, source: collectordataAdapter,theme: 'energyblue',
+                    selectedIndex: 0, source: collectordataAdapter,theme: 'energyblue',
       placeHolder: "Select Collector", displayMember: "collector",autoDropDownHeight:true, valueMember: "collector", width: 200, height: 25
                 });
 
@@ -1155,7 +1155,7 @@
                                     var prod_grp = data.itemgroup;
                                     var curr_poten = data.potentialqty;
                                     var leadstatus = data.leadstatusid;
-                                   /* alert("leadstatus "+leadstatus);*/
+                                    alert("leadstatus "+leadstatus);
                                     if (leadstatus=='No Status')
                                     {
 
@@ -1441,17 +1441,18 @@
                                         alert("null not matching");
                                     }*/
                                   //  alert("leadid in resultsEditorldst_update "+leadid);
-                                  // alert("type of leadid resultsEditorldst_update "+typeof(data.leadid));
+                                  
                                    if(data.leadid=='No Leads')
                                    {
                                     data.leadid=0;
                                    }
-                                  // alert("data.leadid in resultsEditorldst_update "+data.leadid);
+                      /*             alert("data.leadid in resultsEditorldst_update "+data.leadid);
+                                   alert("type of leadid resultsEditorldst_update "+typeof(data.leadid))*/;
                                    if (data.leadid===null && leadid!='No Leads' || typeof(data.leadid)==="undefined") 
                                     {
                                        geturl=base_url + "dailyactivity/getldstatusupdate"
                                     }
-                                    else if (typeof(data.leadid)==="string" && data.leadid.length >0 )
+                                    else if (typeof(data.leadid)==="number" && data.noofleads==1 )
                                     {
                                         
                                          geturl=base_url + "dailyactivity/getldstatusfor/"+leadid;
@@ -1515,23 +1516,26 @@
                                      status_name = status_name.replace(/\//gi, "-");
 
                                    var leadid =data.leadid;
-                                 /*  alert("in initeditor for update substatus "+status_name);
-                                   alert("in initeditor for update leadid "+leadid);
-                                   alert("in initeditor for update typeof leadid "+typeof(leadid));
-                                   alert("in initeditor for update length leadid "+data.leadid.length);*/
+                                  /* alert("in initeditor for update substatus "+status_name);
+                                   alert("in initeditor for update substatus leadid "+data.leadid);
+                                   alert("in initeditor for update substatus typeof leadid "+typeof(data.leadid));
+                                   alert("in initeditor for update substatus length leadid "+data.leadid.length);
+                                   alert("noofleads in initeditor for substatus update  "+data.noofleads);*/
                                    
                                    /* if (leadid!="" && leadid!='No Leads'|| typeof(data.leadid)==="undefined") 
                                     {
                                       geturl=base_url + "dailyactivity/getldsubstatusbyname/"+status_name;
                                       
                                     }*/
-                                   if (typeof(data.leadid)==="string" && data.leadid.length >0)
+                                   if (typeof(data.leadid)==="number" && data.noofleads >0)
                                     {
+                                        
                                         geturl=base_url + "dailyactivity/getldsubstatusbynameid/"+status_name+"/"+leadid;
                                        
                                     }
                                     else if ( typeof(data.leadid)==="string" && (data.leadid.length==0 || data.leadid.length=="undefined") || (typeof(data.leadid)==="number" && data.leadid==0 ))
                                     {
+                                        
                                         geturl=base_url + "dailyactivity/getldsubstatusbyname/"+status_name;
                                     }
                                    var substslist = {
@@ -1821,6 +1825,7 @@
                                                             sortable: true,
                                                             showfilterrow: false,
                                                             filterable: true,
+                                                            localization: {thousandsSeparator: ""},
                                                             columns: [
                                                                 {text: 'UID', datafield: 'id', width: 50, cellsalign: 'left', hidden: true},
                                                                 {text: 'LineId', datafield: 'line_id', width: 30, cellsalign: 'left', hidden: true},

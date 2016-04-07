@@ -2199,8 +2199,9 @@ class dailyactivity extends CI_Controller {
   
     function getmarketcircles()
     {
+        
         $data = array();
-        $data = $this->dailyactivity_model->get_marketcircles();
+        $data = $this->dailyactivity_model->get_marketcircles($this->session->userdata['get_assign_to_user_id']);
         print_r($data);
     }
     

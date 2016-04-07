@@ -842,7 +842,7 @@
                 {
                      $("#market_circle > option").remove();
                     var option = $('#collector').val();
-                    alert("collector change"+option);
+                  
                     if(option=='NO COLLECTOR')
                     {
                             $.ajax({
