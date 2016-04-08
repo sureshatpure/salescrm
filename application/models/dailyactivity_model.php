@@ -1120,10 +1120,30 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 				$prodgroup =urldecode($prodgroup);
 				$sql = "select * from vw_lead_check_prod_duplicate WHERE  customergroup='".$customergroup."' AND product_group = '".$prodgroup."'";
 
-         //echo $sql;   die;                
+        // echo $sql;   die;                
 		        $result = $this->db->query($sql);
 		        $rowcount = $result->num_rows();
 		        if ($rowcount == 0) {
+		            return "true";
+		        } {
+		            return "false";
+		        }
+			}
+			function fncheck_prodgroup_dup_saleorder($customergroup,$prodgroup)
+			{
+
+				$customergroup=urldecode($customergroup);
+				$prodgroup =urldecode($prodgroup);
+				$sql ="SELECT * FROM  fn_dailyactivty_duplicate_itemdespatch('".$customergroup."','".$prodgroup."')";
+				$sql1 = "SELECT * FROM  vw_lead_check_prod_duplicate WHERE  customergroup='".$customergroup."' AND product_group = '".$prodgroup."'";
+
+		        $result = $this->db->query($sql);
+		        $result1 = $this->db->query($sql1);
+		        $rowcount1 = $result1->num_rows();
+		        $rowcount = $result->num_rows();
+
+		        if($rowcount == 0 && $rowcount1 == 0)
+		        {
 		            return "true";
 		        } {
 		            return "false";
