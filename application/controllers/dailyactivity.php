@@ -338,8 +338,10 @@ class dailyactivity extends CI_Controller {
                             'crd_assesment' =>'Update Later',
                             'assignleadchk' => $login_user_id,
                             'user_branch' => $user_branch,
-                            'description' => "added from dailyactivity",
-                            'comments' => "comments added from dailyactivity",
+                            /*'description' => "added from dailyactivity",
+                            'comments' => "comments added from dailyactivity",*/
+                            'description' => $val['Remarks'],
+                            'comments' => $val['Remarks'],
                             'sales_type_flag' => $sales_type_flag,
                             'createddate' => date('Y-m-d:H:i:s'),
                             'last_modified' => date('Y-m-d:H:i:s'),
@@ -566,7 +568,8 @@ class dailyactivity extends CI_Controller {
                         'lh_lead_curr_statusid' => $lead_status_id,
                         'lh_created_date' => date('Y-m-d:H:i:s'),
                         'lh_created_user' => $login_user_id,
-                        'lh_comments' => "status log comments for lead created from dailyactivity",
+                        /*'lh_comments' => "status log comments for lead created from dailyactivity",*/
+                        'lh_comments' => $val['Remarks'],
                         'action_type' => 'Insert',
                         'created_user_name' => $login_username,
                         'assignto_user_id ' => $login_user_id,
@@ -583,7 +586,8 @@ class dailyactivity extends CI_Controller {
                         'lhsub_lh_lead_curr_statusid' => $lead_status_id,
                         'lhsub_lh_lead_curr_sub_status' => $lead_sub_status_name,
                         'lhsub_lh_lead_curr_sub_statusid' => $lead_substatus_id,
-                        'lhsub_lh_comments' => "substatus log comments for lead created from dailyactivity",
+                        /*'lhsub_lh_comments' => "substatus log comments for lead created from dailyactivity",*/
+                        'lhsub_lh_comments' => $val['Remarks'],
                         'lhsub_lh_created_date' => date('Y-m-d:H:i:s'),
                         'lhsub_lh_created_user' => $login_user_id,
                         'lhsub_action_type' => 'Insert',
@@ -1022,7 +1026,7 @@ class dailyactivity extends CI_Controller {
                                                 'lhsub_lh_lead_curr_sub_statusid' => $this->revert_substatus($lead_substatus_id,$samle_reject_count),
                                                 'lhsub_lh_updated_date' => date('Y-m-d:H:i:s'),
                                                 'lhsub_lh_last_updated_user' => $login_user_id,
-                                                'lhsub_lh_comments' => "updated from daily call",
+                                                'lhsub_lh_comments' => "updated from daily call revertback",
                                                 'lhsub_action_type' => "RevertBack",
                                                 'lhsub_modified_user_name' => $login_username,
                                                 'lhsub_assignto_user_id ' => $login_user_id,
@@ -1526,7 +1530,8 @@ class dailyactivity extends CI_Controller {
                                             'lh_lead_curr_statusid' => $lead_status_id,
                                             'lh_created_date' => date('Y-m-d:H:i:s'),
                                             'lh_created_user' => $login_user_id,
-                                            'lh_comments' => 'added log comments from dailyactivity',
+                                            /*'lh_comments' => 'added log comments from dailyactivity',*/
+                                            'lh_comments' => $val['remarks'],
                                             'action_type' => 'Insert',
                                             'created_user_name' => $login_username,
                                             'assignto_user_id ' => $login_user_id,
@@ -1958,7 +1963,8 @@ class dailyactivity extends CI_Controller {
                                     'lh_lead_curr_statusid' => $lead_status_id,
                                     'lh_updated_date' => date('Y-m-d:H:i:s'),
                                     'lh_last_updated_user' => $login_user_id,
-                                    'lh_comments' => "log comments from dailyactivity",
+                                    /*'lh_comments' => "log comments from dailyactivity",*/
+                                    'lh_comments' => $val['Remarks'],
                                     'action_type' => 'Update',
                                     'modified_user_name' => $login_username,
                                     'assignto_user_name' => $lead_assign_name,
@@ -2327,7 +2333,8 @@ class dailyactivity extends CI_Controller {
 
     function checkduplicate_product($prodgrp, $customergroup) {
 
-            $leaddata1['response'] = $this->dailyactivity_model->check_prodgroup_dup_saleorder($prodgrp, $customergroup);
+           // $leaddata1['response'] = $this->dailyactivity_model->check_prodgroup_dup_saleorder($prodgrp, $customergroup);
+             $leaddata1['response'] = $this->dailyactivity_model->fncheck_prodgroup_dup_saleorder($prodgrp, $customergroup);
             if ($customergroup=='undefined')
             {
 
