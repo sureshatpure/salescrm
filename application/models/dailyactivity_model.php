@@ -670,10 +670,12 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 						INNER JOIN lead_prod_potential_types ON lead_prod_potential_types.leadid=leaddetails.leadid
 						WHERE leaddetails.leadid=".$leaid." GROUP BY leadproducts.quantity ";*/
 
-						$sql="SELECT lead_prod_potential_types.potential,leadproducts.quantity as requirement,leaddetails.leadid,leaddetails.leadstatus as curr_stats_id, leaddetails.ldsubstatus as curr_substats_id,lead_prod_potential_types.product_type_id as id,lead_sale_type.n_value_displayname as lead_sale_type, leadsource.leadsource as lead_source_name,leaddetails.email_id
+						$sql="SELECT lead_prod_potential_types.potential,leadproducts.quantity as requirement,leaddetails.leadid,leaddetails.leadstatus as curr_stats_id, leaddetails.ldsubstatus as curr_substats_id,lead_prod_potential_types.product_type_id as id,lead_sale_type.n_value_displayname as lead_sale_type, leadsource.leadsource as lead_source_name,leaddetails.email_id,leadstatus.leadstatus as leadstatusname,leadsubstatus.lst_name as leadsubstatusname
 							FROM leaddetails 
 							INNER JOIN leadproducts ON leaddetails.leadid = leadproducts.leadid 
 							INNER JOIN leadsource ON leaddetails.leadsource = leadsource.leadsourceid
+							INNER JOIN leadstatus ON leadstatus.leadstatusid =leaddetails.leadstatus
+							INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id =leaddetails.ldsubstatus
 							INNER JOIN customermasterhdr ON leaddetails.company = customermasterhdr.id 
 							INNER JOIN view_tempitemmaster_grp ON view_tempitemmaster_grp.id=leadproducts.productid 
 							INNER JOIN lead_prod_potential_types ON lead_prod_potential_types.leadid=leaddetails.leadid 

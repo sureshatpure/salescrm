@@ -718,7 +718,8 @@ class dailyactivity extends CI_Controller {
                                 $leaddetails = array(
                                 'leadstatus' => $lead_status_id,
                                 'ldsubstatus' => $lead_substatus_id,
-                                'comments' => "updated from dailyactivity",
+                                /*'comments' => "updated from dailyactivity",*/
+                                'comments' => $val['Remarks'],
                                 'email_id' => $this->input->post('email_id'),
                                 'lead_2pa_no' => 0,
                                 'lead_crm_soc_no' => $crm_first_soc_no,
@@ -1003,7 +1004,8 @@ class dailyactivity extends CI_Controller {
                                                 'lh_lead_curr_statusid' => $this->revert_status($lead_status_id, $lead_substatus_id,$samle_reject_count),
                                                 'lh_updated_date' => date('Y-m-d:H:i:s'),
                                                 'lh_last_updated_user' => $login_user_id,
-                                                'lh_comments' => "updated from daily call",
+                                                /*'lh_comments' => "updated from daily call",*/
+                                                'lh_comments' => $val['Remarks'],
                                                 'action_type' => 'RevertBack',
                                                 'modified_user_name' => $login_username,
                                                 'assignto_user_name' => $lead_assign_name,

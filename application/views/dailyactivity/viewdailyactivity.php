@@ -4640,6 +4640,7 @@
                                 var leadid =args.value;
                                 var lead_poten;
                                 var lead_req;
+                                alert("leadid "+leadid);
                                 if(args.datafield=='leadid' && leadid!="" )
                                 {
 
@@ -4663,6 +4664,8 @@
                                                 lead_email_id =rows[0].email_id;
                                                 lead_curr_stsid =rows[0].curr_stats_id;
                                                 lead_curr_substsid =rows[0].curr_substats_id;
+                                                lead_status_name =rows[0].leadstatusname;
+                                                lead_substatus_name =rows[0].leadsubstatusname;
                                             }
                                         });
                                          $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "actualpotenqty", lead_poten);
@@ -4673,7 +4676,11 @@
                                          $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "create_lead", 0);
                                          $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "prevstatusid", lead_curr_stsid);
                                          $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "prevsubstatusid", lead_curr_substsid);
+                                         $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "statusid", lead_status_name);
+                                         $("#jqxgrid_add").jqxGrid('setcellvalue', rowindex, "leadsubstatusid", lead_substatus_name);
                                          
+
+
 
     
                                 }
