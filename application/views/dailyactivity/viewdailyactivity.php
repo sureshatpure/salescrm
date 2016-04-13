@@ -1155,7 +1155,7 @@
                                     var prod_grp = data.itemgroup;
                                     var curr_poten = data.potentialqty;
                                     var leadstatus = data.leadstatusid;
-                                    alert("leadstatus "+leadstatus);
+                                   /* alert("leadstatus "+leadstatus);*/
                                     if (leadstatus=='No Status')
                                     {
 
@@ -4640,7 +4640,6 @@
                                 var leadid =args.value;
                                 var lead_poten;
                                 var lead_req;
-                                //alert("leadid "+leadid);
                                 if(args.datafield=='leadid' && leadid!="" )
                                 {
 
