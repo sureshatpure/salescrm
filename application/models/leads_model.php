@@ -729,9 +729,15 @@ class Leads_model extends CI_Model {
         $collectorid = $result_collector->result_array();
         //echo "collector_id".$collectorid['0']['collector_id'];
         $collector_id =$collectorid['0']['collector_id'];
-        
+        if (@$this->session->userdata['reportingto'] == "")
+        {
 
-        $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";
+            $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";
+        }
+        else
+        {
+            $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." AND gc_executive_code=".$this->session->userdata['user_id']." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";
+        }
        // echo $sql; die;
         $result = $this->db->query($sql);
         //  print_r($result->result_array());
