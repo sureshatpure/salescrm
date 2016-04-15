@@ -240,7 +240,7 @@
                 var collectordataAdapter = new $.jqx.dataAdapter(collectorsource);
 
                    $("#collector").jqxDropDownList({
-                    selectedIndex: -1, source: collectordataAdapter,theme: 'energyblue',
+                    selectedIndex: 0, source: collectordataAdapter,theme: 'energyblue',
       placeHolder: "Select Collector", displayMember: "collector",autoDropDownHeight:true, valueMember: "collector", width: 200, height: 25
                 });
                    $("#collector_update").jqxDropDownList({
@@ -277,6 +277,7 @@
                 source: mcsourcedataAdapter,
                 displayMember: "mc_sub_id",
                 valueMember: "mc_sub_id",
+                selectedIndex: 0,
                 height: 10,
                 width:262,
                 theme: theme,
@@ -353,6 +354,7 @@
                 displayMember: "mc_sub_id",
                 valueMember: "mc_sub_id",
                 height: 10,
+                selectedIndex: 0,
                 width:262,
                 theme: theme,
                 placeHolder: '– Market Circle –'
