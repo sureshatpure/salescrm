@@ -2470,7 +2470,7 @@ class Leads_model extends CI_Model {
      function get_leadproduct_saletype()
      {
 
-           $sql = "SELECT sale_type_id,n_value_id,n_value,n_value_displayname FROM lead_sale_type";
+           $sql = "SELECT sale_type_id,n_value_id,n_value,n_value_displayname FROM lead_sale_type WHERE active=1";
            $result = $this->db->query($sql);
            $options = $result->result_array(); 
          /*  foreach ($options as $option) 

@@ -160,11 +160,11 @@
 
                         $("#custprodgrid").jqxGrid('showcolumn', 'bulk');
                         $("#custprodgrid").jqxGrid('showcolumn', 'repack');
-                        $("#custprodgrid").jqxGrid('showcolumn', 'small_packing');
-                        $("#custprodgrid").jqxGrid('showcolumn', 'part_tanker');
                         $("#custprodgrid").jqxGrid('showcolumn', 'intact');
+/*                        $("#custprodgrid").jqxGrid('showcolumn', 'small_packing');
+                        $("#custprodgrid").jqxGrid('showcolumn', 'part_tanker');
                         $("#custprodgrid").jqxGrid('showcolumn', 'single_tanker');
-                         
+*/                         
                          
                     });
                     $("#indentingBusiness").bind('change', function (event) {
@@ -174,11 +174,11 @@
                         indBusChkVal =true;
                         $("#custprodgrid").jqxGrid('hidecolumn', 'bulk');
                         $("#custprodgrid").jqxGrid('hidecolumn', 'repack');
-                        $("#custprodgrid").jqxGrid('hidecolumn', 'small_packing');
-                        $("#custprodgrid").jqxGrid('hidecolumn', 'part_tanker');
                         $("#custprodgrid").jqxGrid('hidecolumn', 'intact');
+/*                        $("#custprodgrid").jqxGrid('hidecolumn', 'small_packing');
+                        $("#custprodgrid").jqxGrid('hidecolumn', 'part_tanker');
                         $("#custprodgrid").jqxGrid('hidecolumn', 'single_tanker');
-
+*/
                         $("#custprodgrid").jqxGrid('showcolumn', 'indent_bulk');
                         $("#custprodgrid").jqxGrid('showcolumn', 'fcl');
                         $("#custprodgrid").jqxGrid('showcolumn', 'iso_container');
@@ -195,10 +195,10 @@
                     row["product_id"] = "";
                     row["bulk"] = "";
                     row["repack"] = "";
-                    row["small_packing"] = "";
                     row["intact"] = "";
+/*                    row["small_packing"] = "";
                     row["part_tanker"] = "";
-                    row["single_tanker"] = "";
+                    row["single_tanker"] = "";*/
                     row["indent_bulk"] = "";
                     row["iso_container"] = "";
                     row["fcl"] = "";
@@ -223,11 +223,11 @@
                                         {name: 'product_id', type: 'string'},
                                         {name: 'bulk', type: 'string'},
                                         {name: 'repack', type: 'string'},
-                                        {name: 'small_packing', type: 'number'},
                                         {name: 'intact', type: 'number'},
+ /*                                       {name: 'small_packing', type: 'number'},
                                         {name: 'part_tanker', type: 'number'},
                                         {name: 'single_tanker', type: 'number'},
-                                        {name: 'indent_bulk', type: 'number'},
+ */                                       {name: 'indent_bulk', type: 'number'},
                                         {name: 'iso_container', type: 'number'},
                                         {name: 'fcl', type: 'number'},
                                         {name: 'requirment', type: 'string'}
@@ -440,10 +440,10 @@
                                 {text: 'Product id', datafield: 'product_id', width: 50, editable: false, hidden:true},
                                 {text: 'Bulk', datafield: 'bulk', width: 50,hidden:false},
                                 {text: 'Repack', datafield: 'repack', width: 65,hidden:false},
-                                {text: 'Small Packing', datafield: 'small_packing', width: 110, cellsalign: 'right',hidden:false},
+                                {text: 'Small Packing', datafield: 'small_packing', width: 110, cellsalign: 'right',hidden:true},
                                 {text: 'Intact', datafield: 'intact', width: 55, cellsalign: 'right',hidden:false},
-                                {text: 'Part Tanker', datafield: 'part_tanker', width: 100, cellsalign: 'right',hidden:false},
-                                {text: 'Single - Tanker', datafield: 'single_tanker', width: 120, cellsalign: 'right',hidden:false},
+                                {text: 'Part Tanker', datafield: 'part_tanker', width: 100, cellsalign: 'right',hidden:true},
+                                {text: 'Single - Tanker', datafield: 'single_tanker', width: 120, cellsalign: 'right',hidden:true},
                                 {text: 'Bulk', datafield: 'indent_bulk', width: 100,cellsalign: 'right',hidden:true},
                                 {text: 'FCL', datafield: 'fcl', width: 110, cellsalign: 'right',hidden:true},
                                 {text: 'Iso Container', datafield: 'iso_container', width: 150,cellsalign: 'right',hidden:true},
@@ -642,10 +642,10 @@
                             var req = $('#custprodgrid').jqxGrid('getcellvalue', i, "requirment");
                             var bulkPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "bulk");
                             var repackPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "repack");
-                            var small_packingPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "small_packing");
                             var intactPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "intact");
+                            /*var small_packingPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "small_packing");                            
                             var part_tankerPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "part_tanker");
-                            var single_tankerPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "single_tanker");
+                            var single_tankerPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "single_tanker");*/
                             var indent_bulkPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "indent_bulk");
                             var fclPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "fcl");
                             var iso_containerPotential = $('#custprodgrid').jqxGrid('getcellvalue', i, "iso_container");
@@ -701,14 +701,14 @@
                                     potential_reg = 1;
                                 if (repackPotential != "" && repackPotential != 'undefined' && repackPotential > 0)
                                     potential_reg = 1;
-                                if (small_packingPotential != "" && small_packingPotential != 'undefined' && small_packingPotential > 0)
-                                    potential_reg = 1;
                                 if (intactPotential != "" && intactPotential != 'undefined' && intactPotential > 0)
+                                    potential_reg = 1;
+                              /*  if (small_packingPotential != "" && small_packingPotential != 'undefined' && small_packingPotential > 0)
                                     potential_reg = 1;
                                 if (part_tankerPotential != "" && part_tankerPotential != 'undefined' && part_tankerPotential > 0)
                                     potential_reg = 1;
                                 if (single_tankerPotential != "" && single_tankerPotential != 'undefined' && single_tankerPotential > 0)
-                                    potential_reg = 1;
+                                    potential_reg = 1;*/
                                 if (indent_bulkPotential != "" && indent_bulkPotential != 'undefined' && indent_bulkPotential > 0)
                                     potential_reg = 1;
                                 if (fclPotential != "" && fclPotential != 'undefined' && fclPotential > 0)
@@ -732,7 +732,8 @@
                             griddata = $('#custprodgrid').jqxGrid('getrowdata', i);
 
                             var start_str = "{";
-                            var json_str = "\"productname\":\"" + griddata.product_name + "\",\"prod_item_name\":\"" + griddata.item_name + "\",\"product_id\":\"" + griddata.product_id + "\",\"bulk\":\"" + griddata.bulk + "\",\"repack\":\"" + griddata.repack + "\",\"small_packing\":\"" + griddata.small_packing + "\",\"intact\":\"" + griddata.intact + "\",\"part_tanker\":\"" + griddata.part_tanker + "\",\"single_tanker\":\"" + griddata.single_tanker + "\",\"indent_bulk\":\"" + griddata.indent_bulk + "\",\"fcl\":\"" + griddata.fcl + "\",\"iso_container\":\"" + griddata.iso_container + "\",\"requirment\":\"" + griddata.requirment + "\"";
+                        /*    var json_str = "\"productname\":\"" + griddata.product_name + "\",\"prod_item_name\":\"" + griddata.item_name + "\",\"product_id\":\"" + griddata.product_id + "\",\"bulk\":\"" + griddata.bulk + "\",\"repack\":\"" + griddata.repack + "\",\"small_packing\":\"" + griddata.small_packing + "\",\"intact\":\"" + griddata.intact + "\",\"part_tanker\":\"" + griddata.part_tanker + "\",\"single_tanker\":\"" + griddata.single_tanker + "\",\"indent_bulk\":\"" + griddata.indent_bulk + "\",\"fcl\":\"" + griddata.fcl + "\",\"iso_container\":\"" + griddata.iso_container + "\",\"requirment\":\"" + griddata.requirment + "\"";*/
+                            var json_str = "\"productname\":\"" + griddata.product_name + "\",\"prod_item_name\":\"" + griddata.item_name + "\",\"product_id\":\"" + griddata.product_id + "\",\"bulk\":\"" + griddata.bulk + "\",\"repack\":\"" + griddata.repack + "\",\"intact\":\"" + griddata.intact + "\",\"indent_bulk\":\"" + griddata.indent_bulk + "\",\"fcl\":\"" + griddata.fcl + "\",\"iso_container\":\"" + griddata.iso_container + "\",\"requirment\":\"" + griddata.requirment + "\"";
 
                             var end_str = "}";
                             rowstr = start_str + json_str + end_str;
