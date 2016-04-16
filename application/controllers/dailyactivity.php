@@ -1533,7 +1533,7 @@ class dailyactivity extends CI_Controller {
                                             'lh_created_date' => date('Y-m-d:H:i:s'),
                                             'lh_created_user' => $login_user_id,
                                             /*'lh_comments' => 'added log comments from dailyactivity',*/
-                                            'lh_comments' => $val['remarks'],
+                                            'lh_comments' => $val['Remarks'],
                                             'action_type' => 'Insert',
                                             'created_user_name' => $login_username,
                                             'assignto_user_id ' => $login_user_id,
@@ -2351,7 +2351,7 @@ class dailyactivity extends CI_Controller {
                 {
                     $response = array(
                    'ok' => false,
-                    'msg' => "<font color=red>This product group has been already billed for this customer</font>");
+                    'msg' => "<font color=red>This product group has been already billed for this customer or lead already exists</font>");
                 }
                 else
                 {

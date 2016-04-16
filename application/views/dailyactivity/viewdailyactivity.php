@@ -2676,7 +2676,7 @@
 
                                         {text: 'noofleads', datafield: 'noofleads', hidden:true, width: 20, cellsalign: 'left', editable: false},
                                         {text: 'result_type', datafield: 'result_type',hidden:true, width: 75, cellsalign: 'left', editable: false},
-                                        {text: 'Create Lead', datafield: 'create_lead', hidden:true, width: 20, cellsalign: 'left', editable: false},
+                                        {text: 'Create Lead', datafield: 'create_lead', hidden:false, width: 20, cellsalign: 'left', editable: false},
                                         {text: 'Activity Type', datafield: 'Sub_Activity', width: 110, cellsalign: 'left', cellbeginedit:Results.initResultsEditorat, initeditor: Results.resultsEditorat, cellsrenderer: Results.renderUnitsat
                                         },
                                         {text: 'Sales Type', datafield: 'division', width: 110, cellsalign: 'left',readonly:true,cellbeginedit:Results.initResultsEditorst, initeditor: Results.resultsEditorst, cellsrenderer: Results.renderUnitsstleadsubstatusid
@@ -4368,7 +4368,7 @@
                                             var marketcircle_up = $("#marketcircle_update").jqxDropDownList('getSelectedItem'); 
                                             $("#jqxgrid_selectCustomMaster").jqxGrid('clear');
                                          // Source for Customer Master grid start
-                                            var url = "dailyactivity//get_data_customermaster_coll_mc/"+collector.value+"/"+marketcircle_up.value;
+                                            var url = "dailyactivity/get_data_customermaster_coll_mc/"+collector.value+"/"+marketcircle_up.value;
                                             var rows = {};
                                             jQuery.ajax({
                                                 dataType: "html",

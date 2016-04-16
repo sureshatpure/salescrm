@@ -826,7 +826,6 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
                  JOIN market_circle_hdr on market_circle_hdr.gc_executive_code= vw_web_user_login.header_user_id AND vw_web_user_login.header_user_id in (".$reporting_user_id.") ) GROUP BY collector";
         }
        
-       
         $result = $this->db->query($sql);
         $arr = "{\"rows\":" .json_encode($result->result_array()). "}";
         return $arr;
@@ -1188,8 +1187,14 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 				$customergroup=urldecode($customergroup);
 				$prodgroup =urldecode($prodgroup);
 				$sql ="SELECT * FROM  fn_dailyactivty_duplicate_itemdespatch('".$customergroup."','".$prodgroup."')";
-				$sql1 = "SELECT * FROM  vw_lead_check_prod_duplicate WHERE  customergroup='".$customergroup."' AND product_group = '".$prodgroup."'";
-
+				//$sql1 = "SELECT * FROM  vw_lead_check_prod_duplicate_no_cust WHERE  customergroup='".$customergroup."' AND product_group = '".$prodgroup."'";
+				$sql1="SELECT 	leaddetails.leadid,leaddetails.leadid as id,sum(lead_prod_potential_types.potential)as potential
+						FROM leaddetails 
+					INNER JOIN leadproducts ON leaddetails.leadid = leadproducts.leadid 
+					INNER JOIN customermasterhdr ON leaddetails.company = customermasterhdr.id 
+					INNER JOIN view_tempitemmaster_grp ON view_tempitemmaster_grp.id=leadproducts.productid 
+					INNER JOIN lead_prod_potential_types ON lead_prod_potential_types.leadid=leaddetails.leadid 
+					WHERE replace(trim(customermasterhdr.customergroup),'''','')='".$customergroup."' AND trim(view_tempitemmaster_grp.itemgroup)='".$prodgroup."' AND leaddetails.lead_close_status=0 and converted=0 AND leaddetails.lead_close_status=0 and converted=0 	GROUP BY leaddetails.leadid";
 		        $result = $this->db->query($sql);
 		        $result1 = $this->db->query($sql1);
 		        $rowcount1 = $result1->num_rows();
@@ -1198,7 +1203,8 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 		        if($rowcount == 0 && $rowcount1 == 0)
 		        {
 		            return "true";
-		        } {
+		        } 
+		        {
 		            return "false";
 		        }
 			}
@@ -1288,7 +1294,7 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
      	 function get_leadsalestype()
 			{
 			//$sql="SELECT sale_type_id,n_value_id,n_value,n_value_displayname FROM lead_sale_type";
-			$sql="SELECT n_value_id,n_value_displayname FROM lead_sale_type";
+			$sql="SELECT n_value_id,n_value_displayname FROM lead_sale_type WHERE active=1";
 				$result = $this->db->query($sql);
 				$leadst_val = $result->result_array();
 				//print_r($poten_val);
