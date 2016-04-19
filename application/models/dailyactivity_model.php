@@ -1170,7 +1170,7 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 
 				$customergroup=urldecode($customergroup);
 				$prodgroup =urldecode($prodgroup);
-				$sql = "select * from vw_lead_check_prod_duplicate WHERE  customergroup='".$customergroup."' AND product_group = '".$prodgroup."'";
+				$sql = "select * from vw_lms_check_billed_product WHERE  customergroup='".$customergroup."' AND product_group = '".$prodgroup."'";
 
         // echo $sql;   die;                
 		        $result = $this->db->query($sql);
@@ -1186,7 +1186,8 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 
 				$customergroup=urldecode($customergroup);
 				$prodgroup =urldecode($prodgroup);
-				$sql ="SELECT * FROM  fn_dailyactivty_duplicate_itemdespatch('".$customergroup."','".$prodgroup."')";
+				//$sql ="SELECT * FROM  fn_dailyactivty_duplicate_itemdespatch('".$customergroup."','".$prodgroup."')";
+				$sql ="SELECT  lead_customer_ref_id,customer_number, product_group, customergroup  FROM  vw_lms_check_billed_product WHERE replace(trim(vw_lms_check_billed_product.customergroup),'''','')='".$customergroup."' AND trim(product_group) ='".$prodgroup."' GROUP BY  lead_customer_ref_id,customer_number, product_group, customergroup";
 				//$sql1 = "SELECT * FROM  vw_lead_check_prod_duplicate_no_cust WHERE  customergroup='".$customergroup."' AND product_group = '".$prodgroup."'";
 				$sql1="SELECT 	leaddetails.leadid,leaddetails.leadid as id,sum(lead_prod_potential_types.potential)as potential
 						FROM leaddetails 
@@ -1195,6 +1196,7 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 					INNER JOIN view_tempitemmaster_grp ON view_tempitemmaster_grp.id=leadproducts.productid 
 					INNER JOIN lead_prod_potential_types ON lead_prod_potential_types.leadid=leaddetails.leadid 
 					WHERE replace(trim(customermasterhdr.customergroup),'''','')='".$customergroup."' AND trim(view_tempitemmaster_grp.itemgroup)='".$prodgroup."' AND leaddetails.lead_close_status=0 and converted=0 AND leaddetails.lead_close_status=0 and converted=0 	GROUP BY leaddetails.leadid";
+					//echo $sql; echo $sql1; die;
 		        $result = $this->db->query($sql);
 		        $result1 = $this->db->query($sql1);
 		        $rowcount1 = $result1->num_rows();

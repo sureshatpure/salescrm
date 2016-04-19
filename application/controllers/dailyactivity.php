@@ -2342,7 +2342,7 @@ class dailyactivity extends CI_Controller {
 
                     $response = array(
                    'ok' => false,
-                    'msg' => "<font color=red>No Product has been selected,hence lead will not be created</font>");
+                    'msg' => "<font color=red>No Product has been selected,hence lead will not be created </font>");
                
             }
             else
@@ -2351,7 +2351,7 @@ class dailyactivity extends CI_Controller {
                 {
                     $response = array(
                    'ok' => false,
-                    'msg' => "<font color=red>This product group has been already billed for this customer or lead already exists</font>");
+                    'msg' => "<font color=red>This product group has been already billed for this customer </font>");
                 }
                 else
                 {

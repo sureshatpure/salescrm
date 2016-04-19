@@ -3093,7 +3093,7 @@ presentsource,suppliername,decisionmaker,branchname,comments,uploadeddate,descri
     }
     function check_prodgroup_dup_saleorder($prodgrp, $customerid,$customergroup) {
           //$sql = "select * from vw_lead_check_prod_duplicate WHERE  lead_customer_ref_id=".$customerid." AND product_group = '".$prodgrp."'";
-        $sql = "select * from vw_lead_check_prod_duplicate WHERE (lead_customer_ref_id=".$customerid." or  customergroup ='".$customergroup."' ) AND product_group = '".$prodgrp."'";
+        $sql = "select * from vw_lms_check_billed_product WHERE (lead_customer_ref_id=".$customerid." or  customergroup ='".$customergroup."' ) AND product_group = '".$prodgrp."'";
 
 
        //  echo $sql;   die;                
