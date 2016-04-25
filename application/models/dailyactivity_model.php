@@ -1220,34 +1220,8 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 			 	$customergroup=urldecode($customergroup);
 				$prodgroup =urldecode($prodgroup);
 
-
-				
-/*				//$sql ="SELECT * FROM  fn_dailyactivty_duplicate_itemdespatch('".$customergroup."','".$prodgroup."')";
-				$sql ="SELECT  lead_customer_ref_id,customer_number, product_group, customergroup  FROM  vw_lms_check_billed_product WHERE replace(trim(vw_lms_check_billed_product.customergroup),'''','')='".$customergroup."' AND trim(product_group) ='".$prodgroup."' GROUP BY  lead_customer_ref_id,customer_number, product_group, customergroup";
-                $result = $this->db->query($sql);
-                echo $sql;
-                echo "in check_saleorderentries ";print_r($result);
-                return  $result->num_rows();*/
-/*                $sqlnew = "SELECT  lead_customer_ref_id,customer_number, product_group, customergroup  FROM  vw_lms_check_billed_product WHERE replace(trim(vw_lms_check_billed_product.customergroup),'''','')='".$en."'";
-                $sqlnew1 = "SELECT  lead_customer_ref_id,customer_number, product_group, customergroup  FROM  vw_lms_check_billed_product WHERE replace(trim(vw_lms_check_billed_product.customergroup),'''','')='".$en2."'";
-                $sqlnew2 = "SELECT  lead_customer_ref_id,customer_number, product_group, customergroup  FROM  vw_lms_check_billed_product WHERE replace(trim(vw_lms_check_billed_product.customergroup),'''','')='".$en3."'";
-
-echo $sqlnew;echo "<br>";
-echo $sqlnew1;echo "<br>";
-echo $sqlnew2;echo "<br>";*/
-
-                //$sql ="SELECT  lead_customer_ref_id,customer_number, product_group, customergroup  FROM  vw_lms_check_billed_product WHERE replace(trim(vw_lms_check_billed_product.customergroup),'''','')='".$customergroup."' AND trim(product_group) ='".$prodgroup."' GROUP BY  lead_customer_ref_id,customer_number, product_group, customergroup";
                 $sql ="SELECT  lead_customer_ref_id,customer_number, product_group, customergroup  FROM  vw_lms_check_billed_product WHERE replace(trim(vw_lms_check_billed_product.customergroup),'''','')='".html_entity_decode($customergroup)."' AND trim(product_group) ='".$prodgroup."' GROUP BY  lead_customer_ref_id,customer_number, product_group, customergroup";
-
-               // $sql ="SELECT * FROM vw_lms_check_billed_product  WHERE customergroup like 'ORCHID CHEMICAL%'  AND product_group='ISO PROPYL ALCOHOL'";
-
-                //echo $sql;
                 $result = $this->db->query($sql);
-
-              
-
-               // echo "in check_saleorderentries "; echo"<pre>";print_r($result);echo"</pre>";
-              //  return  $result->num_rows();
                 $rowcount = $result->num_rows();
                 return $rowcount;
 
@@ -1257,19 +1231,6 @@ echo $sqlnew2;echo "<br>";*/
 			 {
 			 	$customergroup=urldecode($customergroup);
 				$prodgroup =urldecode($prodgroup);
-/*			 	$sql1="SELECT 	leaddetails.leadid,leaddetails.leadid as id,sum(lead_prod_potential_types.potential)as potential
-						FROM leaddetails 
-					INNER JOIN leadproducts ON leaddetails.leadid = leadproducts.leadid 
-					INNER JOIN customermasterhdr ON leaddetails.company = customermasterhdr.id 
-					INNER JOIN view_tempitemmaster_grp ON view_tempitemmaster_grp.id=leadproducts.productid 
-					INNER JOIN lead_prod_potential_types ON lead_prod_potential_types.leadid=leaddetails.leadid 
-					WHERE replace(trim(customermasterhdr.customergroup),'''','')='".$customergroup."' AND trim(view_tempitemmaster_grp.itemgroup)='".$prodgroup."' AND leaddetails.lead_close_status=0 and converted=0 AND leaddetails.lead_close_status=0 and converted=0 	GROUP BY leaddetails.leadid";
-					echo $sql1; die;
-
-                $result = $this->db->query($sql1);
-                echo "in check_leadduplicates "; print_r($result);
-                return  $result->num_rows();*/
-
                 $sql="SELECT 	leaddetails.leadid,leaddetails.leadid as id,sum(lead_prod_potential_types.potential)as potential
 						FROM leaddetails 
 					INNER JOIN leadproducts ON leaddetails.leadid = leadproducts.leadid 
