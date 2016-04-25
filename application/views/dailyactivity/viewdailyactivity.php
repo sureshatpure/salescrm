@@ -1449,7 +1449,7 @@
                                     data.leadid=0;
                                    }
                       /*             alert("data.leadid in resultsEditorldst_update "+data.leadid);
-                                   alert("type of leadid resultsEditorldst_update "+typeof(data.leadid))*/;
+                                   alert("type of leadid resultsEditorldst_update "+typeof(data.leadid))*/
                                    if (data.leadid===null && leadid!='No Leads' || typeof(data.leadid)==="undefined") 
                                     {
                                        geturl=base_url + "dailyactivity/getldstatusupdate"

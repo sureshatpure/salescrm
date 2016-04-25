@@ -2335,9 +2335,13 @@ class dailyactivity extends CI_Controller {
 
     function checkduplicate_product($prodgrp, $customergroup) {
 
-           // $leaddata1['response'] = $this->dailyactivity_model->check_prodgroup_dup_saleorder($prodgrp, $customergroup);
-             $leaddata1['response'] = $this->dailyactivity_model->fncheck_prodgroup_dup_saleorder($prodgrp, $customergroup);
-            if ($customergroup=='undefined')
+
+            $leaddata1['response'] = $this->dailyactivity_model->fncheck_prodgroup_dup_saleorder($prodgrp, $customergroup);
+           /*   $noof_saleorders = $this->dailyactivity_model->check_saleorderentries($prodgrp, $customergroup);
+              $noof_leadduplicates = $this->dailyactivity_model->check_leadduplicates($prodgrp, $customergroup);
+             $leaddata1['response'] = $this->check_duplicates_sale_lms($noof_saleorders,$noof_leadduplicates);
+*/
+             if ($customergroup=='undefined')
             {
 
                     $response = array(
@@ -2364,6 +2368,18 @@ class dailyactivity extends CI_Controller {
             
         echo json_encode($response);
 
+    }
+
+    function check_duplicates_sale_lms($noof_saleorders,$noof_leadduplicates)
+    {
+        if($noof_saleorders == 0 && $noof_leadduplicates == 0)
+                {
+                    return "true";
+                }
+                else 
+                {
+                    return "false";
+                }
     }
     function checkduplicate_product_update($prodgrp, $customergroup) {
 
