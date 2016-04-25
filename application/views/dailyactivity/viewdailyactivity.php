@@ -1441,20 +1441,22 @@
                                     else
                                     {
                                         alert("null not matching");
-                                    }*/
-                                  //  alert("leadid in resultsEditorldst_update "+leadid);
+                                    }
+                                    alert("leadid in resultsEditorldst_update "+leadid);*/
                                   
                                    if(data.leadid=='No Leads')
                                    {
                                     data.leadid=0;
                                    }
-                      /*             alert("data.leadid in resultsEditorldst_update "+data.leadid);
-                                   alert("type of leadid resultsEditorldst_update "+typeof(data.leadid))*/
+                                 /*  alert("data.leadid in resultsEditorldst_update "+data.leadid);
+                                   alert("type of leadid resultsEditorldst_update "+typeof(data.leadid));
+                                   alert("noofleads resultsEditorldst_update "+data.noofleads);*/
+
                                    if (data.leadid===null && leadid!='No Leads' || typeof(data.leadid)==="undefined") 
                                     {
                                        geturl=base_url + "dailyactivity/getldstatusupdate"
                                     }
-                                    else if (typeof(data.leadid)==="number" && data.noofleads==1 )
+                                    else if ((typeof(data.leadid)==="number" || typeof(data.leadid)==="string") && data.noofleads==1 )
                                     {
                                         
                                          geturl=base_url + "dailyactivity/getldstatusfor/"+leadid;
@@ -1512,13 +1514,13 @@
                                },
                                resultsEditorldsubst_update: function(row, cellvalue, editor){
                                    var data = $('#jqxgrid_n').jqxGrid('getrowdata', row);
-                                //   var substatus_name = data.leadsubstatusid;
+                                   var substatus_name = data.leadsubstatusid;
                                     jqxgrid_n_row =row;
                                    var status_name = data.leadstatusid;
                                      status_name = status_name.replace(/\//gi, "-");
 
                                    var leadid =data.leadid;
-                                  /* alert("in initeditor for update substatus "+status_name);
+                                   /*alert("in initeditor for update substatus "+status_name);
                                    alert("in initeditor for update substatus leadid "+data.leadid);
                                    alert("in initeditor for update substatus typeof leadid "+typeof(data.leadid));
                                    alert("in initeditor for update substatus length leadid "+data.leadid.length);
@@ -1529,7 +1531,7 @@
                                       geturl=base_url + "dailyactivity/getldsubstatusbyname/"+status_name;
                                       
                                     }*/
-                                   if (typeof(data.leadid)==="number" && data.noofleads >0)
+                                   if (typeof(data.leadid)==="string" && data.noofleads >0)
                                     {
                                         
                                         geturl=base_url + "dailyactivity/getldsubstatusbynameid/"+status_name+"/"+leadid;
@@ -2674,7 +2676,7 @@
                                         },
                                             
 
-                                        {text: 'noofleads', datafield: 'noofleads', hidden:true, width: 20, cellsalign: 'left', editable: false},
+                                        {text: 'noofleads', datafield: 'noofleads', hidden:false, width: 20, cellsalign: 'left', editable: false},
                                         {text: 'result_type', datafield: 'result_type',hidden:true, width: 75, cellsalign: 'left', editable: false},
                                         {text: 'Create Lead', datafield: 'create_lead', hidden:false, width: 20, cellsalign: 'left', editable: false},
                                         {text: 'Activity Type', datafield: 'Sub_Activity', width: 110, cellsalign: 'left', cellbeginedit:Results.initResultsEditorat, initeditor: Results.resultsEditorat, cellsrenderer: Results.renderUnitsat
@@ -3996,9 +3998,13 @@
                                 
                                 var lead_substatus = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "leadsubstatusid");
                                 var create_lead = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "create_lead");
-                             /*   alert("lead_substatus id "+k+" is"+lead_substatus);
+                                var noofleads = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "noofleads");
+/*
+                                alert("lead_substatus id "+k+" is"+lead_substatus);
+                                alert("create_lead "+k+" is"+create_lead);
+                                alert("noofleads "+k+" is"+noofleads);
                                 alert("typeof lead_substatus id "+k+" is"+typeof(lead_substatus));*/
-                                if (create_lead==1)
+                                if ((create_lead==1) || (create_lead==0 && noofleads >0 ))
                                 {
                                     if (lead_substatus == null || typeof(lead_substatus) == 'undefined' || lead_substatus == 'Select Substatus')
                                     {
