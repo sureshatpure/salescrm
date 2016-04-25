@@ -1438,7 +1438,7 @@ class Leads_model extends CI_Model {
              $sql .= " WHERE " . implode('AND ', $whereParts);
         }
         $sql .= ' AND converted=0 ORDER BY leadid ASC'; 
-     // echo $sql; die;
+      //echo $sql; die;
          $result = $this->db->query($sql);
         $productdetails = $result->result_array();
 // echo"count of all leads ".count($productdetails); die;
@@ -1897,6 +1897,7 @@ class Leads_model extends CI_Model {
             vw_web_user_login.empname as assign_from_name,
             assignedfrom.empname,
             view_tempcustomermaster.tempcustname,
+            market_circle_hdr.mc_sub_id,
             get_acc_yr(leaddetails.createddate::DATE) as fin_yr,
             CASE WHEN (createddate::DATE )  BETWEEN  jc_period_from AND  jc_period_to then    jc_code ELSE  0 END AS JCODE
         FROM
@@ -1909,6 +1910,7 @@ class Leads_model extends CI_Model {
             INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
             INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
             INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
+            INNER JOIN market_circle_hdr ON market_circle_hdr.gc_executive_code= vw_web_user_login.header_user_id 
             INNER JOIN jc_calendar_dtl ON get_acc_yr(leaddetails.createddate::DATE) = jc_calendar_dtl.acc_yr  
             WHERE leaddetails.leadid IN (
             SELECT  leadid from leaddetails WHERE created_user IN ('.$user_list_ids.')
@@ -1935,6 +1937,7 @@ class Leads_model extends CI_Model {
             $row["statusid"] = $jTableResult['leaddetails'][$i]["leadstatusid"];
             $row["substatusid"] = $jTableResult['leaddetails'][$i]["ldsubstatus"];
             $row["lead_no"] = $row["leadid"] . "-" . $jTableResult['leaddetails'][$i]["lead_no"];
+            $row["mc_sub_id"] = $jTableResult['leaddetails'][$i]["mc_sub_id"];
 
             if ($jTableResult['leaddetails'][$i]["lead_close_status"] == 1) {
                 $closed = "Closed";
