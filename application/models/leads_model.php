@@ -503,6 +503,8 @@ class Leads_model extends CI_Model {
                 $closed = "Open";
                 $lead_status_for_closed = $jTableResult['leaddetails'][$i]["leadstatus"];
             }
+
+            $row["mc_sub_id"] = $jTableResult['leaddetails'][$i]["mc_sub_id"];
             $row["leadstatus"] = $lead_status_for_closed;
             $row["lead_close_status"] = $closed;
             $row["lead_close_option"] = $jTableResult['leaddetails'][$i]["lead_close_option"];
@@ -1380,7 +1382,7 @@ class Leads_model extends CI_Model {
                       $whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
  
 //BUILD THE QUERY
-        $sql = 'SELECT
+        /*$sql = 'SELECT
             leaddetails.leadid,
             leaddetails.lead_no,
             leaddetails.email_id,
@@ -1433,9 +1435,156 @@ class Leads_model extends CI_Model {
             INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
             INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
             INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
-            INNER JOIN jc_calendar_dtl ON get_acc_yr(leaddetails.createddate::DATE) = jc_calendar_dtl.acc_yr';   
+            INNER JOIN jc_calendar_dtl ON get_acc_yr(leaddetails.createddate::DATE) = jc_calendar_dtl.acc_yr'; */  
+            $sql='SELECT
+                leaddetails.leadid,
+              0::text as mc_sub_id,
+                leaddetails.lead_no,
+                leaddetails.email_id,
+                leaddetails.firstname,
+                leaddetails.lastname,
+                leaddetails.industry,
+                leaddetails.website,
+                leaddetails.user_branch,
+                leaddetails.converted,
+                leaddetails.designation,
+                leaddetails.lead_crm_soc_no,
+                leaddetails.lead_close_status,
+                leaddetails.lead_close_option,
+                leaddetails.lead_close_comments,
+                leaddetails.comments,
+                leaddetails.uploaded_date,
+                leaddetails.description,
+                leaddetails.ldsubstatus,
+                leaddetails.secondaryemail,
+                leaddetails.assignleadchk,
+                leaddetails.createddate,
+                leaddetails.leadstatus AS leadstatusid,
+                leaddetails.leadsource AS leadsourceid,
+                leadstatus.leadstatus,
+                leadsubstatus.lst_name AS substatusname,
+                leadsource.leadsource,
+                leaddetails.company,
+                leaddetails.customer_id,
+                leaddetails.created_user,
+                leaddetails.last_modified,
+                leaddetails.last_updated_user,
+                leaddetails.sent_mail_alert,
+                leaddetails.industry_id,
+                leadproducts.productid,
+                leadproducts.product_group,
+                view_tempitemmaster.description AS productname,
+                leadproducts.product_itemname,
+                vw_web_user_login.empname AS assign_from_name,
+                assignedfrom.empname,
+                view_tempcustomermaster.tempcustname,
+                get_acc_yr (
+                    leaddetails.createddate :: DATE
+                ) AS fin_yr,
+                CASE
+            WHEN (createddate :: DATE) BETWEEN jc_period_from
+            AND jc_period_to THEN
+                jc_code
+            ELSE
+                0
+            END AS JCODE
+            FROM
+                leaddetails
+            INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
+            INNER JOIN "leadstatus" ON "leadstatus"."leadstatusid" = "leaddetails"."leadstatus"
+            INNER JOIN "leadsource" ON "leadsource"."leadsourceid" = "leaddetails"."leadsource"
+            INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
+            INNER JOIN "vw_web_user_login" AS assignedfrom ON "leaddetails"."assignleadchk" = "assignedfrom"."header_user_id"
+            INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
+            INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
+            INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
+            INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company  AND (cust_account_id is NULL  OR  cust_account_id =0 ) 
+
+            INNER JOIN jc_calendar_dtl ON get_acc_yr (
+                leaddetails.createddate :: DATE
+            ) = jc_calendar_dtl.acc_yr
+            WHERE
+             (createddate :: DATE) BETWEEN jc_period_from
+            AND jc_period_to
+
+
+            UNION
+
+            SELECT
+                leaddetails.leadid,
+              market_circle_hdr.mc_sub_id,
+                leaddetails.lead_no,
+                leaddetails.email_id,
+                leaddetails.firstname,
+                leaddetails.lastname,
+                leaddetails.industry,
+                leaddetails.website,
+                leaddetails.user_branch,
+                leaddetails.converted,
+                leaddetails.designation,
+                leaddetails.lead_crm_soc_no,
+                leaddetails.lead_close_status,
+                leaddetails.lead_close_option,
+                leaddetails.lead_close_comments,
+                leaddetails.comments,
+                leaddetails.uploaded_date,
+                leaddetails.description,
+                leaddetails.ldsubstatus,
+                leaddetails.secondaryemail,
+                leaddetails.assignleadchk,
+                leaddetails.createddate,
+                leaddetails.leadstatus AS leadstatusid,
+                leaddetails.leadsource AS leadsourceid,
+                leadstatus.leadstatus,
+                leadsubstatus.lst_name AS substatusname,
+                leadsource.leadsource,
+                leaddetails.company,
+                leaddetails.customer_id,
+                leaddetails.created_user,
+                leaddetails.last_modified,
+                leaddetails.last_updated_user,
+                leaddetails.sent_mail_alert,
+                leaddetails.industry_id,
+                leadproducts.productid,
+                leadproducts.product_group,
+                view_tempitemmaster.description AS productname,
+                leadproducts.product_itemname,
+                vw_web_user_login.empname AS assign_from_name,
+                assignedfrom.empname,
+                view_tempcustomermaster.tempcustname,
+                get_acc_yr (
+                    leaddetails.createddate :: DATE
+                ) AS fin_yr,
+                CASE
+            WHEN (createddate :: DATE) BETWEEN jc_period_from
+            AND jc_period_to THEN
+                jc_code
+            ELSE
+                0
+            END AS JCODE
+            FROM
+                leaddetails
+            INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
+            INNER JOIN "leadstatus" ON "leadstatus"."leadstatusid" = "leaddetails"."leadstatus"
+            INNER JOIN "leadsource" ON "leadsource"."leadsourceid" = "leaddetails"."leadsource"
+            INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
+            INNER JOIN "vw_web_user_login" AS assignedfrom ON "leaddetails"."assignleadchk" = "assignedfrom"."header_user_id"
+            INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
+            INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
+            INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
+
+             INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company
+             INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code 
+
+            INNER JOIN jc_calendar_dtl ON get_acc_yr (
+                leaddetails.createddate :: DATE
+            ) = jc_calendar_dtl.acc_yr
+            WHERE
+             (createddate :: DATE) BETWEEN jc_period_from  AND jc_period_to';
+
         if(count($whereParts)) {
-             $sql .= " WHERE " . implode('AND ', $whereParts);
+            // $sql .= " WHERE " . implode('AND ', $whereParts);
+             $sql .= " AND " . implode('AND ', $whereParts);
         }
         $sql .= ' AND converted=0 ORDER BY leadid ASC'; 
       //echo $sql; die;
@@ -1462,6 +1611,14 @@ class Leads_model extends CI_Model {
             } else {
                 $closed = "Open";
                 $lead_status_for_closed = $jTableResult['leaddetails'][$i]["leadstatus"];
+            }
+            if($jTableResult['leaddetails'][$i]["mc_sub_id"]=="0")
+            {
+                $row["mc_sub_id"] = "New Customer";
+            }
+            else
+            {
+                $row["mc_sub_id"] = $jTableResult['leaddetails'][$i]["mc_sub_id"];
             }
             $row["leadstatus"] = $lead_status_for_closed;
             $row["lead_close_status"] = $closed;
@@ -1655,7 +1812,6 @@ class Leads_model extends CI_Model {
                     INNER JOIN "leadsource" ON "leadsource"."leadsourceid" = "leaddetails"."leadsource"
                     LEFT JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
                     INNER JOIN "vw_web_user_login" AS assignedfrom ON leaddetails.assignleadchk = "assignedfrom"."header_user_id"
-                   -- INNER JOIN "leadaddress" ON "leaddetails"."leadid" = "leadaddress"."leadaddressid"
                     INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
                     INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
                     INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
@@ -1856,7 +2012,7 @@ class Leads_model extends CI_Model {
         $whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
        // echo"<pre>";print_r($whereParts); echo"</pre>";
 //BUILD THE QUERY
-        $sql = 'SELECT
+       /* $sql = 'SELECT
             leaddetails.leadid,
             leaddetails.lead_no,
             leaddetails.email_id,
@@ -1910,17 +2066,186 @@ class Leads_model extends CI_Model {
             INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
             INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
             INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
-            INNER JOIN market_circle_hdr ON market_circle_hdr.gc_executive_code= vw_web_user_login.header_user_id 
+            
+            INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company
+            INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code 
+            
             INNER JOIN jc_calendar_dtl ON get_acc_yr(leaddetails.createddate::DATE) = jc_calendar_dtl.acc_yr  
             WHERE leaddetails.leadid IN (
             SELECT  leadid from leaddetails WHERE created_user IN ('.$user_list_ids.')
-            OR  assignleadchk in ('.$user_list_ids.')) ';   
+            OR  assignleadchk in ('.$user_list_ids.')) '; */
+
+            $sql = 'SELECT *  FROM 
+            (
+            SELECT
+                leaddetails.leadid,
+                0::text as mc_sub_id,
+                leaddetails.lead_no,
+                leaddetails.email_id,
+                leaddetails.firstname,
+                leaddetails.lastname,
+                leaddetails.industry,
+                leaddetails.website,
+                leaddetails.user_branch,
+                leaddetails.converted,
+                leaddetails.designation,
+                leaddetails.lead_crm_soc_no,
+                leaddetails.lead_close_status,
+                leaddetails.lead_close_option,
+                leaddetails.lead_close_comments,
+                leaddetails.comments,
+                leaddetails.uploaded_date,
+                leaddetails.description,
+                leaddetails.ldsubstatus,
+                leaddetails.secondaryemail,
+                leaddetails.assignleadchk,
+                leaddetails.createddate,
+                leaddetails.leadstatus AS leadstatusid,
+                leaddetails.leadsource AS leadsourceid,
+                leadstatus.leadstatus,
+                leadsubstatus.lst_name AS substatusname,
+                leadsource.leadsource,
+                leaddetails.company,
+                leaddetails.customer_id,
+                leaddetails.created_user,
+                leaddetails.last_modified,
+                leaddetails.last_updated_user,
+                leaddetails.sent_mail_alert,
+                leaddetails.industry_id,
+                leadproducts.productid,
+                leadproducts.product_group,
+                view_tempitemmaster.description AS productname,
+                leadproducts.product_itemname,
+                vw_web_user_login.empname AS assign_from_name,
+                assignedfrom.empname,
+                view_tempcustomermaster.tempcustname,
+                get_acc_yr (
+                    leaddetails.createddate :: DATE
+                ) AS fin_yr,
+                CASE
+            WHEN (createddate :: DATE) BETWEEN jc_period_from
+            AND jc_period_to THEN
+                jc_code
+            ELSE
+                0
+            END AS JCODE
+            FROM
+                leaddetails
+            INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
+            INNER JOIN leadstatus ON leadstatus.leadstatusid = leaddetails.leadstatus
+            INNER JOIN leadsource ON leadsource.leadsourceid = leaddetails.leadsource
+            INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
+            INNER JOIN vw_web_user_login AS assignedfrom ON leaddetails.assignleadchk = assignedfrom.header_user_id
+            INNER JOIN view_tempcustomermaster ON leaddetails.company = view_tempcustomermaster.id
+            INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
+            INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
+            INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company  AND (cust_account_id is NULL  OR  cust_account_id =0 ) 
+
+            INNER JOIN jc_calendar_dtl ON get_acc_yr (
+                leaddetails.createddate :: DATE
+            ) = jc_calendar_dtl.acc_yr
+            WHERE
+                leaddetails.leadid IN (
+                    SELECT
+                        leadid
+                    FROM
+                        leaddetails
+                    WHERE
+                        assignleadchk IN ('.$user_list_ids.')
+                )
+            AND (createddate :: DATE) BETWEEN jc_period_from
+            AND jc_period_to
+            AND converted = 0
+
+
+            UNION
+
+            SELECT
+                leaddetails.leadid,
+              market_circle_hdr.mc_sub_id,
+                leaddetails.lead_no,
+                leaddetails.email_id,
+                leaddetails.firstname,
+                leaddetails.lastname,
+                leaddetails.industry,
+                leaddetails.website,
+                leaddetails.user_branch,
+                leaddetails.converted,
+                leaddetails.designation,
+                leaddetails.lead_crm_soc_no,
+                leaddetails.lead_close_status,
+                leaddetails.lead_close_option,
+                leaddetails.lead_close_comments,
+                leaddetails.comments,
+                leaddetails.uploaded_date,
+                leaddetails.description,
+                leaddetails.ldsubstatus,
+                leaddetails.secondaryemail,
+                leaddetails.assignleadchk,
+                leaddetails.createddate,
+                leaddetails.leadstatus AS leadstatusid,
+                leaddetails.leadsource AS leadsourceid,
+                leadstatus.leadstatus,
+                leadsubstatus.lst_name AS substatusname,
+                leadsource.leadsource,
+                leaddetails.company,
+                leaddetails.customer_id,
+                leaddetails.created_user,
+                leaddetails.last_modified,
+                leaddetails.last_updated_user,
+                leaddetails.sent_mail_alert,
+                leaddetails.industry_id,
+                leadproducts.productid,
+                leadproducts.product_group,
+                view_tempitemmaster.description AS productname,
+                leadproducts.product_itemname,
+                vw_web_user_login.empname AS assign_from_name,
+                assignedfrom.empname,
+                view_tempcustomermaster.tempcustname,
+                get_acc_yr (
+                    leaddetails.createddate :: DATE
+                ) AS fin_yr,
+                CASE
+            WHEN (createddate :: DATE) BETWEEN jc_period_from
+            AND jc_period_to THEN
+                jc_code
+            ELSE
+                0
+            END AS JCODE
+            FROM
+                leaddetails
+            INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
+            INNER JOIN leadstatus ON leadstatus.leadstatusid = leaddetails.leadstatus
+            INNER JOIN leadsource ON leadsource.leadsourceid = leaddetails.leadsource
+            INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
+            INNER JOIN vw_web_user_login AS assignedfrom ON leaddetails.assignleadchk = assignedfrom.header_user_id
+            INNER JOIN view_tempcustomermaster ON leaddetails.company = view_tempcustomermaster.id
+            INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
+            INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
+
+             INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company
+             INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code 
+
+            INNER JOIN jc_calendar_dtl ON get_acc_yr (
+                leaddetails.createddate :: DATE
+            ) = jc_calendar_dtl.acc_yr
+            WHERE
+                leaddetails.leadid IN (
+                    SELECT
+                        leadid
+                    FROM
+                        leaddetails
+                    WHERE
+                        assignleadchk IN ('.$user_list_ids.'))'; 
+
+
+
         if(count($whereParts)) {
              $sql .= " AND " . implode('AND ', $whereParts);
            //  $sql .= "WHERE" . implode('AND ', $whereParts);
         }
 
-        $sql .= " AND converted=0 ORDER BY leadid DESC";
+        $sql .= " AND converted=0 ORDER BY leadid DESC )";
      
        //echo "sql is ".$sql."<br>"; die;
         $result = $this->db->query($sql);
@@ -1937,7 +2262,15 @@ class Leads_model extends CI_Model {
             $row["statusid"] = $jTableResult['leaddetails'][$i]["leadstatusid"];
             $row["substatusid"] = $jTableResult['leaddetails'][$i]["ldsubstatus"];
             $row["lead_no"] = $row["leadid"] . "-" . $jTableResult['leaddetails'][$i]["lead_no"];
-            $row["mc_sub_id"] = $jTableResult['leaddetails'][$i]["mc_sub_id"];
+            if($jTableResult['leaddetails'][$i]["mc_sub_id"]=="0")
+            {
+                $row["mc_sub_id"] = "New Customer";
+            }
+            else
+            {
+                $row["mc_sub_id"] = $jTableResult['leaddetails'][$i]["mc_sub_id"];
+            }
+            
 
             if ($jTableResult['leaddetails'][$i]["lead_close_status"] == 1) {
                 $closed = "Closed";
