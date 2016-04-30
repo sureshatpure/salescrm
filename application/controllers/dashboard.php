@@ -693,13 +693,11 @@ class Dashboard extends CI_Controller {
 
     function getbranches() {
         $branches = $this->dashboard_model->get_branches();
-        //	$substatus = $this->Leads_model->get_assigned_tobranch();
         header('Content-Type: application/x-json; charset=utf-8');
         echo $branches;
     }
        function getbranchesAll() {
         $branches = $this->dashboard_model->get_branches_all();
-        //  $substatus = $this->Leads_model->get_assigned_tobranch();
         header('Content-Type: application/x-json; charset=utf-8');
         echo $branches;
     }
@@ -710,13 +708,11 @@ class Dashboard extends CI_Controller {
 
         function getjchdr() {
         $jc_headers = $this->dashboard_model->get_jchdr();
-        //  $substatus = $this->Leads_model->get_assigned_tobranch();
         header('Content-Type: application/x-json; charset=utf-8');
         echo $jc_headers;
     }
       function getjchdrforweek($fin_year) {
         $jc_headers = $this->dashboard_model->get_jchdr_forweek($fin_year);
-        //  $substatus = $this->Leads_model->get_assigned_tobranch();
         header('Content-Type: application/x-json; charset=utf-8');
         echo $jc_headers;
     }
@@ -726,7 +722,6 @@ class Dashboard extends CI_Controller {
         $this->dashboard_model->jc_code = urldecode($jc_code);
         $this->dashboard_model->fin_year = urldecode($fin_year);
         $get_jcperiods = $this->dashboard_model->get_jcperiodfromdate();
-        //  $substatus = $this->Leads_model->get_assigned_tobranch();
         header('Content-Type: application/x-json; charset=utf-8');
         echo $get_jcperiods;
     }
@@ -734,7 +729,6 @@ class Dashboard extends CI_Controller {
         $this->dashboard_model->jc_code = urldecode($jc_code);
         $this->dashboard_model->fin_year = urldecode($fin_year);
         $get_jcperiods = $this->dashboard_model->get_jcperiodtodate();
-        //  $substatus = $this->Leads_model->get_assigned_tobranch();
         header('Content-Type: application/x-json; charset=utf-8');
         echo $get_jcperiods;
     }
@@ -2269,7 +2263,6 @@ class Dashboard extends CI_Controller {
 
     function getjcweek_hdr($fin_year,$jc_code) {
         $jc_headers = $this->dashboard_model->get_jcweek_hdr($fin_year,$jc_code);
-        //  $substatus = $this->Leads_model->get_assigned_tobranch();
         header('Content-Type: application/x-json; charset=utf-8');
         echo $jc_headers;
     }

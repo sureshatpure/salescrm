@@ -49,13 +49,12 @@
 $active_group = "forms";
 $active_record = TRUE;
 
-
-
 $db['forms']['hostname'] = '10.1.9.71';
 $db['forms']['username'] = 'puredb';
 $db['forms']['password'] = 'pure123';
 $db['forms']['database'] = 'softcodeformstest';
 $db['forms']['dbdriver'] = 'postgre';
+
 /*
 $db['forms']['hostname'] = '10.1.0.21';
 $db['forms']['username'] = 'puredb';
@@ -104,6 +103,7 @@ $db['default']['database'] = 'softcodetest';
 $db['default']['dbdriver'] = 'postgre';
 
 /*
+
 $db['default']['hostname'] = '10.1.0.21';
 $db['default']['username'] = 'puredb';
 $db['default']['password'] = 'pure123';

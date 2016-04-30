@@ -47,7 +47,7 @@ class Leads extends CI_Controller {
             }
             else
             {
-             $leaddata['selectedIndex_val']=-1;
+             $leaddata['selectedIndex_val']=0;
             }
            // echo" selectedIndex_val "+$leaddata['selectedIndex_val']; die;
             $allgroups = $this->admin_auth->groups()->result();
@@ -69,7 +69,7 @@ class Leads extends CI_Controller {
             }
             $arr = json_encode($datagroup);
             $leaddata['grpperm'] = $arr;
-    
+           
                $this->load->view('leads/viewleadsnewsort', $leaddata);
         } else {
             redirect('admin/index', 'refresh');
@@ -83,6 +83,8 @@ class Leads extends CI_Controller {
         @$branch =$_POST['selectbranch'];
         @$selectuserid =$_POST['selectuser'];
         @$assigntouserid =$_POST['assigntouser'];
+        @$selectmc_sub_id =$_POST['marketcircle'];
+        
         @$statusid =$_POST['status'];
         @$substatusid =$_POST['substatus'];
         @$customerid =$_POST['customer'];
@@ -124,6 +126,7 @@ class Leads extends CI_Controller {
             $leaddata['to_date']=@$_POST['todate'];
             $leaddata['from_date']=@$_POST['fromdate'];
             $leaddata['sel_user_id']=$selectuserid;
+            $leaddata['sel_mc_sub_id']=@$selectmc_sub_id;
             $leaddata['assign_user_id']=$assigntouserid;
             
             $leaddata['statusid']=$statusid;
@@ -138,7 +141,7 @@ class Leads extends CI_Controller {
                 $leaddata['data'] = $this->Leads_model->get_lead_details_all_srch($branch,$selectuserid,$assigntouserid,$statusid,$substatusid,$customerid,$productid,$fromdate,$todate);
                 
             } else {
-                $leaddata['data'] = $this->Leads_model->get_lead_details_srch($branch,$selectuserid,$assigntouserid,$statusid,$substatusid,$customerid,$productid,$from_date,$to_date,$this->session->userdata['reportingto']);
+                $leaddata['data'] = $this->Leads_model->get_lead_details_srch($branch,$selectmc_sub_id,$assigntouserid,$statusid,$substatusid,$customerid,$productid,$from_date,$to_date,$this->session->userdata['reportingto']);
 
                
             }
@@ -3756,6 +3759,31 @@ select  cast(customermasterhdr.id as varchar(50)), customermasterhdr.tempcustnam
               echo "noof rows ".$isExecutive['0']['noofrows'];
 
         }
+
+        /* market cricle functions */
+        function getmcbranches() 
+        {
+            $branches = $this->Leads_model->get_mcbranches();
+            //  $substatus = $this->Leads_model->get_assigned_tobranch();
+            header('Content-Type: application/x-json; charset=utf-8');
+            echo $branches;
+        }
+        function getmcselectedbranch($brach_sel) 
+        {
+            $this->Leads_model->brach_sel = urldecode($brach_sel);
+            $mcbranchlist = $this->Leads_model->get_mcselected_branch();
+            header('Content-Type: application/x-json; charset=utf-8');
+            echo $mcbranchlist;
+        }
+
+        function getmarketcircleloginuser()
+        {
+            $marketcirlist = $this->Leads_model->get_marketcircle_loginuser();
+            header('Content-Type: application/x-json; charset=utf-8');
+            echo $marketcirlist;
+        }
+
+        
 
 }
 

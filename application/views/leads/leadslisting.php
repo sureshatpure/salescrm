@@ -62,6 +62,8 @@
         var group_len = permission.length;
         var br = $('#hdn_branch').val();
         var sel_user_id = $('#hdn_userid').val();
+        var sel_mc_id = $('#hdn_mc_sub_id').val();
+        
         var assign_user_id = $('#hdn_assign_user_id').val();
         var statusid = $('#hdn_status_id').val();
         var substatusid = $('#hdn_substatus_id').val();
@@ -568,7 +570,7 @@
         $("#jqxgrid").jqxGrid({rendertoolbar: toolbarfunc});
         /* start for searching*/
 
-         var url = base_url + "leads/getbranches";
+         /*var url = base_url + "leads/getbranches";
             // prepare the data
             sourceforbranch =
                     {
@@ -595,16 +597,50 @@
             });
 
 
-            $("#selectbranch").jqxDropDownList('val', br);
+            $("#selectbranch").jqxDropDownList('val', br);*/
+            var url = base_url + "leads/getmcbranches";
+            // prepare the data
+            sourceforbranch =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'branch'},
+                            {name: 'branch'}
+                        ],
+                        url: url,
+                        async: false
+                    };
+
+            
+         var branch_dataAdapter = new $.jqx.dataAdapter(sourceforbranch);
+            // Create a jqxDropDownList
+            $("#selectbranch").jqxDropDownList({
+                selectedIndex: -1,
+                source: branch_dataAdapter,
+                displayMember: "branch",
+                valueMember: "branch",
+                height: 25,
+                theme: theme,
+                placeHolder: '– Select Branch –'
+            });
+             $("#selectbranch").jqxDropDownList('val', br);
 
            // alert("selected branch "+br);
-            if (br == 'SelectBranch')
+           /* if (br == 'SelectBranch')
             {
                 var url = base_url + "dashboard/getusersforloginuser";
             }
             else
             {
                 var url = base_url + "dashboard/getassignedtobranch/" + br;
+            }*/
+             if (br == 'SelectBranch')
+            {
+                var url = base_url + "leads/getmarketcircleloginuser";
+            }
+            else
+            {
+                var url = base_url + "leads/getmcselectedbranch/" + br;
             }
 
 
@@ -621,8 +657,21 @@
                     };
 
             var selectuser_dataAdapter = new $.jqx.dataAdapter(select_user_source);
+
+            select_mc_source =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'mc_sub_id'},
+                            {name: 'mc_sub_id'}
+                        ],
+                        url: url,
+                        async: false
+                    };
+
+            var selectmcsource_dataAdapter = new $.jqx.dataAdapter(select_mc_source);
             // Create a jqxDropDownList
-            $("#selectuser").jqxDropDownList({
+         /*   $("#selectuser").jqxDropDownList({
                 selectedIndex: -1,
                 source: selectuser_dataAdapter,
                 displayMember: "displayname",
@@ -632,7 +681,20 @@
                 theme: theme,
                 placeHolder: '– Created By –'
             });
-            $("#selectuser").jqxDropDownList('val', sel_user_id);
+            $("#selectuser").jqxDropDownList('val', sel_user_id);*/
+
+             $("#marketcircle").jqxDropDownList({
+                selectedIndex: -1,
+                source: selectmcsource_dataAdapter,
+                displayMember: "mc_sub_id",
+                valueMember: "mc_sub_id",
+                height: 25,
+                width:262,
+                theme: theme,
+                placeHolder: '– Market Circle –'
+            });
+              $("#marketcircle").jqxDropDownList('val', sel_mc_id);
+
             // Create a jqxDropDownList
             $("#assigntouser").jqxDropDownList({
                 selectedIndex: -1,
@@ -689,7 +751,7 @@
 
             var dataAdapter = new $.jqx.dataAdapter(source);
             // Create a jqxDropDownList
-            $("#selectuser").jqxDropDownList({
+         /*   $("#selectuser").jqxDropDownList({
                 selectedIndex: -1,
                 source: dataAdapter,
                 displayMember: "displayname",
@@ -698,7 +760,33 @@
                 height: 25,
                 theme: theme,
                 placeHolder: '– Created By –'
+            });*/
+             var urlmc = base_url + "leads/getmcselectedbranch/" + datafield;
+
+            // prepare the data
+            sourcemc =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'mc_sub_id'},
+                            {name: 'mc_sub_id'}
+                        ],
+                        url: urlmc,
+                        async: false
+                    };
+        var dataAdaptermc = new $.jqx.dataAdapter(sourcemc);                    
+            // Create a jqxDropDownList
+           $("#marketcircle").jqxDropDownList({
+                selectedIndex: -1,
+                source: dataAdaptermc,
+                displayMember: "mc_sub_id",
+                valueMember: "mc_sub_id",
+                height: 25,
+                width:262,
+                theme: theme,
+                placeHolder: '– Market Circle –'
             });
+           
              $("#assigntouser").jqxDropDownList({
                 selectedIndex: -1,
                 source: dataAdapter,
@@ -899,6 +987,7 @@
 <input value="" id="parent" name="parent" type="hidden">
 <input value="<?php echo $branch; ?>" id="hdn_branch" name="hdn_branch" type="hidden">
 <input value="<?php echo @$sel_user_id; ?>" id="hdn_userid" name="hdn_userid" type="hidden">
+<input value="<?php echo @$sel_mc_sub_id; ?>" id="hdn_mc_sub_id" name="hdn_mc_sub_id" type="hidden">
 <input value="<?php echo @$assign_user_id; ?>" id="hdn_assign_user_id" name="hdn_assign_user_id" type="hidden">
 <input value="<?php echo @$from_date; ?>" id="hdn_from_date" name="hdn_from_date" type="hidden">
 <input value="<?php echo @$to_date; ?>" id="hdn_to_date" name="hdn_to_date" type="hidden">
@@ -934,7 +1023,11 @@
                                         <tr>
                                  
                                             <td><div style="float: left" id="selectbranch"></div></td>
-                                            <td><div style="float: inherit" id="selectuser"></div></td>
+                                            <td>
+                                            <div style="float: inherit" id="selectuser"></div>
+                                            <div style="float: inherit" id="marketcircle"></div>
+                                            </td>
+
                                             <td><div style="float: inherit" id="assigntouser"></div></td>
                                         </tr>
                                         <tr>

@@ -872,14 +872,33 @@ class Dashboard_model extends CI_Model
 				@$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
 				if (@$reporting_to=="")
 				{
-					$sql="select header_user_id,displayname , branch from 
-									(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from vw_web_user_login ) a where upper(branch)='".$this->brach_sel."' order by displayname"; 
+					/*$sql="select header_user_id,displayname , branch from 
+									(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from vw_web_user_login ) a where upper(branch)='".$this->brach_sel."' order by displayname"; */
+
+						$sql="select 
+									header_user_id,
+									displayname , 
+						      branch from (
+												SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(c.name) || '-' || upper(v.empname) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id 
+						                    AND m.gc_executive_code=v.header_user_id AND upper(c.name)='".$this->brach_sel."' GROUP BY  v.header_user_id,upper(v.empname),  c.name,m.mc_sub_id 
+																) a 
+						where upper(branch)='".$this->brach_sel."' GROUP BY header_user_id, displayname , branch order by displayname";
+
 												
 
 				}
 				else{
-					$sql="select header_user_id,displayname , branch from 
-									(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from vw_web_user_login ) a where header_user_id IN (".$get_assign_to_user_id.")  and upper(branch)='".urldecode($this->brach_sel)."' order by displayname";
+						/*$sql="select header_user_id,displayname , branch from 
+									(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from vw_web_user_login ) a where header_user_id IN (".$get_assign_to_user_id.")  and upper(branch)='".urldecode($this->brach_sel)."' order by displayname";*/
+
+						$sql="select 
+									header_user_id,
+									displayname , 
+						      branch from (
+												SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(c.name) || '-' || upper(v.empname) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id 
+						                    AND m.gc_executive_code=v.header_user_id AND upper(c.name)='".$this->brach_sel."' GROUP BY  v.header_user_id,upper(v.empname),  c.name,m.mc_sub_id 
+																) a 
+						where header_user_id IN (".$get_assign_to_user_id.") and upper(branch)='".$this->brach_sel."' GROUP BY header_user_id, displayname , branch order by displayname";
 				}
 				//echo $sql; die;
 					$result = $this->db->query($sql);
@@ -950,15 +969,41 @@ class Dashboard_model extends CI_Model
 				//if ($get_assign_to_user_id=="")
 				if (@$reporting_to=="")
 				{
-					$sql="select header_user_id,displayname , branch from 
-									(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from vw_web_user_login WHERE  duser NOT LIKE 'TOMSAL%' AND  duser NOT LIKE 'ISD%' ) a";
+					/*$sql="select header_user_id,displayname , branch from 
+									(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from vw_web_user_login WHERE  duser NOT LIKE 'TOMSAL%' AND  duser NOT LIKE 'ISD%' ) a";*/
+					 $sql="select 
+									header_user_id,
+									displayname , 
+						      branch from (
+												SELECT  v.duser,v.header_user_id,c.name as branch,m.mc_sub_id,  upper(c.name) || '-' || upper(v.empname) as displayname  
+															FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v 
+															WHERE  m.collector_id = c.collector_id 
+						                    AND m.gc_executive_code=v.header_user_id 
+																AND v.duser NOT LIKE 'TOMSAL%' AND v.duser NOT LIKE 'ISD%' 
+															GROUP BY  v.duser,v.header_user_id,upper(v.empname),  c.name,m.mc_sub_id 
+																) a 
+						
+				GROUP BY header_user_id,displayname,branch 
+				order by displayname";
 
 				}
 				else{
-					$sql="select header_user_id,displayname , branch from 
-									(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from vw_web_user_login WHERE  duser NOT LIKE 'TOMSAL%' AND  duser NOT LIKE 'ISD%' ) a where header_user_id IN (".$get_assign_to_user_id.")";
-				}
 
+					/*$sql="select header_user_id,displayname , branch from 
+									(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from vw_web_user_login WHERE  duser NOT LIKE 'TOMSAL%' AND  duser NOT LIKE 'ISD%' ) a where header_user_id IN (".$get_assign_to_user_id.")";*/
+
+					 $sql="select 	header_user_id,
+									displayname , 
+						      branch from (
+												SELECT  v.duser,v.header_user_id,c.name as branch,m.mc_sub_id,  upper(c.name) || '-' || upper(v.empname) as displayname  
+															FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v 
+															WHERE  m.collector_id = c.collector_id 
+						                    				AND m.gc_executive_code=v.header_user_id 
+																AND v.duser NOT LIKE 'TOMSAL%' AND v.duser NOT LIKE 'ISD%' 
+															GROUP BY  v.duser,v.header_user_id,upper(v.empname),  c.name,m.mc_sub_id 
+																) a WHERE header_user_id IN (".$get_assign_to_user_id.") GROUP BY header_user_id,displayname,branch order by displayname";
+				}
+			//	echo $sql; die;
 					$result = $this->db->query($sql);
 					$userlist = $result->result_array();
 // 				       $myarray = $this->array_push_multi_assoc('', count($userlist),'header_user_id','#','displayname','--Select Branch--','branch','null');

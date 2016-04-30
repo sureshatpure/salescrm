@@ -1438,14 +1438,14 @@ class Leads_model extends CI_Model {
             INNER JOIN jc_calendar_dtl ON get_acc_yr(leaddetails.createddate::DATE) = jc_calendar_dtl.acc_yr'; */  
             $sql='SELECT
                 leaddetails.leadid,
-              0::text as mc_sub_id,
+                0::text as mc_sub_id,
                 leaddetails.lead_no,
                 leaddetails.email_id,
                 leaddetails.firstname,
                 leaddetails.lastname,
                 leaddetails.industry,
                 leaddetails.website,
-                leaddetails.user_branch,
+                0::text as user_branch,
                 leaddetails.converted,
                 leaddetails.designation,
                 leaddetails.lead_crm_soc_no,
@@ -1519,7 +1519,7 @@ class Leads_model extends CI_Model {
                 leaddetails.lastname,
                 leaddetails.industry,
                 leaddetails.website,
-                leaddetails.user_branch,
+                ar_collectors.name as user_branch,
                 leaddetails.converted,
                 leaddetails.designation,
                 leaddetails.lead_crm_soc_no,
@@ -1574,7 +1574,8 @@ class Leads_model extends CI_Model {
             INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
 
              INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company
-             INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code 
+             INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code
+             INNER JOIN ar_collectors ON ar_collectors.name=customermasterhdr.collector  
 
             INNER JOIN jc_calendar_dtl ON get_acc_yr (
                 leaddetails.createddate :: DATE
@@ -1632,7 +1633,17 @@ class Leads_model extends CI_Model {
             
             $row["product_group"] = $jTableResult['leaddetails'][$i]["product_group"];
             $row["productid"] = $jTableResult['leaddetails'][$i]["productid"];
-            $row["branch"] = $jTableResult['leaddetails'][$i]["user_branch"];
+            //$row["branch"] = $jTableResult['leaddetails'][$i]["user_branch"];
+
+            if($jTableResult['leaddetails'][$i]["user_branch"]=="0")
+            {
+                $row["branch"] = "NO COLLECTOR";
+            }
+            else
+            {
+                $row["branch"] = $jTableResult['leaddetails'][$i]["user_branch"];
+            }
+
             $row["leadsource"] = $jTableResult['leaddetails'][$i]["leadsource"];
             $row["assign_from_name"] = $jTableResult['leaddetails'][$i]["assign_from_name"];
             $row["tempcustname"] = $jTableResult['leaddetails'][$i]["tempcustname"];
@@ -1989,7 +2000,7 @@ class Leads_model extends CI_Model {
         $this->session->set_userdata('user_leads_converted_count', $user_leads_count); // added by perusu
         return $productdetails;
     }
-    function get_lead_details_srch($branch=null,$selectuserid=0,$assigntouserid=0,$statusid=0,$substatusid=0,$customerid=0,$productid=0,$fromdate=null,$todate=null,$id)
+    function get_lead_details_srch($branch=null,$selectmc_sub_id=0,$assigntouserid=0,$statusid=0,$substatusid=0,$customerid=0,$productid=0,$fromdate=null,$todate=null,$id)
         {
         $reportingid = $this->session->userdata['loginname'];
         //echo"b".$user_list_ids = $this->get_user_list_ids($reportingid); replaced by SELECT get_hierarchical_user_id on 5-mar-2015
@@ -2001,7 +2012,7 @@ class Leads_model extends CI_Model {
          
         $whereParts = array();
         if($branch)     { $whereParts[] = "leaddetails.user_branch ='$branch' "; }
-        if($selectuserid) { $whereParts[] = "leaddetails.created_user = $selectuserid "; }
+        //if($selectuserid) { $whereParts[] = "leaddetails.created_user = $selectuserid "; }
         if($assigntouserid) { $whereParts[] = "leaddetails.assignleadchk = $assigntouserid "; }
         if($statusid)  { $whereParts[] = "leaddetails.leadstatus = $statusid "; }
         if($substatusid)  { $whereParts[] = "leaddetails.ldsubstatus = $substatusid "; }
@@ -2009,8 +2020,9 @@ class Leads_model extends CI_Model {
         if($productid)  { $whereParts[] = "leadproducts.productid::TEXT = '$productid'"; }
         if($fromdate)  { $whereParts[] = "leaddetails.createddate::DATE >= '$fromdate' "; }
         if($todate)  { $whereParts[] = "leaddetails.createddate::DATE <= '$todate' "; }
+        //if($selectmc_sub_id) { $whereParts[] = "leaddetails.mc_sub_id = '$selectmc_sub_id' "; }
         $whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
-       // echo"<pre>";print_r($whereParts); echo"</pre>";
+      // echo"<pre>";print_r($whereParts); echo"</pre>";
 //BUILD THE QUERY
        /* $sql = 'SELECT
             leaddetails.leadid,
@@ -2075,9 +2087,7 @@ class Leads_model extends CI_Model {
             SELECT  leadid from leaddetails WHERE created_user IN ('.$user_list_ids.')
             OR  assignleadchk in ('.$user_list_ids.')) '; */
 
-            $sql = 'SELECT *  FROM 
-            (
-            SELECT
+            $sql = 'SELECT
                 leaddetails.leadid,
                 0::text as mc_sub_id,
                 leaddetails.lead_no,
@@ -2086,7 +2096,7 @@ class Leads_model extends CI_Model {
                 leaddetails.lastname,
                 leaddetails.industry,
                 leaddetails.website,
-                leaddetails.user_branch,
+                0::text as user_branch,
                 leaddetails.converted,
                 leaddetails.designation,
                 leaddetails.lead_crm_soc_no,
@@ -2162,14 +2172,14 @@ class Leads_model extends CI_Model {
 
             SELECT
                 leaddetails.leadid,
-              market_circle_hdr.mc_sub_id,
+                market_circle_hdr.mc_sub_id,
                 leaddetails.lead_no,
                 leaddetails.email_id,
                 leaddetails.firstname,
                 leaddetails.lastname,
                 leaddetails.industry,
                 leaddetails.website,
-                leaddetails.user_branch,
+                ar_collectors.name as user_branch,
                 leaddetails.converted,
                 leaddetails.designation,
                 leaddetails.lead_crm_soc_no,
@@ -2224,7 +2234,8 @@ class Leads_model extends CI_Model {
             INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
 
              INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company
-             INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code 
+             INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code
+             INNER JOIN ar_collectors ON ar_collectors.name=customermasterhdr.collector  
 
             INNER JOIN jc_calendar_dtl ON get_acc_yr (
                 leaddetails.createddate :: DATE
@@ -2244,10 +2255,15 @@ class Leads_model extends CI_Model {
              $sql .= " AND " . implode('AND ', $whereParts);
            //  $sql .= "WHERE" . implode('AND ', $whereParts);
         }
-
-        $sql .= " AND converted=0 ORDER BY leadid DESC )";
+        
+        if($selectmc_sub_id!="")
+        {
+            $sql .= " AND mc_sub_id='".$selectmc_sub_id."'";
+        }
+           $sql .= ' AND converted=0 ORDER BY leadid ASC'; 
+       
      
-       //echo "sql is ".$sql."<br>"; die;
+      // echo "sql is ".$sql."<br>"; die;
         $result = $this->db->query($sql);
         $productdetails = $result->result_array();
         $all_leads_count = count($productdetails); 
@@ -2289,7 +2305,19 @@ class Leads_model extends CI_Model {
             
             $row["productid"] = $jTableResult['leaddetails'][$i]["productid"];
             $row["product_group"] = $jTableResult['leaddetails'][$i]["product_group"];
-            $row["branch"] = $jTableResult['leaddetails'][$i]["user_branch"];
+           // $row["branch"] = $jTableResult['leaddetails'][$i]["user_branch"];
+
+            if($jTableResult['leaddetails'][$i]["user_branch"]=="0")
+            {
+                $row["branch"] = "NO COLLECTOR";
+            }
+            else
+            {
+                $row["branch"] = $jTableResult['leaddetails'][$i]["user_branch"];
+            }
+
+
+
             $row["leadsource"] = $jTableResult['leaddetails'][$i]["leadsource"];
             $row["assign_from_name"] = $jTableResult['leaddetails'][$i]["assign_from_name"];
             $row["tempcustname"] = $jTableResult['leaddetails'][$i]["tempcustname"];
@@ -3763,6 +3791,81 @@ presentsource,suppliername,decisionmaker,branchname,comments,uploadeddate,descri
         return ($this->db->affected_rows() > 0);
     }
 
+    /* market cricle functions */
+
+
+     function get_mcbranches()
+                {
+                
+                $reporting_to = $this->session->userdata['reportingto'];
+                $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+
+                if (@$reporting_to=="")
+                {
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
+                } else
+                {
+
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id AND 
+                    v.header_user_id IN (".$get_assign_to_user_id.")";
+                }
+                //echo $sql; die;
+                    $result = $this->db->query($sql);
+                    $options = $result->result_array();
+                    $arr =  json_encode($options); 
+                // return $result = $this->db->query($sql);
+        
+    //echo $arr; die;
+            return $arr;
+
+                }
+
+    function get_marketcircle_loginuser()
+    {
+        @$reporting_to = $this->session->userdata['reportingto'];
+        $get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+        if (@$reporting_to=="")
+        {
+            $sql="SELECT m.mc_sub_id FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE m.collector_id = c.collector_id AND 
+            m.gc_executive_code=v.header_user_id GROUP BY   c.name,m.mc_sub_id ORDER BY 1";
+        }
+        else
+        {
+            $sql="SELECT m.mc_sub_id FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE m.collector_id = c.collector_id AND 
+            m.gc_executive_code=v.header_user_id AND  v.header_user_id IN (".$get_assign_to_user_id.") GROUP BY   c.name,m.mc_sub_id ORDER BY 1";
+        }
+     //   echo $sql; die;
+        $result = $this->db->query($sql);
+        $marktcircle = $result->result_array();
+        $arr =  json_encode($marktcircle); 
+        return $arr;        
+    }
+
+    function get_mcselected_branch()
+    {
+
+        @$reporting_to = $this->session->userdata['reportingto'];
+        $get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+        if (@$reporting_to=="")
+        {
+           
+            $sql="SELECT  c.name,m.mc_sub_id FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id 
+                    AND m.gc_executive_code=v.header_user_id AND upper(c.name)='".$this->brach_sel."' GROUP BY    c.name,m.mc_sub_id ORDER BY 1";
+        }
+        else
+        {
+              $sql="SELECT  c.name,m.mc_sub_id FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id 
+                    AND m.gc_executive_code=v.header_user_id  AND v.header_user_id IN (".$get_assign_to_user_id.") AND upper(c.name)='".$this->brach_sel."' GROUP BY   c.name,m.mc_sub_id ORDER BY 1";
+        }
+      //  echo $sql; die;
+        $result = $this->db->query($sql);
+        $marktcircle = $result->result_array();
+        $arr =  json_encode($marktcircle); 
+        return $arr;
+
+    }
     
 
 

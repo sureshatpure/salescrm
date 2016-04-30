@@ -58,6 +58,7 @@
         var hdnto_date = $('#hdn_to_date').val();
         var br = "SelectBranch";
         var sel_user_id = "SelectUser";
+        var sel_mc_id = "SelectMC";
         var assign_user_id = "SelectUser";
         var sel_datefilter;
         var theme = 'energyblue';
@@ -70,7 +71,7 @@
      
         /* start for searching*/
 
-         var url = base_url + "dashboard/getbranches";
+         var url = base_url + "leads/getmcbranches";
             // prepare the data
             sourceforbranch =
                     {
@@ -100,32 +101,42 @@
 
             $("#selectbranch").jqxDropDownList('val', br);
 
-            //alert("selected branch "+br);
+            
             if (br == 'SelectBranch')
             {
-                var url = base_url + "dashboard/getusersforloginuser";
+                var url = base_url + "leads/getmarketcircleloginuser";
             }
             else
             {
-                var url = base_url + "dashboard/getassignedtobranch/" + br;
+                var url = base_url + "leads/getmcselectedbranch/" + br;
+            }
+            
+            if (br == 'SelectBranch')
+            {
+                var urlasign = base_url + "dashboard/getusersforloginuser";
+            }
+            else
+            {
+                var urlasign = base_url + "dashboard/getassignedtobranch/" + br;
             }
 
 
+
             // prepare the data
-            branchsource =
+            branchsourceassign =
                     {
                         datatype: "json",
                         datafields: [
                             {name: 'displayname'},
                             {name: 'header_user_id'}
                         ],
-                        url: url,
+                        url: urlasign,
                         async: false
                     };
 
-            var branchsourcedataAdapter = new $.jqx.dataAdapter(branchsource);
+            var branchsourceassigndataAdapter = new $.jqx.dataAdapter(branchsourceassign);
             // Create a jqxDropDownList
-            $("#selectuser").jqxDropDownList({
+         /*   $("#selectuser").jqxDropDownList({
                 selectedIndex: selectedIndex_val,
                 source: branchsourcedataAdapter,
                 displayMember: "displayname",
@@ -135,7 +146,43 @@
                 theme: theme,
                 placeHolder: '– Created By –'
             });
-            $("#selectuser").jqxDropDownList('val', sel_user_id);
+            $("#selectuser").jqxDropDownList('val', sel_user_id);*/
+            
+
+            if (br == 'SelectBranch')
+            {
+                var url = base_url + "leads/getmarketcircleloginuser";
+            }
+            else
+            {
+                var url = base_url + "leads/getmcselectedbranch/" + br;
+            }
+
+            branchsource =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'mc_sub_id'},
+                            {name: 'mc_sub_id'}
+                        ],
+                        url: url,
+                        async: false
+                    };
+
+            var branchsourcedataAdapter = new $.jqx.dataAdapter(branchsource);
+            // Create a jqxDropDownList
+            $("#marketcircle").jqxDropDownList({
+                selectedIndex: selectedIndex_val,
+                source: branchsourcedataAdapter,
+                displayMember: "mc_sub_id",
+                valueMember: "mc_sub_id",
+                height: 25,
+                width:262,
+                theme: theme,
+                placeHolder: '– Market Circle –'
+            });
+              $("#marketcircle").jqxDropDownList('val', sel_mc_id);
+
             $("#assigntouser").jqxDropDownList('val', assign_user_id);
          // end of funtion setInitialgridsource
 
@@ -144,9 +191,9 @@
         });
 
         var updateFilterBox = function (datafield) {
-            //   alert('testing'+datafield);
-
-            var url = base_url + "dashboard/getassignedtobranch/" + datafield;
+               //alert('testing'+datafield);
+               br=datafield;
+            var urluser = base_url + "dashboard/getassignedtobranch/" + datafield;
 
             // prepare the data
             source =
@@ -156,25 +203,63 @@
                             {name: 'displayname'},
                             {name: 'header_user_id'}
                         ],
-                        url: url,
+                        url: urluser,
                         async: false
                     };
 
             var dataAdapter = new $.jqx.dataAdapter(source);
+
+
+            var urlmc = base_url + "leads/getmcselectedbranch/" + datafield;
+
+            // prepare the data
+            sourcemc =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'mc_sub_id'},
+                            {name: 'mc_sub_id'}
+                        ],
+                        url: urlmc,
+                        async: false
+                    };
+        var dataAdaptermc = new $.jqx.dataAdapter(sourcemc);                    
             // Create a jqxDropDownList
-            $("#selectuser").jqxDropDownList({
+           $("#marketcircle").jqxDropDownList({
                 selectedIndex: selectedIndex_val,
-                source: dataAdapter,
-                displayMember: "displayname",
-                valueMember: "header_user_id",
-                width: 200,
+                source: dataAdaptermc,
+                displayMember: "mc_sub_id",
+                valueMember: "mc_sub_id",
                 height: 25,
+                width:262,
                 theme: theme,
-                placeHolder: '– Created By –'
+                placeHolder: '– Market Circle –'
             });
+
+            if (br == 'SelectBranch')
+            {
+                var urlasignbr = base_url + "dashboard/getusersforloginuser";
+            }
+            else
+            {
+                var urlasignbr = base_url + "dashboard/getassignedtobranch/" + br;
+            }
+                    branchsourceassignbranch =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'displayname'},
+                            {name: 'header_user_id'}
+                        ],
+                        url: urlasignbr,
+                        async: false
+                    };
+
+            var branchsourceassignbranchdataAdapter = new $.jqx.dataAdapter(branchsourceassignbranch);
+
              $("#assigntouser").jqxDropDownList({
                 selectedIndex: selectedIndex_val,
-                source: dataAdapter,
+                source: branchsourceassignbranchdataAdapter,
                 displayMember: "displayname",
                 valueMember: "header_user_id",
                 height: 25,
@@ -283,25 +368,11 @@
             // prepare the data
            
 
-            var dataAdapter = new $.jqx.dataAdapter(branchsource);
-            // Create a jqxDropDownList
-            $("#selectuser").jqxDropDownList({
-                selectedIndex: selectedIndex_val,
-                source: dataAdapter,
-                displayMember: "displayname",
-                valueMember: "header_user_id",
-                width: 200,
-                height: 25,
-                theme: theme,
-                placeHolder: '– Created By –'
-            });
-            // end of updateSubstatus   
-
-            var dataAdapter = new $.jqx.dataAdapter(branchsource);
+            var dataAdapter = new $.jqx.dataAdapter(branchsourceassign);
             // Create a jqxDropDownList
             $("#assigntouser").jqxDropDownList({
                 selectedIndex: selectedIndex_val,
-                source: dataAdapter,
+                source: branchsourceassigndataAdapter,
                 displayMember: "displayname",
                 valueMember: "header_user_id",
                 height: 25,
@@ -486,7 +557,10 @@
                                <table border="1" cellpadding="5" cellspacing="5" style="margin-left:150px;border-width:7px; border-color:#cfdde9;">
                                         <tr>
                                             <td><div style="float: left" id="selectbranch"></div></td>
-                                            <td><div style="float: inherit" id="selectuser"></div></td>
+                                            <td>
+                                            <div style="float: inherit" id="selectuser"></div>
+                                            <div style="float: inherit" id="marketcircle"></div>
+                                            </td>
                                             <td><div style="float: inherit" id="assigntouser"></div></td>
                                           
                                         </tr>
