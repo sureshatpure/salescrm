@@ -221,6 +221,8 @@ class dailyactivity extends CI_Controller {
     function additemmaster() {
         $createddate = date('Y-m-d:H:i:s');
         $lastupdatedate = date('Y-m-d:H:i:s');
+        $account_yrdate = date("Y-m-d"); 
+        $account_yr = $this->Leads_model->get_current_accnt_yr($account_yrdate);
         $creationuser = $this->session->userdata['identity'];
         $lastupdateuser = "";
          $execode = $this->session->userdata['empcode'];
@@ -236,12 +238,13 @@ class dailyactivity extends CI_Controller {
          $header_user_id = $assign_to_array['0']['header_user_id'];
          $sales_type_flag="R";
        
-        //echo "current_date ".$_POST[0]['currentdate'];
-   //     echo"<pre> _POST data";print_r($_POST);echo"</pre>";
+       // echo "current_date ".$_POST[0]['currentdate'];
+       // echo"<pre> _POST data";print_r($_POST);echo"</pre>";
+
         $hrd_currentdate = $_POST[0]['currentdate'];
         $grid_data = array_slice($_POST, 1, null, true);
-      //  echo"<pre> grid data";print_r($grid_data);echo"</pre>"; 
-      //  die;
+       // echo"<pre> grid data";print_r($grid_data);echo"</pre>"; 
+        //die;
         $check_duplicates = $this->dailyactivity_model->check_dailyhdr_duplicates($hrd_currentdate, $user1);
         //  echo $check_duplicates; die;
         $today_date = date('Y-m-d:H:i:s');
@@ -256,7 +259,7 @@ class dailyactivity extends CI_Controller {
                     'execode' => $execode,
                     'exename' => $exename,
                     'companycode' => 'PPC',
-                    'accperiod' => '2016-2017',
+                    'accperiod' => $account_yr,
                     'user1' => $user1,
                     'creationuser' => $creationuser,
                     'creationdate' => $createddate,
@@ -300,6 +303,11 @@ class dailyactivity extends CI_Controller {
                          $sales_type_id = $this->dailyactivity_model->get_salestypeid_byname($val['division']);
 
                          $customer_id=$val['hdn_cust_id'];
+                         
+                         $customer_details = $this->Leads_model->GetCustomerdetails($customer_id);
+                         $customer_number = $customer_details['customer_number'];
+                         $customer_name = $customer_details['customer_name'];
+
                          $customer_address[] = $this->dailyactivity_model->get_customer_address($customer_id);
                          $user_branch = $this->dailyactivity_model->get_user_branch($login_user_id);
                          if($val['itemgroup']=="")
@@ -338,6 +346,7 @@ class dailyactivity extends CI_Controller {
                             'crd_assesment' =>'Update Later',
                             'assignleadchk' => $login_user_id,
                             'user_branch' => $user_branch,
+                            'collector' => $val['collector'],
                             /*'description' => "added from dailyactivity",
                             'comments' => "comments added from dailyactivity",*/
                             'description' => $val['Remarks'],
@@ -541,7 +550,8 @@ class dailyactivity extends CI_Controller {
                             $lpid_seq = $this->Leads_model->GetNextlpid($lead_id);
                             $lpid_seq = $lpid_seq;
  
-                            for ($k = 0; $k < count($product_sale_type); $k++) {
+                            for ($k = 0; $k < count($product_sale_type); $k++) 
+                            {
                                 $lead_prod_poten_type[$k]['leadid'] = $lead_id;
                                 $lead_prod_poten_type[$k]['productid'] = $val['hdn_prod_id'];
                                 $lead_prod_poten_type[$k]['product_type_id'] =$product_sale_type[$k]['n_value_id'];
@@ -561,6 +571,36 @@ class dailyactivity extends CI_Controller {
                             $k = 0;
                          /* End for inserting into lead_prod_potential_types*/
 
+                         /*Start for inserting into potential update table add form */
+                          
+                          for ($m = 0; $m < count($product_sale_type); $m++) {
+                                $lead_customer_pontential[$m]['id'] = $lead_id;
+                                $lead_customer_pontential[$m]['line_id'] = $lpid_seq;
+                                $lead_customer_pontential[$m]['user1'] = strtoupper($duser);
+                                $lead_customer_pontential[$m]['customergroup'] = $val['custgroup'];
+                                $lead_customer_pontential[$m]['itemgroup'] = $val['itemgroup'];
+                                $lead_customer_pontential[$m]['customer_number'] = $customer_number;
+                                $lead_customer_pontential[$m]['customer_name'] = $customer_name;
+                                $lead_customer_pontential[$m]['types'] = "LEAD";
+                                $lead_customer_pontential[$m]['current_acc_yr'] =$account_yr;
+                                $lead_customer_pontential[$m]['collector'] = $val['collector'];
+                                $lead_customer_pontential[$m]['lead_created_date'] = date('Y-m-d:H:i:s');
+                                $lead_customer_pontential[$m]['user_code'] = $login_user_id;
+                                $lead_customer_pontential[$m]['businesscategory'] = strtoupper($product_sale_type[$m]['n_value_displayname']);
+
+                                 if ($product_sale_type[$m]['n_value_id'] == $sales_type_id) {
+                                    $lead_customer_pontential[$m]['yearly_potential_qty'] = ($val['actualpotenqty'] * 12);
+                                } else {
+                                    $lead_customer_pontential[$m]['yearly_potential_qty'] = 0;
+                                }
+
+
+                               
+                            }
+                            $m = 0;
+                             $lead_pord_poten_id = $this->Leads_model->save_leadcustomer_potential_update($lead_customer_pontential);
+
+                            /*END  for inserting into potential update table */
                          /* Start of creating log and sublog details with revert back to previous status*/
                            $lead_log_details = array('lh_lead_id' => $lead_id,
                         'lh_user_id' => $login_user_id,
@@ -1179,6 +1219,10 @@ class dailyactivity extends CI_Controller {
         	
         $createddate = date('Y-m-d:H:i:s');
         $lastupdatedate = date('Y-m-d:H:i:s');
+        
+        $account_yrdate = date("Y-m-d"); 
+        $account_yr = $this->Leads_model->get_current_accnt_yr($account_yrdate);
+
         $creationuser = $this->session->userdata['identity'];
         $lastupdateuser = $this->session->userdata['identity'];
         $execode = $this->session->userdata['empcode'];
@@ -1191,9 +1235,11 @@ class dailyactivity extends CI_Controller {
         $hdn_hdr_id = $_POST[0]['hdn_hdr_id'];
         $assign_to_array = $this->Leads_model->GetAssigntoName($login_user_id);
         $lead_assign_name = $assign_to_array['0']['location_user'] . "-" . $assign_to_array['0']['aliasloginname'];
-        //echo"<pre> post array";print_r($_POST);echo"</pre>";
+        $duser = $assign_to_array['0']['duser'];
+       // echo"<pre> post array";print_r($_POST);echo"</pre>";
         $grid_data = array_slice($_POST, 1, null, true);
-        //echo"<pre>";print_r($grid_data);echo"</pre>"; 
+      //  echo"<pre>";print_r($grid_data);echo"</pre>"; 
+      //  die;
         $get_update_id = $hdn_hdr_id;
 
             if ($_POST['update'] == 'true') {
@@ -1283,8 +1329,11 @@ class dailyactivity extends CI_Controller {
                                 $appiontment_date = $val['lead_appointmentdt'];
                             }
                        //  echo "appiontment_date ".$appiontment_date."<br>";
-                         $customer_id=$val['hdn_cust_id'];
-                         $customer_address[] = $this->dailyactivity_model->get_customer_address($customer_id);
+                            $customer_id=$val['hdn_cust_id'];
+                            $customer_details = $this->Leads_model->GetCustomerdetails($customer_id);
+                            $customer_number = $customer_details['customer_number'];
+                            $customer_name = $customer_details['customer_name'];
+                            $customer_address[] = $this->dailyactivity_model->get_customer_address($customer_id);
 
                             $leaddetails = array('lead_no' => $lead_no,
                             'leadstatus' => $lead_status_id,
@@ -1305,6 +1354,7 @@ class dailyactivity extends CI_Controller {
                             'converted' => $ld_converted,
                             'crd_assesment' =>'Update Later',
                             'assignleadchk' => $login_user_id,
+                            'collector' => $val['collector'],
                             'user_branch' => $user_branch,
                             'description' => "added from dailyactivity",
                             'comments' => "comments added from dailyactivity",
@@ -1331,7 +1381,8 @@ class dailyactivity extends CI_Controller {
                         $prdetid = $this->Leads_model->save_lead_products_all($leadproducts);
                          /* End for inserting into leadproducts*/
 
-                         /* Start for inserting into lead_prod_potential_types*/
+                         /* Start for inserting into lead_prod_potential_types update form*/
+
                             $product_sale_type = $this->Leads_model->get_leadproduct_saletype();
                             $lpid_seq = $this->Leads_model->GetNextlpid($lead_id);
                             $lpid_seq = $lpid_seq;
@@ -1357,6 +1408,41 @@ class dailyactivity extends CI_Controller {
 
                             $k = 0;
                          /* End for inserting into lead_prod_potential_types*/
+
+                         /* Start for inserting into potential_update_table update form*/
+                          
+                          for ($m = 0; $m < count($product_sale_type); $m++) {
+                                $lead_customer_pontential[$m]['id'] = $lead_id;
+                                $lead_customer_pontential[$m]['line_id'] = $lpid_seq;
+                                $lead_customer_pontential[$m]['user1'] = strtoupper($duser);
+                                $lead_customer_pontential[$m]['customergroup'] = $val['custgroup'];
+                                $lead_customer_pontential[$m]['itemgroup'] = $val['itemgroup'];
+                                $lead_customer_pontential[$m]['customer_number'] = $customer_number;
+                                $lead_customer_pontential[$m]['customer_name'] = $customer_name;
+                                $lead_customer_pontential[$m]['types'] = "LEAD";
+                                $lead_customer_pontential[$m]['current_acc_yr'] =$account_yr;
+                                $lead_customer_pontential[$m]['collector'] = $val['collector'];
+                                $lead_customer_pontential[$m]['lead_created_date'] = date('Y-m-d:H:i:s');
+                                $lead_customer_pontential[$m]['user_code'] = $login_user_id;
+                                $lead_customer_pontential[$m]['businesscategory'] = strtoupper($product_sale_type[$m]['n_value_displayname']);
+
+                                 if ($product_sale_type[$m]['n_value_id'] == $sales_type_id) {
+                                    $lead_customer_pontential[$m]['yearly_potential_qty'] = ($val['actualpotenqty'] * 12);
+                                } else {
+                                    $lead_customer_pontential[$m]['yearly_potential_qty'] = 0;
+                                }
+
+
+                               
+                            }
+                            $m = 0;
+                             $lead_pord_poten_id = $this->Leads_model->save_leadcustomer_potential_update($lead_customer_pontential);
+
+
+                         /* End for inserting into potential_update_table*/
+
+
+
                          // Start of if condition for inserting in the mail alert table
                          if (($lead_status_id == 1) && ( $lead_substatus_id == 3 ||  $lead_substatus_id == 4 || $lead_substatus_id == 5 || $lead_substatus_id == 6 ) || ($lead_status_id == 2) && ($lead_substatus_id == 7 )) 
                             { 
@@ -1639,6 +1725,8 @@ class dailyactivity extends CI_Controller {
                            //echo "lead update is to be done for ".$val['leadid'];
                            //echo"lead_status_id ".$lead_status_id."<br>";
                            //echo"lead_substatus_id ".$lead_substatus_id."<br>";
+
+
                              if($val['crm_soc_number']=='undefined' || $val['crm_soc_number']=="")
                              {
                                 $crm_first_soc_no=0;
@@ -1714,6 +1802,33 @@ class dailyactivity extends CI_Controller {
                             $id = $this->Leads_model->update_lead($leaddetails, $lead_id);
                             $id = $this->Leads_model->update_leadproducts($leadproducts, $lead_id);
                             $lead_pord_poten_id = $this->Leads_model->dcupdate_leadprodpotentypes($lead_prod_poten_type_update, $lead_id,$sales_type_id);
+
+
+                            /* update potential_update_table for update form start*/
+                            $product_sale_type = $this->Leads_model->get_leadproduct_saletype();
+                             for ($m = 0; $m < count($product_sale_type); $m++) {
+                                 
+                                $lpid_seq = $this->dailyactivity_model->GetPotentialUpdateTable_lineid($lead_id);
+                                $lead_customer_pontential_update[$m]['id'] = $lead_id;
+                                $lead_customer_pontential_update[$m]['line_id'] = $lpid_seq;
+                            
+                               // $lead_customer_pontential[$m]['lead_created_date'] = date('Y-m-d:H:i:s');
+                                //$lead_customer_pontential[$m]['user_code'] = $login_user_id;
+                                $lead_customer_pontential_update[$m]['businesscategory'] = strtoupper($product_sale_type[$m]['n_value_displayname']);
+                               
+
+                                 if ($product_sale_type[$m]['n_value_id'] == $sales_type_id) {
+                                    $lead_customer_pontential_update[$m]['yearly_potential_qty'] = ($val['actualpotenqty'] * 12);
+                                } else {
+                                    $lead_customer_pontential_update[$m]['yearly_potential_qty'] = 0;
+                                }
+
+                             }
+                            $m = 0;    
+                            
+                            $lead_pord_poten_id = $this->dailyactivity_model->updatelead_customer_potential_table($lead_customer_pontential_update, $lead_id);
+                            /* update potential_update_table for update form start*/
+
 
       
 

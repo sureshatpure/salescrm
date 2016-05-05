@@ -84,7 +84,8 @@
             //alert("check");
             clearbranch=1;
             clearstatus=1;
-                $("#selectuser").jqxDropDownList({ selectedIndex: -1});
+                //$("#selectuser").jqxDropDownList({ selectedIndex: -1});
+                $("#marketcircle").jqxDropDownList({ selectedIndex: -1});
                 $("#assigntouser").jqxDropDownList({selectedIndex: -1});
                 
                 $("#selectbranch").jqxDropDownList({ selectedIndex: -1});
@@ -97,7 +98,8 @@
 
                 $("#product").jqxDropDownList('clearSelection', true);
                 $("#customer").jqxDropDownList('clearSelection', true);
-                $("#selectuser").jqxDropDownList('clearSelection', true);
+                //$("#selectuser").jqxDropDownList('clearSelection', true);
+                $("#marketcircle").jqxDropDownList({ selectedIndex: -1});
                 $("#assigntouser").jqxDropDownList('clearSelection', true);
                 $("#substatus").jqxDropDownList('clearSelection', true);
                 $("#selectbranch").jqxDropDownList('clearSelection', true);
@@ -170,7 +172,7 @@
                         {text: 'Subid', dataField: 'substatusid', width: 50, hidden: true},
                         {text: 'LeadNo', dataField: 'lead_no', width: 100,hidden: true},
                         {text: 'Closed', dataField: 'lead_close_status', width: 75,hidden: true},
-                        {text: 'Branch', dataField: 'branch', width: 100, cellsalign: 'left'},
+                        {text: 'Branch', dataField: 'branch', width: 159, cellsalign: 'left'},
                         {text: 'Mkt Circle', dataField: 'mc_sub_id', width: 100, cellsalign: 'left'},
                         {text: 'Lead Status', dataField: 'leadstatus', width: 85},
                         {text: 'Lead SubStatus', dataField: 'substatusname', width: 120},
@@ -469,7 +471,7 @@
                                         placeHolder: '– Select User –'
                                     });
 
-                                   var url = base_url + "dashboard/getdistinctbranch/" + branchdt;
+                                   var url = base_url + "leads/getreassignmcbranches/" + branchdt;
                                    to_branchsrc =
                                             {
                                                 datatype: "json",
@@ -492,6 +494,45 @@
                                         theme: theme,
                                         placeHolder: '– Select Branch –'
                                     });
+                                   
+
+/*                                    if (br == 'SelectBranch' || br == '')
+                                        {
+                                            var url_reassign = base_url + "leads/getmarketcircleloginuser";
+                                        }
+                                        else
+                                        {
+                                            var url_reassign = base_url + "leads/getmcselectedbranch/" + br;
+                                        }*/
+                                     var url_reassign = base_url + "leads/getmarketcircleloginuser";                                        
+
+                                    reassign_mc_source =
+                                                {
+                                                    datatype: "json",
+                                                    datafields: [
+                                                        {name: 'mc_sub_id'},
+                                                        {name: 'mc_sub_id'}
+                                                    ],
+                                                    url: url_reassign,
+                                                    async: false
+                                                };
+
+                                        var reassignmcsource_dataAdapter = new $.jqx.dataAdapter(reassign_mc_source);
+
+
+                                        
+
+                                         $("#to_marketcircle").jqxDropDownList({
+                                            selectedIndex: -1,
+                                            source: reassignmcsource_dataAdapter,
+                                            displayMember: "mc_sub_id",
+                                            valueMember: "mc_sub_id",
+                                            height: 25,
+                                            width:262,
+                                            theme: theme,
+                                            placeHolder: '– Market Circle –'
+                                        });
+                                          $("#to_marketcircle").jqxDropDownList('val', sel_mc_id);
                               
                               
                    
@@ -529,12 +570,13 @@
                                     
                                 }
                                 re_assign_branch=to_branch;
-                              //  alert("re_assign_branch value is "+re_assign_branch);
-                              //      alert("re_assign_user_id value is "+re_assign_user_id);
+                               // alert("re_assign_branch value is "+re_assign_branch);
+                                alert("re_assign_user_id value is "+re_assign_user_id);
 
 
  
                             }); 
+
                         $("#save").click(function (event)
                         {   
                             var data = "save=true&assignto_id="+re_assign_user_id+"&reassign_br="+re_assign_branch+"&"+$.param(dataval);
@@ -626,15 +668,16 @@
              $("#selectbranch").jqxDropDownList('val', br);
 
            // alert("selected branch "+br);
-           /* if (br == 'SelectBranch')
+            if (br == 'SelectBranch' || br == '')
             {
-                var url = base_url + "dashboard/getusersforloginuser";
+                var urlassignto = base_url + "dashboard/getusersforloginuser";
             }
             else
             {
-                var url = base_url + "dashboard/getassignedtobranch/" + br;
-            }*/
-             if (br == 'SelectBranch')
+                var urlassignto = base_url + "dashboard/getassignedtobranch/" + br;
+            }
+
+            if (br == 'SelectBranch' || br == '')
             {
                 var url = base_url + "leads/getmarketcircleloginuser";
             }
@@ -652,7 +695,7 @@
                             {name: 'displayname'},
                             {name: 'header_user_id'}
                         ],
-                        url: url,
+                        url: urlassignto,
                         async: false
                     };
 
@@ -693,7 +736,7 @@
                 theme: theme,
                 placeHolder: '– Market Circle –'
             });
-              $("#marketcircle").jqxDropDownList('val', sel_mc_id);
+              $("#marketcircle").jqxDropDownList('val', sel_mc_id); 
 
             // Create a jqxDropDownList
             $("#assigntouser").jqxDropDownList({
@@ -723,7 +766,7 @@
                 {
                     if(event.args.item!=null)
                     {
-                     updateFilterBox(event.args.item.value);         
+                     updateFilterBoxReassign(event.args.item.value);         
                     }    
                   
                 }
@@ -731,6 +774,50 @@
                   clearbranch=0;   
                 }
             });
+
+             $("#to_marketcircle").on('select', function (event) {
+                if(clearbranch==0)
+                {
+                    if(event.args.item!=null)
+                    {
+                     updateMarketCirUsers(event.args.item.value);         
+                    }    
+                  
+                }
+                else{
+                  clearbranch=0;   
+                }
+            });
+            var updateMarketCirUsers = function (datafield) {
+               // alert("select marketcircle "+datafield);
+
+                 var url_reassign = base_url + "leads/getusersformarketcircle/" + datafield;
+
+                   reassign_mc_source =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'displayname'},
+                            {name: 'header_user_id'}
+                        ],
+                        url: url_reassign,
+                        async: false
+                    };
+
+            var reassignmcsource_dataAdapter = new $.jqx.dataAdapter(reassign_mc_source);
+
+
+                 $("#re_assign_user").jqxDropDownList({
+                                selectedIndex: 1,
+                                source: reassignmcsource_dataAdapter,
+                                displayMember: "displayname",
+                                valueMember: "header_user_id",
+                                width: 262,
+                                height: 25,
+                                theme: theme,
+                                placeHolder: '– Re-AssignTo –'
+                            });
+               }
 
             var updateFilterBox = function (datafield) {
             //   alert('testing'+datafield);
@@ -797,6 +884,57 @@
                 theme: theme,
                 placeHolder: '– Assigned To –'
             });
+            
+
+             
+         }   // end of updateFilterBox       
+
+         var updateFilterBoxReassign = function (datafield) {
+            //   alert('testing'+datafield);
+
+            var url = base_url + "dashboard/getassignedtobranch/" + datafield;
+
+            // prepare the data
+            source =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'displayname'},
+                            {name: 'header_user_id'}
+                        ],
+                        url: url,
+                        async: false
+                    };
+
+            var dataAdapter = new $.jqx.dataAdapter(source);
+   
+             var urlmc = base_url + "leads/getmcselectedbranch/" + datafield;
+
+            // prepare the data
+            sourcemc =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            {name: 'mc_sub_id'},
+                            {name: 'mc_sub_id'}
+                        ],
+                        url: urlmc,
+                        async: false
+                    };
+        var dataAdaptermc = new $.jqx.dataAdapter(sourcemc);                    
+            // Create a jqxDropDownList
+           $("#to_marketcircle").jqxDropDownList({
+                selectedIndex: -1,
+                source: dataAdaptermc,
+                displayMember: "mc_sub_id",
+                valueMember: "mc_sub_id",
+                height: 25,
+                width:262,
+                theme: theme,
+                placeHolder: '– Market Circle –'
+            });
+           
+            
              $("#re_assign_user").jqxDropDownList({
                 selectedIndex: 1,
                 source: dataAdapter,
@@ -809,7 +947,7 @@
             });
 
              
-         }   // end of updateFilterBox       
+         }   // end of updateFilterBox      
 
        /*
             Start for status and substatus
@@ -1096,6 +1234,11 @@
                                         <td><input type="hidden" id="reassign_branch" name="reassign_branch"/></td>
                                         <td align="left">Select the Branch</td>
                                         <td align="left"><div id='to_branch' name='to_branch'></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="hidden" id="reassign_marketcircle" name="reassign_branch"/></td>
+                                        <td align="left">Select the Market Circle</td>
+                                        <td align="left"><div id='to_marketcircle' name='to_marketcircle'></div></td>
                                     </tr>
                                      <tr>
                                         <td><input type="hidden" id="branch_vw" name="branch_vw"/></td>

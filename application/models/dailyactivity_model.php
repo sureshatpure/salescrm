@@ -855,8 +855,8 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
     public function get_collector_mc($collector) {
 
         $collector = urldecode($collector);
-        $sql_collector = "SELECT id as collector_id  FROM collectormaster WHERE upper(collectorname) ='".strtoupper($collector)."'";
-      
+       $sql_collector = "SELECT id as collector_id  FROM collectormaster WHERE upper(collectorname) ='".strtoupper($collector)."'";
+       @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
         $result_collector = $this->db->query($sql_collector);
         $collectorid = $result_collector->result_array();
         //echo "collector_id".$collectorid['0']['collector_id'];
@@ -868,7 +868,8 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
     	}
     	else
     	{
-    	 $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." AND gc_executive_code=".$this->session->userdata['user_id']." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";	
+    	 $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." AND 
+    	 gc_executive_code IN  (".$get_assign_to_user_id.") GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";	
     	}	
        // echo $sql; die;
         $result = $this->db->query($sql);
@@ -1610,6 +1611,40 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 				$arr =	 '{ "rows" :'.$arr.' }';
 				return $arr;
 			}
+			function GetPotentialUpdateTable_lineid($leadid)
+			{
+
+				//SELECT * FROM  potential_updated_table WHERE id =43187 AND  types='LEAD' 
+				$this->db->select('line_id');
+		        $this->db->from('potential_updated_table');
+		        $this->db->where('id', $leadid);
+		        $this->db->where('types', 'LEAD');
+		        $result = $this->db->get();
+		        $poten_lineid = $result->result_array();
+		       return @$poten_lineid[0]['line_id'];
+			}
+
+			function updatelead_customer_potential_table($customer_poten, $leadid) 
+			{
+				/*            
+			[id] => 43185
+            [line_id] => 18305
+            [businesscategory] => BULK
+            [yearly_potential_qty] => 240*/
+		        $potential_update = array();
+		        foreach ($customer_poten as $potential_update) {
+		            $data = array(
+		                'yearly_potential_qty' => $potential_update['yearly_potential_qty'],
+		            );
+
+		            $this->db->where('id', $potential_update['id']);
+		            $this->db->where('line_id', $potential_update['line_id']);
+		            $this->db->where('upper(businesscategory)', $potential_update['businesscategory']);
+		            $this->db->update('potential_updated_table', $data);
+		        }
+
+		        return ($this->db->affected_rows() > 0);
+    		}
 }
 ?>
 

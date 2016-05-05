@@ -47,7 +47,7 @@ class Leads extends CI_Controller {
             }
             else
             {
-             $leaddata['selectedIndex_val']=0;
+             $leaddata['selectedIndex_val']=-1;
             }
            // echo" selectedIndex_val "+$leaddata['selectedIndex_val']; die;
             $allgroups = $this->admin_auth->groups()->result();
@@ -261,7 +261,7 @@ class Leads extends CI_Controller {
             $data['optionsasto'] = $this->Leads_model->get_assignto_users();
             $data['optionslocuser'] = $this->Leads_model->get_locationuser_add();
         } else {
-//			$data['optionsasto'] = $this->Leads_model->get_assignto_users_order($this->session->userdata['reportingto']);
+
             $data['optionsasto'] = $this->Leads_model->get_assignto_users_order($this->session->userdata['reportingto']);
             $data['optionslocuser'] = $this->Leads_model->get_locationuser_add_order();
         }
@@ -650,7 +650,7 @@ class Leads extends CI_Controller {
 
 
         $insert_dc_hdr=0;
-        $dte = $this->input->post('uploaded_date');
+        $dte = $this->input->post('uploaded_date'); //    [uploaded_date] => 03/05/2016
         $reffer_page = $this->input->post('hdn_refferer');  //dailycall
 
         $dt = new DateTime();
@@ -760,6 +760,7 @@ class Leads extends CI_Controller {
             $customer_id = $this->Leads_model->GetTempCustId($this->input->post('company'));
             $customer_details = $this->Leads_model->GetCustomerdetails($this->input->post('company'));
             $customer_number = $customer_details['customer_number'];
+            $user_branch = strtoupper($assign_to_array['0']['location_user']);
             $customer_name = $customer_details['customer_name'];
 
             if ($customer_details['customergroup'] != "") {
@@ -791,7 +792,8 @@ class Leads extends CI_Controller {
                     'crd_assesment' => $lead_crd,
                     'ldsubstatus' => $substatus_id[0],
                     'assignleadchk' => $this->input->post('assignedto'),
-                    'user_branch' => $this->input->post('branch'),
+                    'collector' => $this->input->post('branch'),
+                    'user_branch' => $user_branch,
                     'description' => trim($this->input->post('description')),
                     'comments' => trim($this->input->post('comments')),
                     'producttype' => trim($this->input->post('producttype')),
@@ -821,7 +823,8 @@ class Leads extends CI_Controller {
                     'crd_assesment' => $lead_crd,
                     'ldsubstatus' => $substatus_id[0],
                     'assignleadchk' => $this->input->post('assignedto'),
-                    'user_branch' => $this->input->post('branch'),
+                    'user_branch' => $user_branch,
+                    'collector' => $this->input->post('branch'),
                     'description' => trim($this->input->post('description')),
                     'comments' => trim($this->input->post('comments')),
                     'producttype' => trim($this->input->post('producttype')),
@@ -1188,6 +1191,7 @@ class Leads extends CI_Controller {
                                 $lead_customer_pontential[$m]['customer_number'] = $customer_number;
                                 $lead_customer_pontential[$m]['customer_name'] = $customer_name;
                                 $lead_customer_pontential[$m]['types'] = "LEAD";
+                                $lead_customer_pontential[$m]['current_acc_yr'] =$account_yr;
                                 $lead_customer_pontential[$m]['collector'] = $this->input->post('branch');
                                 $lead_customer_pontential[$m]['lead_created_date'] = date('Y-m-d:H:i:s');
                                 $lead_customer_pontential[$m]['user_code'] = $this->input->post('assignedto');
@@ -1432,6 +1436,8 @@ class Leads extends CI_Controller {
             $lead_assign_name = $assign_to_array['0']['location_user'] . "-" . $assign_to_array['0']['aliasloginname'];
             $duser_for_update = $assign_to_array['0']['duser'];
             $duser = $assign_to_array['0']['duser'];
+            $user_branch = strtoupper($assign_to_array['0']['location_user']);
+
             $customer_id = $this->Leads_model->GetTempCustId($this->input->post('company'));
 
             $cust_account_id = $this->Leads_model->CheckNewCustomer($this->input->post('company'));
@@ -1498,7 +1504,8 @@ class Leads extends CI_Controller {
                 'company' => $this->input->post('company'),
                 'customer_id' => $customer_id,
                 'leadsource' => $this->input->post('leadsource'),
-                'user_branch' => $this->input->post('branch'),
+                'collector' => $this->input->post('branch'),
+                'user_branch' => $user_branch,
                 'industry_id' => $this->input->post('industry'),
                 'email_id' => $this->input->post('email_id'),
                 'firstname' => $this->input->post('firstname'),
@@ -1868,6 +1875,7 @@ class Leads extends CI_Controller {
                 $lead_prod_poten_type[$key]['productid'] = $_POST['customFieldName'][0];
                 $lead_prod_poten_type[$key]['product_type_id'] = $_POST['customDispatch'][$key];
                 $lead_prod_poten_type[$key]['potential'] = $_POST['customFieldPoten'][$key];
+                
                 $lead_customer_pontential[$key]['id'] = $leadid;
                 $lead_customer_pontential[$key]['line_id'] = $_POST['leadprodid'][$key];
                 $lead_customer_pontential[$key]['user1'] = strtoupper($duser_for_update);
@@ -1974,7 +1982,8 @@ class Leads extends CI_Controller {
                     'company' => $this->input->post('company'),
                     'customer_id' => $customer_id,
                     'leadsource' => $this->input->post('leadsource'),
-                    'user_branch' => $this->input->post('branch'),
+                    'collector' => $this->input->post('branch'),
+                    'user_branch' => $user_branch,
                     'industry_id' => $this->input->post('industry'),
                     'email_id' => $this->input->post('email_id'),
                     'firstname' => $this->input->post('firstname'),
@@ -2462,6 +2471,7 @@ class Leads extends CI_Controller {
         $lst_order_by_id = $leaddata['leaddetails'][0]['lst_order_by'];
         $lst_parentid_id = $leaddata['leaddetails'][0]['lst_parentid'];
         $branch = $leaddata['leaddetails'][0]['user_branch'];
+        $collector = $leaddata['leaddetails'][0]['collector'];
         
       //  $countryid = $leaddata['leaddetails'][0]['country'];
      //   $stateid = $leaddata['leaddetails'][0]['state'];
@@ -3586,13 +3596,15 @@ select  cast(customermasterhdr.id as varchar(50)), customermasterhdr.tempcustnam
             $lead_assign_name = $assign_to_array['0']['location_user'] . "-" . $assign_to_array['0']['aliasloginname'];
             $duser = $assign_to_array['0']['duser'];
             $header_user_id = $assign_to_array['0']['header_user_id'];
+            $user_branch = strtoupper($assign_to_array['0']['location_user']);
             
             /*[leadid] => 19890
             [branch] => COIMBATORE*/
 
             $lead_update[$key]['leadid'] = $val['leadid'];
             $lead_update[$key]['assignleadchk'] = $assignto_id;
-            $lead_update[$key]['user_branch'] = strtoupper($reassign_branch);
+            $lead_update[$key]['user_branch'] = $user_branch;
+            $lead_update[$key]['collector'] = strtoupper($reassign_branch);
             $lead_update[$key]['last_updated_user'] = $login_user_id;
             $lead_update[$key]['last_modified'] = date('Y-m-d:H:i:s');
 
@@ -3768,6 +3780,14 @@ select  cast(customermasterhdr.id as varchar(50)), customermasterhdr.tempcustnam
             header('Content-Type: application/x-json; charset=utf-8');
             echo $branches;
         }
+         function getreassignmcbranches($brach_sel) 
+        {
+            $this->Leads_model->brach_sel = urldecode($brach_sel);
+            $branches = $this->Leads_model->get_reassign_mcbranches($brach_sel);
+            //  $substatus = $this->Leads_model->get_assigned_tobranch();
+            header('Content-Type: application/x-json; charset=utf-8');
+            echo $branches;
+        }
         function getmcselectedbranch($brach_sel) 
         {
             $this->Leads_model->brach_sel = urldecode($brach_sel);
@@ -3781,6 +3801,16 @@ select  cast(customermasterhdr.id as varchar(50)), customermasterhdr.tempcustnam
             $marketcirlist = $this->Leads_model->get_marketcircle_loginuser();
             header('Content-Type: application/x-json; charset=utf-8');
             echo $marketcirlist;
+        }
+
+        function getusersformarketcircle($mc_sel)
+        {
+
+            $this->Leads_model->mc_sel = urldecode($mc_sel);
+            $marketcirlist = $this->Leads_model->get_users_formarketcircle($mc_sel);
+            header('Content-Type: application/x-json; charset=utf-8');
+            echo $marketcirlist;
+
         }
 
         

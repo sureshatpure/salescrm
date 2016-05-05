@@ -240,11 +240,11 @@
                 var collectordataAdapter = new $.jqx.dataAdapter(collectorsource);
 
                    $("#collector").jqxDropDownList({
-                    selectedIndex: 0, source: collectordataAdapter,theme: 'energyblue',
+                    selectedIndex: -1, source: collectordataAdapter,theme: 'energyblue',
       placeHolder: "Select Collector", displayMember: "collector",autoDropDownHeight:true, valueMember: "collector", width: 200, height: 25
                 });
                    $("#collector_update").jqxDropDownList({
-                    selectedIndex: 0, source: collectordataAdapter,theme: 'energyblue',
+                    selectedIndex: -1, source: collectordataAdapter,theme: 'energyblue',
       placeHolder: "Select Collector", displayMember: "collector",autoDropDownHeight:true, valueMember: "collector", width: 200, height: 25
                 });
 
@@ -3406,6 +3406,7 @@
                             entrydate = convertdmy_ymd(entrydate);
                             for (var k = 0; k < rowscount; k++)
                             {
+                                var selected_collector = $("#collector").jqxDropDownList('getSelectedItem'); 
                                 var cg_value = $('#jqxgrid_add').jqxGrid('getcellvalue', k, "custgroup");
                                 if (cg_value == null || typeof(cg_value) == 'undefined')
                                 {
@@ -3718,8 +3719,11 @@
                                     lead_appointmentdt = convertdmy_ymd(griddata.appiontmnt_dt);
                                    
                                 }
-                               
-                            /*    alert("noofleads  "+griddata.noofleads);
+                                 /*   
+                                alert("selected_collector in "+i +" row is "+selected_collector.value);
+                                alert("actualpotenqty  "+griddata.actualpotenqty);
+                                alert("type actualpotenqty  "+typeof(griddata.actualpotenqty));
+                                alert("noofleads  "+griddata.noofleads);
                                 alert("create_lead  "+griddata.create_lead);
                                 alert("actualpotenqty  "+griddata.actualpotenqty);
                                 alert("prevstatusid  "+griddata.prevsubstatusid);
@@ -3737,6 +3741,7 @@
                                     rowval["line_id"] = griddata.line_id;
                                 }
                                 rowval["currentdate"] = currentdate;
+                                rowval["collector"] = selected_collector.value;
                                 rowval["custgroup"] = griddata.custgroup;
                                 rowval["hdn_cust_id"] = griddata.id;
                                 rowval["hdn_prod_id"] = griddata.itemid;
@@ -3898,8 +3903,10 @@
                             var hdr_id = $('#hdn_hdr_id').val();
 
                             for (var k = 0; k < rowscount; k++)
-                            {
-
+                            {   
+                                var updatecollector = $("#collector_update").jqxDropDownList('getSelectedItem'); 
+                                if (updatecollector==null) {alert("Select your collector first"); break;}
+                                //alert("update form collector value "+k+" is "+updatecollector.value);
                                 var cg_value = $('#jqxgrid_n').jqxGrid('getcellvalue', k, "custgroup");
 
                                 if (cg_value == null || typeof(cg_value) == 'undefined')
@@ -4198,6 +4205,7 @@
                                     rowval["line_id"] = griddata.line_id;
                                 }
                                 rowval["leadid"] = griddata.leadid;
+                                rowval["collector"] = updatecollector.value;
                                 rowval["currentdate"] = currentdate;
                                 rowval["custgroup"] = griddata.custgroup;
                                 rowval["itemgroup"] = griddata.itemgroup;

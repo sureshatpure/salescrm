@@ -48,8 +48,27 @@ class Leads_model extends CI_Model {
     }
 
     public function get_locationuser_add() {
+
+                $reporting_to = $this->session->userdata['reportingto'];
+                $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+
+                if (@$reporting_to=="")
+                {
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
+                } else
+                {
+
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id AND 
+                    v.header_user_id IN (".$get_assign_to_user_id.")";
+                }
+
+
+
+
        
-        $sql = "SELECT DISTINCT a.branch FROM ( SELECT 	header_user_id, UPPER (location_user) AS branch FROM vw_web_user_login WHERE LENGTH (location_user) > 2 ) a ORDER BY a.branch";
+        //$sql = "SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
         //echo $sql; die;
         $result = $this->db->query($sql);
         $options = $result->result_array();
@@ -63,9 +82,25 @@ class Leads_model extends CI_Model {
 
     public function get_locationuser_add_order() {
         @$this->session->set_userdata($get_assign_to_user_id);
+        $reporting_to = $this->session->userdata['reportingto'];
         $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
-        $sql = "select 	distinct branch from (select  header_user_id, upper(location_user) as branch from  vw_web_user_login ) a 	where 
-	header_user_id IN (" . $get_assign_to_user_id . ")  order  	by branch";
+
+         if (@$reporting_to=="")
+                {
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
+                } else
+                {
+
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id AND 
+                    v.header_user_id IN (".$get_assign_to_user_id.")";
+                }
+
+/*        $sql = "select 	distinct branch from (select  header_user_id, upper(location_user) as branch from  vw_web_user_login ) a 	where 
+	header_user_id IN (" . $get_assign_to_user_id . ")  order  	by branch";*/
+
+
         $result = $this->db->query($sql);
         $options = $result->result_array();
         $options_arr;
@@ -731,14 +766,36 @@ class Leads_model extends CI_Model {
         $collectorid = $result_collector->result_array();
         //echo "collector_id".$collectorid['0']['collector_id'];
         $collector_id =$collectorid['0']['collector_id'];
+        @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
         if (@$this->session->userdata['reportingto'] == "")
         {
 
-            $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";
+            /*$sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";*/
+            $sql="SELECT c.collector_id,m.mc_code,m.mc_zone,m.mc_sub_id 
+                    FROM market_circle_hdr m,
+                                            ar_collectors c,
+                                            vw_web_user_login v
+                    WHERE 
+                    m.collector_id = c.collector_id AND 
+                    m.gc_executive_code=v.header_user_id AND 
+                    c.collector_id=".$collector_id."
+                    GROUP BY c.collector_id,m.mc_code,m.mc_zone,m.mc_sub_id";
         }
         else
         {
-            $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." AND gc_executive_code=".$this->session->userdata['user_id']." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";
+            /*$sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." AND gc_executive_code=".$this->session->userdata['user_id']." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";*/
+            $sql="SELECT c.collector_id,m.mc_code,m.mc_zone,m.mc_sub_id 
+                    FROM market_circle_hdr m,
+                                            ar_collectors c,
+                                            vw_web_user_login v
+                    WHERE 
+                    m.collector_id = c.collector_id AND 
+                    m.gc_executive_code=v.header_user_id AND 
+                    v.header_user_id IN (" . $get_assign_to_user_id . ")  AND 
+                    c.collector_id=".$collector_id."
+                    GROUP BY c.collector_id,m.mc_code,m.mc_zone,m.mc_sub_id";
+
+
         }
        // echo $sql; die;
         $result = $this->db->query($sql);
@@ -796,13 +853,23 @@ class Leads_model extends CI_Model {
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
         //if ($get_assign_to_user_id == "") {
         if (@$this->session->userdata['reportingto'] == "") {
-            $sql = "select header_user_id,displayname , branch from 
+           /* $sql = "select header_user_id,displayname , branch from 
                                 (select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname1,upper(empname) || '-' || upper(location_user) as displayname from 
-                                 vw_web_user_login ) a where upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";
+                                 vw_web_user_login ) a where upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";*/
+              $sql="select header_user_id,displayname,branch from (
+                            SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(v.empname)  || '-' || upper(c.name) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id  AND m.gc_executive_code=v.header_user_id AND upper(c.name)=upper('".urldecode($this->brach_sel)."') GROUP BY  v.header_user_id,upper(v.empname), c.name,m.mc_sub_id ) a 
+                                  where upper(branch)=upper('".urldecode($this->brach_sel)."') GROUP BY header_user_id, displayname , branch order by displayname";
+
         } else {
-            $sql = "select header_user_id,displayname , branch from 
+            /*$sql = "select header_user_id,displayname , branch from 
                                 (select header_user_id,upper(location_user) as branch ,upper(location_user) || '-' || upper(empname) as displayname1,upper(empname) || '-' || upper(location_user) as displayname from 
-                                 vw_web_user_login ) a where header_user_id IN (" . $get_assign_to_user_id . ")  and upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";
+                                 vw_web_user_login ) a where header_user_id IN (" . $get_assign_to_user_id . ")  and upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";*/
+
+             $sql="select header_user_id,displayname,branch from (
+                            SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(v.empname)  || '-' || upper(c.name) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id  AND m.gc_executive_code=v.header_user_id AND upper(c.name)=upper('".urldecode($this->brach_sel)."') GROUP BY  v.header_user_id,upper(v.empname), c.name,m.mc_sub_id ) a 
+                                  where upper(branch)=upper('".urldecode($this->brach_sel)."') and  header_user_id IN (".$get_assign_to_user_id.") GROUP BY header_user_id, displayname , branch order by displayname";
+
+
         }
 
         //echo $sql; die;
@@ -2011,7 +2078,7 @@ class Leads_model extends CI_Model {
 
          
         $whereParts = array();
-        if($branch)     { $whereParts[] = "leaddetails.user_branch ='$branch' "; }
+        //if($branch)     { $whereParts[] = "leaddetails.user_branch ='$branch' "; }
         //if($selectuserid) { $whereParts[] = "leaddetails.created_user = $selectuserid "; }
         if($assigntouserid) { $whereParts[] = "leaddetails.assignleadchk = $assigntouserid "; }
         if($statusid)  { $whereParts[] = "leaddetails.leadstatus = $statusid "; }
@@ -3607,6 +3674,7 @@ presentsource,suppliername,decisionmaker,branchname,comments,uploadeddate,descri
             $data = array(
                 'assignleadchk' => $lddetails['assignleadchk'],
                 'user_branch' => $lddetails['user_branch'],
+                'collector' => $lddetails['collector'],
                 'last_updated_user' => $lddetails['last_updated_user'],
                 'last_modified' => $lddetails['last_modified']
             );
@@ -3866,9 +3934,74 @@ presentsource,suppliername,decisionmaker,branchname,comments,uploadeddate,descri
         return $arr;
 
     }
+
+     function get_reassign_mcbranches()
+                {
+                
+                $reporting_to = $this->session->userdata['reportingto'];
+                $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+
+                if (@$reporting_to=="")
+                {
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
+                } else
+                {
+
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id AND 
+                    v.header_user_id IN (".$get_assign_to_user_id.")";
+                }
+              //  echo $sql; die;
+                    $result = $this->db->query($sql);
+                    $options = $result->result_array();
+                    $arr =  json_encode($options); 
+                // return $result = $this->db->query($sql);
+        
+    //echo $arr; die;
+            return $arr;
+
+                }
     
 
+     function get_users_formarketcircle()
+     {
 
+                @$reporting_to = $this->session->userdata['reportingto'];
+                @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+                if (@$reporting_to=="")
+                {
+                    $sql="select 
+                                    header_user_id,
+                                    displayname , 
+                              branch from (
+                                                SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(c.name) || '-' || upper(v.empname) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id 
+                                            AND m.gc_executive_code=v.header_user_id AND upper(m.mc_sub_id)='".$this->mc_sel."' GROUP BY  v.header_user_id,upper(v.empname),  c.name,m.mc_sub_id 
+                                                                ) a GROUP BY header_user_id, displayname , branch order by displayname";
+
+                                                
+
+                }
+                else{
+
+
+                        $sql="select 
+                                    header_user_id,
+                                    displayname , 
+                              branch from (
+                                                SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(c.name) || '-' || upper(v.empname) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id 
+                                            AND m.gc_executive_code=v.header_user_id AND upper(m.mc_sub_id)='".$this->mc_sel."' GROUP BY  v.header_user_id,upper(v.empname),  c.name,m.mc_sub_id 
+                                                                ) a   GROUP BY header_user_id, displayname , branch order by displayname";
+                }
+         //   echo $sql; die;
+                    $result = $this->db->query($sql);
+                    $userlist = $result->result_array();
+                $arr =  json_encode($userlist); 
+        //  echo $arr; die;
+            return $arr;
+     
+
+     }
 
 
 }
