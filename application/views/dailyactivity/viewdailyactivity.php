@@ -1909,9 +1909,9 @@
                                                                                                     {text: 'BULK', dataField: 'BULK',editable:true, width: 70,
                                                                                                     cellvaluechanging:cellvaluechanging},
                                                                                                     {text: 'RETAIL', dataField: 'RETAIL',editable:true, width: 70,cellvaluechanging:cellvaluechanging},
-                                                                                                    {text: 'SMALL PACKING', dataField: 'SMALL PACKING',editable:true, width: 110,cellvaluechanging:cellvaluechanging},
-                                                                                                    {text: 'SINGLE - TANKER', dataField: 'SINGLE - TANKER',editable:true, width: 110,cellvaluechanging:cellvaluechanging},
-                                                                                                    {text: 'Part Tanker', dataField: 'PART TANKER',editable:true, width: 110,cellvaluechanging:cellvaluechanging},
+                                                                                                    {text: 'SMALL PACKING', dataField: 'SMALL PACKING',editable:true,hidden:true, width: 110,cellvaluechanging:cellvaluechanging},
+                                                                                                    {text: 'SINGLE - TANKER', dataField: 'SINGLE - TANKER',editable:true, hidden:true,width: 110,cellvaluechanging:cellvaluechanging},
+                                                                                                    {text: 'Part Tanker', dataField: 'PART TANKER',editable:true,hidden:true, width: 110,cellvaluechanging:cellvaluechanging},
                                                                                                     
                                                                                                 ]
 
@@ -1919,7 +1919,7 @@
                                                                                  
                                                                                 // Source for Potential grid END
                                                                                 editrow = row;
-                                                                                $('#popupWindowPotential').jqxWindow({theme: 'energyblue', autoOpen: false, width: 700, height: 400, resizable: true, title: 'BP Potential Details (Potential to be updated MTs per annum basis)'});
+                                                                                $('#popupWindowPotential').jqxWindow({theme: 'energyblue', autoOpen: false, width: 500, height: 400, resizable: true, title: 'BP Potential Details (Potential to be updated MTs per annum basis)'});
                                                                                   var x = ($(window).width() - $("#popupWindowPotential").jqxWindow('width')) / 2 + $(window).scrollLeft();
                                                                                     var y = ($(window).height() - $("#popupWindowPotential").jqxWindow('height')) / 2 + $(window).scrollTop();
 

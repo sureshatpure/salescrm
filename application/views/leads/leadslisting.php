@@ -571,7 +571,7 @@
                                 }
                                 re_assign_branch=to_branch;
                                // alert("re_assign_branch value is "+re_assign_branch);
-                                alert("re_assign_user_id value is "+re_assign_user_id);
+                              //  alert("re_assign_user_id value is "+re_assign_user_id);
 
 
  

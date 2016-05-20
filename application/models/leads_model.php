@@ -1446,64 +1446,12 @@ class Leads_model extends CI_Model {
         if($productid)  { $whereParts[] = "leadproducts.productid::TEXT = '$productid'"; }
         if($fromdate)  { $whereParts[] = "leaddetails.createddate::DATE >= '$fromdate' "; }
         if($todate)  { $whereParts[] = "leaddetails.createddate::DATE <= '$todate' "; }
-                      $whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
+        //$whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
  
 //BUILD THE QUERY
-        /*$sql = 'SELECT
-            leaddetails.leadid,
-            leaddetails.lead_no,
-            leaddetails.email_id,
-            leaddetails.firstname,
-            leaddetails.lastname,
-            leaddetails.industry,
-            leaddetails.website,
-            leaddetails.user_branch,
-            leaddetails.converted,
-            leaddetails.designation,
-            leaddetails.lead_crm_soc_no,
-            leaddetails.lead_close_status,
-            leaddetails.lead_close_option,
-            leaddetails.lead_close_comments,
-            leaddetails.comments,
-            leaddetails.uploaded_date,
-            leaddetails.description,
-            leaddetails.ldsubstatus,
-            leaddetails.secondaryemail,
-            leaddetails.assignleadchk,
-            leaddetails.createddate,
-            leaddetails.leadstatus AS leadstatusid,
-            leaddetails.leadsource AS leadsourceid,
-            leadstatus.leadstatus,
-            leadsubstatus.lst_name as substatusname,
-            leadsource.leadsource,
-            leaddetails.company,
-            leaddetails.customer_id,
-            leaddetails.created_user,
-            leaddetails.last_modified,
-            leaddetails.last_updated_user,
-            leaddetails.sent_mail_alert,
-            leaddetails.industry_id,
-            leadproducts.productid,
-            leadproducts.product_group,
-            view_tempitemmaster.description AS productname,
-            leadproducts.product_itemname,
-            vw_web_user_login.empname as assign_from_name,
-            assignedfrom.empname,
-            view_tempcustomermaster.tempcustname,
-            get_acc_yr(leaddetails.createddate::DATE) as fin_yr,
-            CASE WHEN (createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to then    jc_code ELSE  0 END AS JCODE
-        FROM
-            leaddetails
-            INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
-            INNER JOIN "leadstatus" ON "leadstatus"."leadstatusid" = "leaddetails"."leadstatus"
-            INNER JOIN "leadsource" ON "leadsource"."leadsourceid" = "leaddetails"."leadsource"
-            INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
-            INNER JOIN "vw_web_user_login" AS assignedfrom ON "leaddetails"."assignleadchk" = "assignedfrom"."header_user_id"
-            INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
-            INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
-            INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
-            INNER JOIN jc_calendar_dtl ON get_acc_yr(leaddetails.createddate::DATE) = jc_calendar_dtl.acc_yr'; */  
-            $sql='SELECT
+          
+            $sql=' SELECT * FROM (
+                    SELECT
                 leaddetails.leadid,
                 0::text as mc_sub_id,
                 leaddetails.lead_no,
@@ -1648,14 +1596,14 @@ class Leads_model extends CI_Model {
                 leaddetails.createddate :: DATE
             ) = jc_calendar_dtl.acc_yr
             WHERE
-             (createddate :: DATE) BETWEEN jc_period_from  AND jc_period_to';
+             (createddate :: DATE) BETWEEN jc_period_from  AND jc_period_to ) leaddetails';
 
         if(count($whereParts)) {
             // $sql .= " WHERE " . implode('AND ', $whereParts);
-             $sql .= " AND " . implode('AND ', $whereParts);
+             $sql .= " WHERE " . implode('AND ', $whereParts);
         }
         $sql .= ' AND converted=0 ORDER BY leadid ASC'; 
-      //echo $sql; die;
+  //    echo $sql; die;
          $result = $this->db->query($sql);
         $productdetails = $result->result_array();
 // echo"count of all leads ".count($productdetails); die;
@@ -2088,73 +2036,11 @@ class Leads_model extends CI_Model {
         if($fromdate)  { $whereParts[] = "leaddetails.createddate::DATE >= '$fromdate' "; }
         if($todate)  { $whereParts[] = "leaddetails.createddate::DATE <= '$todate' "; }
         //if($selectmc_sub_id) { $whereParts[] = "leaddetails.mc_sub_id = '$selectmc_sub_id' "; }
-        $whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
+      //  $whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
       // echo"<pre>";print_r($whereParts); echo"</pre>";
 //BUILD THE QUERY
-       /* $sql = 'SELECT
-            leaddetails.leadid,
-            leaddetails.lead_no,
-            leaddetails.email_id,
-            leaddetails.firstname,
-            leaddetails.lastname,
-            leaddetails.industry,
-            leaddetails.website,
-            leaddetails.user_branch,
-            leaddetails.converted,
-            leaddetails.designation,
-            leaddetails.lead_crm_soc_no,
-            leaddetails.lead_close_status,
-            leaddetails.lead_close_option,
-            leaddetails.lead_close_comments,
-            leaddetails.comments,
-            leaddetails.uploaded_date,
-            leaddetails.description,
-            leaddetails.ldsubstatus,
-            leaddetails.secondaryemail,
-            leaddetails.assignleadchk,
-            leaddetails.createddate,
-            leaddetails.leadstatus AS leadstatusid,
-            leaddetails.leadsource AS leadsourceid,
-            leadstatus.leadstatus,
-            leadsubstatus.lst_name as substatusname,
-            leadsource.leadsource,
-            leaddetails.company,
-            leaddetails.customer_id,
-            leaddetails.created_user,
-            leaddetails.last_modified,
-            leaddetails.last_updated_user,
-            leaddetails.sent_mail_alert,
-            leaddetails.industry_id,
-            leadproducts.productid,
-            leadproducts.product_group,
-            view_tempitemmaster.description AS productname,
-            leadproducts.product_itemname,
-            vw_web_user_login.empname as assign_from_name,
-            assignedfrom.empname,
-            view_tempcustomermaster.tempcustname,
-            market_circle_hdr.mc_sub_id,
-            get_acc_yr(leaddetails.createddate::DATE) as fin_yr,
-            CASE WHEN (createddate::DATE )  BETWEEN  jc_period_from AND  jc_period_to then    jc_code ELSE  0 END AS JCODE
-        FROM
-            leaddetails
-            INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
-            INNER JOIN "leadstatus" ON "leadstatus"."leadstatusid" = "leaddetails"."leadstatus"
-            INNER JOIN "leadsource" ON "leadsource"."leadsourceid" = "leaddetails"."leadsource"
-            INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
-            INNER JOIN "vw_web_user_login" AS assignedfrom ON "leaddetails"."assignleadchk" = "assignedfrom"."header_user_id"
-            INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
-            INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
-            INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
-            
-            INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company
-            INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code 
-            
-            INNER JOIN jc_calendar_dtl ON get_acc_yr(leaddetails.createddate::DATE) = jc_calendar_dtl.acc_yr  
-            WHERE leaddetails.leadid IN (
-            SELECT  leadid from leaddetails WHERE created_user IN ('.$user_list_ids.')
-            OR  assignleadchk in ('.$user_list_ids.')) '; */
-
-            $sql = 'SELECT
+      
+            $sql = 'SELECT * FROM ( SELECT
                 leaddetails.leadid,
                 0::text as mc_sub_id,
                 leaddetails.lead_no,
@@ -2230,9 +2116,7 @@ class Leads_model extends CI_Model {
                     WHERE
                         assignleadchk IN ('.$user_list_ids.')
                 )
-            AND (createddate :: DATE) BETWEEN jc_period_from
-            AND jc_period_to
-            AND converted = 0
+            AND (createddate :: DATE) BETWEEN jc_period_from AND jc_period_to  AND converted = 0
 
 
             UNION
@@ -2314,12 +2198,12 @@ class Leads_model extends CI_Model {
                     FROM
                         leaddetails
                     WHERE
-                        assignleadchk IN ('.$user_list_ids.'))'; 
+                        assignleadchk IN ('.$user_list_ids.')) AND (createddate :: DATE) BETWEEN jc_period_from AND jc_period_to  AND converted = 0 ) leaddetails'; 
 
 
 
         if(count($whereParts)) {
-             $sql .= " AND " . implode('AND ', $whereParts);
+             $sql .= " WHERE " . implode('AND ', $whereParts);
            //  $sql .= "WHERE" . implode('AND ', $whereParts);
         }
         
@@ -2330,7 +2214,7 @@ class Leads_model extends CI_Model {
            $sql .= ' AND converted=0 ORDER BY leadid ASC'; 
        
      
-      // echo "sql is ".$sql."<br>"; die;
+     //  echo "sql is ".$sql."<br>"; die;
         $result = $this->db->query($sql);
         $productdetails = $result->result_array();
         $all_leads_count = count($productdetails); 
@@ -3523,8 +3407,9 @@ presentsource,suppliername,decisionmaker,branchname,comments,uploadeddate,descri
         }
     }
     function check_prodgroup_dup_saleorder($prodgrp, $customerid,$customergroup) {
+        $customergroup=str_replace("'", "", $customergroup);
           //$sql = "select * from vw_lead_check_prod_duplicate WHERE  lead_customer_ref_id=".$customerid." AND product_group = '".$prodgrp."'";
-        $sql = "select * from vw_lms_check_billed_product WHERE (lead_customer_ref_id=".$customerid." or  customergroup ='".$customergroup."' ) AND product_group = '".$prodgrp."'";
+        $sql = "select * from vw_lms_check_billed_product WHERE (lead_customer_ref_id=".$customerid." or  replace(trim(customergroup),'''','') ='".$customergroup."' ) AND product_group = '".$prodgrp."'";
 
 
        //  echo $sql;   die;                

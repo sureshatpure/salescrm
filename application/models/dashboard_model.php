@@ -5144,7 +5144,7 @@ function get_leaddetails_aging_additional_chart_withbranchdatefilter($branch,$fr
 			    		$sql="SELECT * FROM fn_jcwise_branchwise_lead_qnty('".$jc_from."','".$jc_to."','".$account_yr."','".$branch."') ORDER BY 1";
 			    	}
 			        
-			    	//echo $sql; die;
+			    	echo $sql; die;
 			        $jTableResult = array();
 					$result = $this->db->query($sql);
 					$jTableResult['leaddetails'] = $result->result_array();

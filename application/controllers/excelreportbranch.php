@@ -33,20 +33,20 @@ class Excelreportbranch extends CI_Controller {
                 @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
                 @$reportingto= $this->session->userdata['reportingto'];
               $branch=urldecode($branch);
-       $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch', 'Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','lead_created_date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
+       $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch','Collector','MarketCircle','Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','lead_created_date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername','customertype','Financial Yr','JC_Code');
         if ($reportingto == "") {
             if ($user_id == "") {
-                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE  branchname='" . strtoupper($branch) . "' order by 1 desc";
+                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . strtoupper($branch) . "' order by 1 desc";
             } else {
                 //$sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND created_user IN (".$user_id.")"; 
-                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $user_id . ") order by 1 desc";
+                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $user_id . ") order by 1 desc";
             }
         } else {
             if ($user_id == "") {
-                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $get_assign_to_user_id . ") order by 1 desc";
+                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $get_assign_to_user_id . ") order by 1 desc";
             } else {
                 //$sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND created_user IN (".$user_id.")"; 
-                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $user_id . ") order by 1 desc";
+                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $user_id . ") order by 1 desc";
             }
         }
 
@@ -111,13 +111,13 @@ class Excelreportbranch extends CI_Controller {
 
 
 
-       $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch', 'Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
+       $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch','Collector','MarketCircle','Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
 
         if ($reportingto == "") {
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE  branchname='" . $branch . "'  AND asignedto_userid IN (" . $user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . $branch . "'  AND asignedto_userid IN (" . $user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         } else {
             //$sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND created_user IN (".$user_id.")"; 
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE  branchname='" . $branch . "' AND asignedto_userid IN (" . $user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . $branch . "' AND asignedto_userid IN (" . $user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         }
 
       //   echo $sql; die;
@@ -180,13 +180,13 @@ class Excelreportbranch extends CI_Controller {
         //   @$reportingto = $this->session->userdata['reportingto'];
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
         @$reportingto = $this->session->userdata['reportingto'];
-         $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch', 'Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
+         $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch','Collector','MarketCircle','Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername','customertype','Financial Yr','JC_Code');
         if ($reportingto == "") {
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE  branchname='" . $branch . "' AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . $branch . "' AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         } else {
 
             //  $sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND asignedto_userid IN (".$user_id.") AND createddate::DATE  between '".$from_date."'::DATE  and '".$to_date."'::DATE"; 
-            $sql = "SELECT * FROM vw_lead_export_to_exceljcwise_fn WHERE  branchname='" . $branch . "' AND asignedto_userid IN (" . $get_assign_to_user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . $branch . "' AND asignedto_userid IN (" . $get_assign_to_user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         }
 
        // echo $sql; die;
@@ -244,17 +244,17 @@ class Excelreportbranch extends CI_Controller {
 
     function exgetallleaddata() {
 
-        $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch', 'Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
+        $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch','Collector','MarketCircle','Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
 
 
 
 
         if ($this->session->userdata['reportingto'] == "") {
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc order by 1 desc";
         } else {
             //$sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND created_user IN (".$user_id.")"; 
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE asignedto_userid IN (" . $get_assign_to_user_id . ") order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE asignedto_userid IN (" . $get_assign_to_user_id . ") order by 1 desc";
         }
 
         //    echo $sql; die;
@@ -314,13 +314,13 @@ class Excelreportbranch extends CI_Controller {
         @$reportingto = $this->session->userdata['reportingto'];
 
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
-        $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch', 'Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
+        $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch','Collector','MarketCircle','Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
         if ($reportingto == "") {
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn WHERE  createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         } else {
 
             //  $sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND asignedto_userid IN (".$user_id.") AND createddate::DATE  between '".$from_date."'::DATE  and '".$to_date."'::DATE"; 
-            $sql = "SELECT * FROM vw_lead_export_to_exceljcwise_fn WHERE  asignedto_userid IN (" . $get_assign_to_user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  asignedto_userid IN (" . $get_assign_to_user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         }
 
         //echo $sql; die;

@@ -68,6 +68,7 @@ class dailyactivity extends CI_Controller {
 
                 $activitydata['data'] = $this->dailyactivity_model->getactivity_data_all();
             } else {
+
                 $activitydata['data'] = $this->dailyactivity_model->getactivity_data($this->session->userdata['user_id']);
             }
 
@@ -307,6 +308,7 @@ class dailyactivity extends CI_Controller {
                          $customer_details = $this->Leads_model->GetCustomerdetails($customer_id);
                          $customer_number = $customer_details['customer_number'];
                          $customer_name = $customer_details['customer_name'];
+                         $customer_email_id = $customer_details['contact_mailid'];
 
                          $customer_address[] = $this->dailyactivity_model->get_customer_address($customer_id);
                          $user_branch = $this->dailyactivity_model->get_user_branch($login_user_id);
@@ -338,7 +340,8 @@ class dailyactivity extends CI_Controller {
                             'createddate' => date('Y-m-d:H:i:s'),
                             'last_modified' => date('Y-m-d:H:i:s'),
                             'created_user' => $login_user_id,
-                            'email_id' => trim($customer_address[0]['contact_mailid']),
+                            /*'email_id' => trim($customer_address[0]['contact_mailid']),*/
+                            'email_id' => trim($customer_email_id),
                             'firstname' => trim($customer_address[0]['contact_person']),
                             'industry_id' => 63,
                             'uploaded_date' => $hrd_currentdate,
@@ -1345,7 +1348,8 @@ class dailyactivity extends CI_Controller {
                             'createddate' => date('Y-m-d:H:i:s'),
                             'last_modified' => date('Y-m-d:H:i:s'),
                             'created_user' => $login_user_id,
-                            'email_id' => trim($customer_address[0]['contact_mailid']),
+                            /*'email_id' => trim($customer_address[0]['contact_mailid']),*/
+                            'email_id' => trim($customer_email_id),
                             'firstname' => trim($customer_address[0]['contact_person']),
                             'industry_id' => 63,
                             'uploaded_date' => $hrd_currentdate,
@@ -2316,7 +2320,7 @@ class dailyactivity extends CI_Controller {
     {
        // $data['optionscollector'] = $this->Leads_model->get_collectors($this->session->userdata['get_assign_to_user_id']);
         $data = array();
-        $data = $this->dailyactivity_model->get_collectors($this->session->userdata['get_assign_to_user_id']);
+        $data = $this->dailyactivity_model->get_collectors();
         print_r($data);
     }
   
@@ -2324,7 +2328,7 @@ class dailyactivity extends CI_Controller {
     {
         
         $data = array();
-        $data = $this->dailyactivity_model->get_marketcircles($this->session->userdata['get_assign_to_user_id']);
+        $data = $this->dailyactivity_model->get_marketcircles();
         print_r($data);
     }
     
@@ -2539,8 +2543,8 @@ class dailyactivity extends CI_Controller {
         /*echo" status_rever ".$status_rever."<br>";
         echo" substatus_rever ".$substatus_rever."<br>";
         echo" in revert_status samle_reject_count ".$samle_reject_count."<br>";*/
-        
-        if ($status_rever == 1) {
+        if ($status_rever == 1 || $status_rever == 2 || $status_rever == 6){
+      //  if ($status_rever == 1 ) {
             return $status_rever;
 
         } else if (($status_rever == 3) && ($substatus_rever == 15)) {
@@ -2595,6 +2599,10 @@ class dailyactivity extends CI_Controller {
               //echo "return 24"."<br>";
             return 23;
         }
+        else if ($substatus_rever == 28 ) {  // Order Cancelled
+              //echo "return 24"."<br>";
+            return 28;
+        }
         else 
             return $substatus_rever;
     }
@@ -2607,8 +2615,8 @@ class dailyactivity extends CI_Controller {
      /*   $sql = "SELECT distinct  replace(customergroup,'''','')   as customergroup FROM customermasterhdr WHERE 
         collector ='".$collector."' or collector is NULL order by customergroup";*/
         
-        $sql = "SELECT * FROM vw_lead_get_soc_no_product_custgroup WHERE customergroup ='".$custgrp."' AND product = '".$prodgrp."'";
-       //echo $sql; die;
+        $sql = "SELECT * FROM vw_lead_get_soc_no_product WHERE customer_name ='".$custgrp."' AND product = '".$prodgrp."'";
+      // echo $sql; die;
         
         $activitydata['datacustomermaster'] = $this->dailyactivity_model->get_synched_products($sql);
         $viewdata = $activitydata['datacustomermaster'];

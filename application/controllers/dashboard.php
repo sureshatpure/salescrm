@@ -706,7 +706,7 @@ class Dashboard extends CI_Controller {
     
 
 
-        function getjchdr() {
+    function getjchdr() {
         $jc_headers = $this->dashboard_model->get_jchdr();
         header('Content-Type: application/x-json; charset=utf-8');
         echo $jc_headers;

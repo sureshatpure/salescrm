@@ -92,12 +92,12 @@ class dailyactivity_model extends CI_Model
 
 	function getactivity_data($user_id)
 	{
-
-		@$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+		@$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+        @$this->session->set_userdata($get_assign_to_user_id);
 
 			$jTableResult = array();
 			 $sql = "SELECT distinct d.id,d.currentdate :: date,d.creationdate :: date,d.execode,d.exename,d.branch from vw_web_daily_activity d  where d.user_id IN(".$get_assign_to_user_id.") OR d.user_id = ".$user_id."  order by id desc";
-			 // echo $sql; die;
+			//  echo $sql; die;
 
 			//$sql="SELECT distinct d.id,d.currentdate :: date ,d.execode,d.exename from vw_web_daily_activity d  where user_id=302 order by id desc";
 
@@ -807,25 +807,30 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
         $arr = "{\"rows\":" .json_encode($result->result_array()). "}";
         return $arr;
     }*/
-    public function get_collectors($reporting_user_id) 
+    public function get_collectors() 
     {
+        $reporting_to = $this->session->userdata['reportingto'];
+        $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
         if (@$this->session->userdata['reportingto'] == "")
         {
-             $sql = "SELECT  a.collector FROM (
+           /*  $sql = "SELECT  a.collector FROM (
                 		SELECT 
 								customermasterhdr.collector 
                  AS collector
-                FROM customermasterhdr WHERE length(collector) > 0 ) a GROUP BY  a.collector ORDER BY collector";
+                FROM customermasterhdr WHERE length(collector) > 0 ) a GROUP BY  a.collector ORDER BY collector";*/
+
+            $sql="SELECT DISTINCT c.name as collector FROM ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE m.collector_id = c.collector_id AND m.gc_executive_code=v.header_user_id";
         }
         else
         {
-            $sql="SELECT collector FROM customermasterhdr  WHERE cust_account_id is NOT NULL  and cust_account_id >0 AND  mc_code in (
+           /* $sql="SELECT collector FROM customermasterhdr  WHERE cust_account_id is NOT NULL  and cust_account_id >0 AND  mc_code in (
                 SELECT  
                 mc_sub_id
                 FROM vw_web_user_login 
-                 JOIN market_circle_hdr on market_circle_hdr.gc_executive_code= vw_web_user_login.header_user_id AND vw_web_user_login.header_user_id in (".$reporting_user_id.") ) GROUP BY collector";
+                 JOIN market_circle_hdr on market_circle_hdr.gc_executive_code= vw_web_user_login.header_user_id AND vw_web_user_login.header_user_id in (".$get_assign_to_user_id.") ) GROUP BY collector";*/
+             $sql="SELECT DISTINCT c.name as collector FROM ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE m.collector_id = c.collector_id AND m.gc_executive_code=v.header_user_id AND v.header_user_id IN (".$get_assign_to_user_id.")";
         }
-       
+       //echo $sql; die;
         $result = $this->db->query($sql);
         $arr = "{\"rows\":" .json_encode($result->result_array()). "}";
         return $arr;
@@ -833,6 +838,8 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 
      public function get_marketcircles($reporting_user_id) 
      {
+		$reporting_to = $this->session->userdata['reportingto'];
+		$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
      	
      	if (@$this->session->userdata['reportingto'] == "")
         {
