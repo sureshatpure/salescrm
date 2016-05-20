@@ -90,6 +90,7 @@
         
         var leadata =<?php echo $data; ?>;
         var lmsscorecard =<?php echo $data_sc; ?>;
+        var lmsscorecard_chart =<?php echo $arr_sc_chart; ?>;
         var baseurl = base_url;
 
 
@@ -1104,81 +1105,35 @@
                     });
          }
 
- /*var dataAdapter = new $.jqx.dataAdapter(source,
-                {
-                    autoBind: true,
-                    async: false,
-                    downloadComplete: function () {
-                    },
-                    loadComplete: function () {
-                    },
-                    loadError: function () {
-                    }
-                });
+
          var settings = {
                 title: "LMS & Last 3 JC scorecard",
-                description: "Scorecard of leads Prospects in JC Wise",
+                description: "Scorecard of leads for Last 3 JC Wise",
                 enableAnimations: true,
                 showLegend: true,
                 padding: { left: 5, top: 5, right: 5, bottom: 5 },
                 titlePadding: { left: 90, top: 0, right: 0, bottom: 10 },
                 source: lmsscorecard_chart,
-                categoryAxis:
+                 xAxis: {
+                    dataField: "jc_code",
+                    valuesOnTicks: false
+                },
+                valueAxis: {
+                    valuesOnTicks: true
+                },
+                seriesGroups: [         
                     {
-                        text: 'Category Axis',
-                        textRotationAngle: 0,
-                        dataField: 'jc_code',
-                        showTickMarks: true,
-                        tickMarksInterval: 1,
-                        tickMarksColor: '#888888',
-                        unitInterval: 1,
-                        showGridLines: false,
-                        gridLinesInterval: 1,
-                        gridLinesColor: '#888888',
-                        axisSize: 'auto'
-                    },
-                colorScheme: 'scheme05',
-                seriesGroups:
-                    [
-                        {
-                            type: 'line',
-                            valueAxis:
+                        type: "line",
+                        series: [                   
                             {
-                                unitInterval: 10,
-                                minValue: 0,
-                                maxValue: 100,
-                                displayValueAxis: false,
-                                description: 'No of Leads',
-                                axisSize: 'auto',
-                                tickMarksColor: '#888888'
-                            },
-                            series: [
-                                    { dataField: 'score', displayText: 'Overall LMS Scorecard', opacity: 0.7 }
-                                ]
-                        },
-                        {
-                            type: 'column',
-                            columnsGapPercent: 100,
-                            seriesGapPercent: 5,
-                            valueAxis:
-                            {
-                                unitInterval: 10,
-                                minValue: 0,
-                                maxValue: 100,
-                                displayValueAxis: true,
-                                description: 'Time in minutes',
-                                axisSize: 'auto',
-                                tickMarksColor: '#888888',
-                                gridLinesColor: '#777777'
-                            },
-                            series: [
-                                    { dataField: 'JC1Week1', displayText: 'JC1Week1' },
-                                    { dataField: 'JC1Week2', displayText: 'JC1Week2' },
-                                    { dataField: 'JC1Week3', displayText: 'JC1Week3' },
-                                    { dataField: 'JC1Week4', displayText: 'JC1Week4' },
-                                ]
-                        }
-                    ]
+                                dataField: "cum_score"
+                            }
+                        ]
+                    }
+                ]
+               
+
+
             };
 // setup the chart
 
@@ -1188,7 +1143,7 @@
         // apply the new scheme by setting the chart's colorScheme property
         $('#chart_lmsscore_card').jqxChart('colorScheme', 'myScheme');
         $('#chart_lmsscore_card').jqxChart({showLegend: true});
-        $('#chart_lmsscore_card').jqxChart({rtl: false});*/
+        $('#chart_lmsscore_card').jqxChart({rtl: false});
 
         
 

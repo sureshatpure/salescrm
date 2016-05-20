@@ -69,11 +69,11 @@ class Lmsscorecard extends CI_Controller {
             
             $leaddata['ownbranch'] = "0";
             $leaddatareturn =$this->lmsscorecard_model->get_leadlms_scorecard();
-           // $leaddatareturn_chart =$this->lmsscorecard_model->get_leadlms_scorecard_chart();
+            $leaddatareturn_chart =$this->lmsscorecard_model->get_leadlms_scorecard_chart();
             $leaddata['data'] = $leaddatareturn['arr'];
             $leaddata['data_sc'] = $leaddatareturn['arr_sc'];
 
-          //  $leaddata['arr_sc_chart'] = $leaddatareturn_chart['arr_sc_chart'];
+            $leaddata['arr_sc_chart'] = $leaddatareturn_chart['arr_sc_chart'];
 
             
             $data = array();
@@ -277,9 +277,11 @@ class Lmsscorecard extends CI_Controller {
             $leaddata['grpperm'] = $arr;
             
         $leaddatareturn =$this->lmsscorecard_model->get_leadlms_scorecard_withfilters($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate);
+        $leaddatareturn_chart =$this->lmsscorecard_model->get_leadlms_scorecard_chart($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate);
       // echo"<pre>";print_r($this->session->userdata);echo"</pre>";
         $leaddata['data'] = $leaddatareturn['arr'];
         $leaddata['data_sc'] = $leaddatareturn['arr_sc'];
+        $leaddata['arr_sc_chart'] = $leaddatareturn_chart['arr_sc_chart'];
 
            $this->load->view('lmsdashboard/scorecard', $leaddata); 
         }else {

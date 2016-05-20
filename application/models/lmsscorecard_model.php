@@ -149,112 +149,34 @@ class Lmsscorecard_model extends CI_Model
 
 			$reportingto=$this->session->userdata['reportingto'];
 			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
-			if ($reportingto=='')
+			/*if ($reportingto=='')
 			{
-				 				$sql="SELECT fin_yr,jc_code,jc_week,
-                                        sum(prospect) * (0.1) as prospects_sc, 
-                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
-                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
-                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
-                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
-                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
-                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
-
-                                FROM 
-                                        vw_lms_scorecard
-                                WHERE createddate >= '2015-04-01' AND createddate <= '2016-05-18'  AND jc_code in (13,1,2)
-                                GROUP BY    
-                                fin_yr,
-                                jc_code,
-                                jc_week
-                                ORDER BY fin_yr";
-			}
-			else
-			{
-							$sql="SELECT fin_yr,jc_code,jc_week,
-                                        sum(prospect) * (0.1) as prospects_sc, 
-                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
-                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
-                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
-                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
-                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
-                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
-
-                                FROM 
-                                        vw_lms_scorecard
-                                WHERE createddate >= '2015-04-01' AND createddate <= '2016-05-18'  AND jc_code in (13,1,2) AND assign_to_id in (".$get_assign_to_user_id.")
-                                GROUP BY    
-                                fin_yr,
-                                jc_code,
-                                jc_week
-                                ORDER BY fin_yr";
-
-			}
-			//echo $sql; die;
-
-						$jTableResult = array();
-						
-				    
-						$result = $this->db->query($sql);
-						$jTableResult['leaddetails'] = $result->result_array();
-						$chart_leads_count = count($jTableResult['leaddetails']);
-						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
-						$data = array();
-						$data_score_chart = array();
-				
-						$i=0;
-						while($i < count($jTableResult['leaddetails']))
-						{    
-								
-							
-							$row_score_chart = array();
-							$row_score_chart["fin_yr"] = $jTableResult['leaddetails'][$i]["fin_yr"];
-							$row_score_chart["jc_code"] = $jTableResult['leaddetails'][$i]["jc_code"];
-							$row_score_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
-							$row_score_chart["prospects_sc"] = $jTableResult['leaddetails'][$i]["prospects_sc"];
-							$row_score_chart["met_the_customer_sc"] = $jTableResult['leaddetails'][$i]["met_the_customer_sc"];
-							$row_score_chart["credit_sssessment_sc"] = $jTableResult['leaddetails'][$i]["credit_sssessment_sc"];
-							$row_score_chart["sample_trails_formalities_sc"] = $jTableResult['leaddetails'][$i]["sample_trails_formalities_sc"];
-							$row_score_chart["enquiry_offer_negotiation_sc"] = $jTableResult['leaddetails'][$i]["enquiry_offer_negotiation_sc"];
-							$row_score_chart["managing_and_implementation_sc"] = $jTableResult['leaddetails'][$i]["managing_and_implementation_sc"];
-							$row_score_chart["expanding_and_build_relationship_sc"] = $jTableResult['leaddetails'][$i]["expanding_and_build_relationship_sc"];
+				 				$sql="SELECT 
+                                    jc_code,
+                                    sum(score) as score,
+                                    CASE WHEN (j.jc_code=1 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC1Week1\",
+                                    CASE WHEN (j.jc_code=1 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC1Week2\",
+                                    CASE WHEN (j.jc_code=1 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC1Week3\",
+                                    CASE WHEN (j.jc_code=1 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC1Week4\",
+                                    CASE WHEN (j.jc_code=2 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC2Week1\",
+                                    CASE WHEN (j.jc_code=2 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC2Week2\",
+                                    CASE WHEN (j.jc_code=2 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC2Week3\",
+                                    CASE WHEN (j.jc_code=2 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC2Week4\", 
+                                    CASE WHEN (j.jc_code=13 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC13Week1\",
+                                    CASE WHEN (j.jc_code=13 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC13Week2\",
+                                    CASE WHEN (j.jc_code=13 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC13Week3\",
+                                    CASE WHEN (j.jc_code=13 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC13Week4\"
+                                    FROM 
+                                    (
+                                    SELECT 
+                                    ld.jc_code,
+                                    ld.jc_week,
+                                    sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
+                                    FROM 
+                                    (
 
 
-							$row_score_chart["total_sc"]= $jTableResult['leaddetails'][$i]["prospects_sc"]+$jTableResult['leaddetails'][$i]["met_the_customer_sc"]+ $jTableResult['leaddetails'][$i]["credit_sssessment_sc"]+ $jTableResult['leaddetails'][$i]["sample_trails_formalities_sc"]+ $jTableResult['leaddetails'][$i]["enquiry_offer_negotiation_sc"]+ $jTableResult['leaddetails'][$i]["managing_and_implementation_sc"]+$jTableResult['leaddetails'][$i]["expanding_and_build_relationship_sc"];
-									
-
-							//$data[$i] = $row;
-							$data_score_chart[$i] = $row_score_chart;
-							$i++;
-						}
-
-						/*
-						$sql="SELECT 
-									jc_code,
-									sum(score) as score,
-									CASE WHEN (j.jc_code=1 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC1Week1\",
-									CASE WHEN (j.jc_code=1 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC1Week2\",
-									CASE WHEN (j.jc_code=1 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC1Week3\",
-									CASE WHEN (j.jc_code=1 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC1Week4\",
-									CASE WHEN (j.jc_code=2 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC2Week1\",
-									CASE WHEN (j.jc_code=2 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC2Week2\",
-									CASE WHEN (j.jc_code=2 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC2Week3\",
-									CASE WHEN (j.jc_code=2 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC2Week4\", 
-									CASE WHEN (j.jc_code=13 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC13Week1\",
-									CASE WHEN (j.jc_code=13 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC13Week2\",
-									CASE WHEN (j.jc_code=13 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC13Week3\",
-									CASE WHEN (j.jc_code=13 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC13Week4\"
-									FROM 
-									(
-									SELECT 
-									ld.jc_code,
-									ld.jc_week,
-									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
-									FROM 
-									(
-
-
-				 					SELECT fin_yr,jc_code,jc_week,
+                                    SELECT fin_yr,jc_code,jc_week,
                                         sum(prospect) * (0.1) as prospects_sc, 
                                         sum(met_the_customer) * (0.2) as met_the_customer_sc, 
                                         sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
@@ -272,42 +194,42 @@ class Lmsscorecard_model extends CI_Model
                                 jc_week
                                 ORDER BY fin_yr
                                 ) ld 
-								GROUP BY  	
-								jc_code,ld.jc_week
-								) j
-								GROUP BY  	
-								j.jc_week ,
-								j.jc_code 
-								ORDER BY jc_code";
+                                GROUP BY    
+                                jc_code,ld.jc_week
+                                ) j
+                                GROUP BY    
+                                j.jc_week ,
+                                j.jc_code 
+                                ORDER BY jc_code";
 			}
 			else
 			{
-							$sql="SELECT 
-									jc_code,
-									sum(score) as score,
-									CASE WHEN (j.jc_code=1 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC1Week1\",
-									CASE WHEN (j.jc_code=1 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC1Week2\",
-									CASE WHEN (j.jc_code=1 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC1Week3\",
-									CASE WHEN (j.jc_code=1 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC1Week4\",
-									CASE WHEN (j.jc_code=2 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC2Week1\",
-									CASE WHEN (j.jc_code=2 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC2Week2\",
-									CASE WHEN (j.jc_code=2 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC2Week3\",
-									CASE WHEN (j.jc_code=2 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC2Week4\", 
-									CASE WHEN (j.jc_code=13 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC13Week1\",
-									CASE WHEN (j.jc_code=13 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC13Week2\",
-									CASE WHEN (j.jc_code=13 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC13Week3\",
-									CASE WHEN (j.jc_code=13 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC13Week4\"
-									FROM 
-									(
-									SELECT 
-									ld.jc_code,
-									ld.jc_week,
-									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
-									FROM 
-									(
+							 $sql="SELECT 
+                                    jc_code,
+                                    sum(score) as score,
+                                    CASE WHEN (j.jc_code=1 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC1Week1\",
+                                    CASE WHEN (j.jc_code=1 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC1Week2\",
+                                    CASE WHEN (j.jc_code=1 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC1Week3\",
+                                    CASE WHEN (j.jc_code=1 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC1Week4\",
+                                    CASE WHEN (j.jc_code=2 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC2Week1\",
+                                    CASE WHEN (j.jc_code=2 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC2Week2\",
+                                    CASE WHEN (j.jc_code=2 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC2Week3\",
+                                    CASE WHEN (j.jc_code=2 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC2Week4\", 
+                                    CASE WHEN (j.jc_code=13 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC13Week1\",
+                                    CASE WHEN (j.jc_code=13 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC13Week2\",
+                                    CASE WHEN (j.jc_code=13 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC13Week3\",
+                                    CASE WHEN (j.jc_code=13 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC13Week4\"
+                                    FROM 
+                                    (
+                                    SELECT 
+                                    ld.jc_code,
+                                    ld.jc_week,
+                                    sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
+                                    FROM 
+                                    (
 
 
-										SELECT fin_yr,jc_code,jc_week,
+                                        SELECT fin_yr,jc_code,jc_week,
                                         sum(prospect) * (0.1) as prospects_sc, 
                                         sum(met_the_customer) * (0.2) as met_the_customer_sc, 
                                         sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
@@ -327,29 +249,158 @@ class Lmsscorecard_model extends CI_Model
 
 
 
-								) ld 
-								GROUP BY  	
-								jc_code,ld.jc_week
-								) j
-								GROUP BY  	
-								j.jc_week ,
-								j.jc_code 
-								ORDER BY jc_code";
+                                ) ld 
+                                GROUP BY    
+                                jc_code,ld.jc_week
+                                ) j
+                                GROUP BY    
+                                j.jc_week ,
+                                j.jc_code 
+                                ORDER BY jc_code";
 
-			}
-						*/
+			}*/
+			//echo $sql; die;
 
 
+						/*$jTableResult = array();
 						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$data_score_chart = array();
+				
+						$i=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_score_chart = array();
+							
+							$row_score_chart["jc_code"] = $jTableResult['leaddetails'][$i]["jc_code"];
+							$row_score_chart["score"] = $jTableResult['leaddetails'][$i]["score"];
+							$row_score_chart["JC1Week1"] = $jTableResult['leaddetails'][$i]["JC1Week1"];
+							$row_score_chart["JC1Week2"] = $jTableResult['leaddetails'][$i]["JC1Week2"];
+							$row_score_chart["JC1Week3"] = $jTableResult['leaddetails'][$i]["JC1Week3"];
+							$row_score_chart["JC1Week4"] = $jTableResult['leaddetails'][$i]["JC1Week4"];
 
-	/*					echo"<pre>";print_r($data);echo"</pre>"; 
-						echo"<pre>";print_r($data_score);echo"</pre>"; die;*/
-						//$arr = "{\"data\":" .json_encode($data). "}";
-						//$arr_sc_chart = "{\"data\":" .json_encode($data_score_chart). "}";
+							$row_score_chart["JC2Week1"] = $jTableResult['leaddetails'][$i]["JC2Week1"];
+							$row_score_chart["JC2Week2"] = $jTableResult['leaddetails'][$i]["JC2Week2"];
+							$row_score_chart["JC2Week3"] = $jTableResult['leaddetails'][$i]["JC2Week3"];
+							$row_score_chart["JC2Week4"] = $jTableResult['leaddetails'][$i]["JC2Week4"];
+
+							$row_score_chart["JC13Week1"] = $jTableResult['leaddetails'][$i]["JC13Week1"];
+							$row_score_chart["JC13Week2"] = $jTableResult['leaddetails'][$i]["JC13Week2"];
+							$row_score_chart["JC13Week3"] = $jTableResult['leaddetails'][$i]["JC13Week3"];
+							$row_score_chart["JC13Week4"] = $jTableResult['leaddetails'][$i]["JC13Week4"];
+							//$data[$i] = $row;
+							$data_score_chart[$i] = $row_score_chart;
+							$i++;
+						}*/
+						if ($reportingto=='')
+						{
+							$sql="SELECT
+									ld.fin_yr,	 
+									ld.jc_code,
+									ld.jc_week,
+									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
+									FROM 
+									(
+
+				 					SELECT fin_yr,jc_code,jc_week,
+                                        sum(prospect) * (0.1) as prospects_sc, 
+                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
+                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
+                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
+                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
+                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
+                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
+
+                                FROM 
+                                        vw_lms_scorecard
+                                WHERE createddate >= '2016-02-28' AND createddate <= '2016-05-20'  AND jc_code in (13,1,2)
+                                GROUP BY    
+                                fin_yr,
+                                jc_code,
+                                jc_week
+                                ORDER BY fin_yr
+                                ) ld 
+								GROUP BY  	
+								       ld.fin_yr,jc_code,ld.jc_week
+								ORDER BY fin_yr,jc_code";
+
+						}
+						else
+						{
+							$sql="SELECT 
+									ld.fin_yr,
+									ld.jc_code,
+									ld.jc_week,
+									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
+									FROM 
+									(
+
+				 					SELECT fin_yr,jc_code,jc_week,
+                                        sum(prospect) * (0.1) as prospects_sc, 
+                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
+                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
+                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
+                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
+                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
+                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
+
+                                FROM 
+                                        vw_lms_scorecard
+                                WHERE createddate >= '2016-02-28' AND createddate <= '2016-05-20'  AND jc_code in (13,1,2)
+                                GROUP BY    
+                                fin_yr,
+                                jc_code,
+                                jc_week
+                                ORDER BY fin_yr
+                                ) ld 
+								GROUP BY  	
+								ld.fin_yr,jc_code,ld.jc_week 
+								ORDER BY fin_yr,jc_code";
+						}	
+
+						$jTableResult = array();
+						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$data_score_chart = array();
+				
+						$i=0;
+						$cum_score=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_score_chart = array();
+					
+							$row_score_chart["jc_code"] = "JC ".$jTableResult['leaddetails'][$i]['jc_code']."Week ".$row_score_chart["jc_week"] = $jTableResult['leaddetails'][$i]['jc_week'];	
+	
+							$row_score_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
+							$row_score_chart["score"] = $jTableResult['leaddetails'][$i]["score"];
+
+							//$cum_score=$jTableResult['leaddetails'][$i]["score"];
+
+							$cum_score=$cum_score + $jTableResult['leaddetails'][$i]["score"];
+							$row_score_chart["cum_score"] = $cum_score;
+						
+							//$data[$i] = $row;
+							$data_score_chart[$i] = $row_score_chart;
+							$i++;
+						}
+
+						//print_r($data_score_chart); die;
 						$arr_sc_chart = json_encode($data_score_chart);
-						//$arr_arr_sc['arr']=$arr;
 						$arr_arr_sc_chart['arr_sc_chart']=$arr_sc_chart;
-					//	echo"<pre>";print_r($arr_arr_sc);echo"</pre>"; die;
 				 		return $arr_arr_sc_chart;
 		}
 
