@@ -24,7 +24,7 @@ class Lmsscorecard_model extends CI_Model
 		}
 
    	
-		function get_leadlms_scorecard()
+		function get_leadlms_scorecard($jc_implement_date,$today_date)
 		{
 
 			$reportingto=$this->session->userdata['reportingto'];
@@ -49,7 +49,7 @@ class Lmsscorecard_model extends CI_Model
 										sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
 
 							FROM 
-									vw_lms_scorecard
+									vw_lms_scorecard  WHERE createddate >= '".$jc_implement_date."' AND createddate <= '".$today_date."' 
 							GROUP BY
 								collector
 							ORDER BY
@@ -76,7 +76,7 @@ class Lmsscorecard_model extends CI_Model
 
 								FROM 
 										vw_lms_scorecard
-								WHERE assign_to_id in (".$get_assign_to_user_id.")
+								WHERE assign_to_id in (".$get_assign_to_user_id.") AND createddate >= '".$jc_implement_date."' AND createddate <= '".$today_date."' 
 								GROUP BY
 									collector
 								ORDER BY
@@ -144,161 +144,18 @@ class Lmsscorecard_model extends CI_Model
 		}
 
 
-		function get_leadlms_scorecard_chart()
+		function get_leadlms_scorecard_chart($jc_implement_date,$today_date)
 		{
+			$today_date= date("Y-m-d"); 
+			$account_yr = $this->get_current_accnt_yr($today_date); 
+			$last_3_jcs=$this->get_last_three_jc($account_yr,$today_date);
+		//	print_r($last_3_jcs);
+			$last3jc = implode(",",$last_3_jcs);
+			
 
 			$reportingto=$this->session->userdata['reportingto'];
 			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
-			/*if ($reportingto=='')
-			{
-				 				$sql="SELECT 
-                                    jc_code,
-                                    sum(score) as score,
-                                    CASE WHEN (j.jc_code=1 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC1Week1\",
-                                    CASE WHEN (j.jc_code=1 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC1Week2\",
-                                    CASE WHEN (j.jc_code=1 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC1Week3\",
-                                    CASE WHEN (j.jc_code=1 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC1Week4\",
-                                    CASE WHEN (j.jc_code=2 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC2Week1\",
-                                    CASE WHEN (j.jc_code=2 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC2Week2\",
-                                    CASE WHEN (j.jc_code=2 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC2Week3\",
-                                    CASE WHEN (j.jc_code=2 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC2Week4\", 
-                                    CASE WHEN (j.jc_code=13 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC13Week1\",
-                                    CASE WHEN (j.jc_code=13 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC13Week2\",
-                                    CASE WHEN (j.jc_code=13 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC13Week3\",
-                                    CASE WHEN (j.jc_code=13 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC13Week4\"
-                                    FROM 
-                                    (
-                                    SELECT 
-                                    ld.jc_code,
-                                    ld.jc_week,
-                                    sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
-                                    FROM 
-                                    (
-
-
-                                    SELECT fin_yr,jc_code,jc_week,
-                                        sum(prospect) * (0.1) as prospects_sc, 
-                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
-                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
-                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
-                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
-                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
-                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
-
-                                FROM 
-                                        vw_lms_scorecard
-                                WHERE createddate >= '2015-04-01' AND createddate <= '2016-05-18'  AND jc_code in (13,1,2)
-                                GROUP BY    
-                                fin_yr,
-                                jc_code,
-                                jc_week
-                                ORDER BY fin_yr
-                                ) ld 
-                                GROUP BY    
-                                jc_code,ld.jc_week
-                                ) j
-                                GROUP BY    
-                                j.jc_week ,
-                                j.jc_code 
-                                ORDER BY jc_code";
-			}
-			else
-			{
-							 $sql="SELECT 
-                                    jc_code,
-                                    sum(score) as score,
-                                    CASE WHEN (j.jc_code=1 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC1Week1\",
-                                    CASE WHEN (j.jc_code=1 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC1Week2\",
-                                    CASE WHEN (j.jc_code=1 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC1Week3\",
-                                    CASE WHEN (j.jc_code=1 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC1Week4\",
-                                    CASE WHEN (j.jc_code=2 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC2Week1\",
-                                    CASE WHEN (j.jc_code=2 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC2Week2\",
-                                    CASE WHEN (j.jc_code=2 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC2Week3\",
-                                    CASE WHEN (j.jc_code=2 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC2Week4\", 
-                                    CASE WHEN (j.jc_code=13 AND j.jc_week=1) THEN sum(score)  ELSE 0 END  as  \"JC13Week1\",
-                                    CASE WHEN (j.jc_code=13 AND j.jc_week=2) THEN sum(score)  ELSE 0 END  as  \"JC13Week2\",
-                                    CASE WHEN (j.jc_code=13 AND j.jc_week=3) THEN sum(score)  ELSE 0 END  as  \"JC13Week3\",
-                                    CASE WHEN (j.jc_code=13 AND j.jc_week=4) THEN sum(score)  ELSE 0 END  as  \"JC13Week4\"
-                                    FROM 
-                                    (
-                                    SELECT 
-                                    ld.jc_code,
-                                    ld.jc_week,
-                                    sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
-                                    FROM 
-                                    (
-
-
-                                        SELECT fin_yr,jc_code,jc_week,
-                                        sum(prospect) * (0.1) as prospects_sc, 
-                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
-                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
-                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
-                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
-                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
-                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
-
-                                FROM 
-                                        vw_lms_scorecard
-                                WHERE createddate >= '2015-04-01' AND createddate <= '2016-05-18'  AND jc_code in (13,1,2) AND assign_to_id in (".$get_assign_to_user_id.")
-                                GROUP BY    
-                                fin_yr,
-                                jc_code,
-                                jc_week
-                                ORDER BY fin_yr
-
-
-
-                                ) ld 
-                                GROUP BY    
-                                jc_code,ld.jc_week
-                                ) j
-                                GROUP BY    
-                                j.jc_week ,
-                                j.jc_code 
-                                ORDER BY jc_code";
-
-			}*/
-			//echo $sql; die;
-
-
-						/*$jTableResult = array();
-						
-				    
-						$result = $this->db->query($sql);
-						$jTableResult['leaddetails'] = $result->result_array();
-						$chart_leads_count = count($jTableResult['leaddetails']);
-						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
-						$data = array();
-						$data_score_chart = array();
-				
-						$i=0;
-						while($i < count($jTableResult['leaddetails']))
-						{    
-								
-							
-							$row_score_chart = array();
-							
-							$row_score_chart["jc_code"] = $jTableResult['leaddetails'][$i]["jc_code"];
-							$row_score_chart["score"] = $jTableResult['leaddetails'][$i]["score"];
-							$row_score_chart["JC1Week1"] = $jTableResult['leaddetails'][$i]["JC1Week1"];
-							$row_score_chart["JC1Week2"] = $jTableResult['leaddetails'][$i]["JC1Week2"];
-							$row_score_chart["JC1Week3"] = $jTableResult['leaddetails'][$i]["JC1Week3"];
-							$row_score_chart["JC1Week4"] = $jTableResult['leaddetails'][$i]["JC1Week4"];
-
-							$row_score_chart["JC2Week1"] = $jTableResult['leaddetails'][$i]["JC2Week1"];
-							$row_score_chart["JC2Week2"] = $jTableResult['leaddetails'][$i]["JC2Week2"];
-							$row_score_chart["JC2Week3"] = $jTableResult['leaddetails'][$i]["JC2Week3"];
-							$row_score_chart["JC2Week4"] = $jTableResult['leaddetails'][$i]["JC2Week4"];
-
-							$row_score_chart["JC13Week1"] = $jTableResult['leaddetails'][$i]["JC13Week1"];
-							$row_score_chart["JC13Week2"] = $jTableResult['leaddetails'][$i]["JC13Week2"];
-							$row_score_chart["JC13Week3"] = $jTableResult['leaddetails'][$i]["JC13Week3"];
-							$row_score_chart["JC13Week4"] = $jTableResult['leaddetails'][$i]["JC13Week4"];
-							//$data[$i] = $row;
-							$data_score_chart[$i] = $row_score_chart;
-							$i++;
-						}*/
+			
 						if ($reportingto=='')
 						{
 							$sql="SELECT
@@ -320,13 +177,13 @@ class Lmsscorecard_model extends CI_Model
 
                                 FROM 
                                         vw_lms_scorecard
-                                WHERE createddate >= '2016-02-28' AND createddate <= '2016-05-20'  AND jc_code in (13,1,2)
+                                WHERE  jc_code in (".$last3jc.") AND  createddate >= '".$jc_implement_date."' AND createddate <= '".$today_date."' 
                                 GROUP BY    
                                 fin_yr,
                                 jc_code,
                                 jc_week
                                 ORDER BY fin_yr
-                                ) ld 
+                                ) ld  WHERE fin_yr='".$account_yr."'
 								GROUP BY  	
 								       ld.fin_yr,jc_code,ld.jc_week
 								ORDER BY fin_yr,jc_code";
@@ -353,18 +210,19 @@ class Lmsscorecard_model extends CI_Model
 
                                 FROM 
                                         vw_lms_scorecard
-                                WHERE createddate >= '2016-02-28' AND createddate <= '2016-05-20'  AND jc_code in (13,1,2)
+                                WHERE  jc_code in (".$last3jc.")  AND assign_to_id in (".$get_assign_to_user_id.") AND createddate >= '".$jc_implement_date."' AND createddate <= '".$today_date."' 
                                 GROUP BY    
                                 fin_yr,
                                 jc_code,
                                 jc_week
                                 ORDER BY fin_yr
-                                ) ld 
+                                ) ld   WHERE fin_yr='".$account_yr."'
 								GROUP BY  	
 								ld.fin_yr,jc_code,ld.jc_week 
 								ORDER BY fin_yr,jc_code";
 						}	
 
+					//echo $sql; die;
 						$jTableResult = array();
 						
 				    
@@ -398,10 +256,423 @@ class Lmsscorecard_model extends CI_Model
 							$i++;
 						}
 
-						//print_r($data_score_chart); die;
+					//	echo"<pre>";print_r($data_score_chart); echo"</pre>";die;
 						$arr_sc_chart = json_encode($data_score_chart);
 						$arr_arr_sc_chart['arr_sc_chart']=$arr_sc_chart;
 				 		return $arr_arr_sc_chart;
+		}
+
+		function get_leadlms_potential_chart($jc_implement_date,$today_date)
+		{
+			$today_date= date("Y-m-d"); 
+			$account_yr = $this->get_current_accnt_yr($today_date); 
+			$last_3_jcs=$this->get_last_three_jc($account_yr,$today_date);
+		//	print_r($last_3_jcs);
+			$last3jc = implode(",",$last_3_jcs);
+			
+
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			
+						if ($reportingto=='')
+						{
+							$sql="SELECT
+									ld.fin_yr,	 
+									ld.jc_code,
+									ld.jc_week,
+									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as potential
+									FROM 
+									(
+
+				 					SELECT fin_yr,jc_code,jc_week,
+                                        sum(prospect) * (0.1) as prospects_sc, 
+                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
+                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
+                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
+                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
+                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
+                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
+
+                                FROM 
+                                        vw_lms_potential_added
+                                WHERE  jc_code in (".$last3jc.") AND  createddate >= '".$jc_implement_date."' AND createddate <= '".$today_date."' 
+                                GROUP BY    
+                                fin_yr,
+                                jc_code,
+                                jc_week
+                                ORDER BY fin_yr
+                                ) ld  WHERE fin_yr='".$account_yr."'
+								GROUP BY  	
+								       ld.fin_yr,jc_code,ld.jc_week
+								ORDER BY fin_yr,jc_code";
+
+						}
+						else
+						{
+							$sql="SELECT 
+									ld.fin_yr,
+									ld.jc_code,
+									ld.jc_week,
+									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as potential
+									FROM 
+									(
+
+				 					SELECT fin_yr,jc_code,jc_week,
+                                        sum(prospect) * (0.1) as prospects_sc, 
+                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
+                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
+                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
+                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
+                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
+                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
+
+                                FROM 
+                                        vw_lms_potential_added
+                                WHERE  jc_code in (".$last3jc.")  AND assign_to_id in (".$get_assign_to_user_id.") AND createddate >= '".$jc_implement_date."' AND createddate <= '".$today_date."' 
+                                GROUP BY    
+                                fin_yr,
+                                jc_code,
+                                jc_week
+                                ORDER BY fin_yr
+                                ) ld   WHERE fin_yr='".$account_yr."'
+								GROUP BY  	
+								ld.fin_yr,jc_code,ld.jc_week 
+								ORDER BY fin_yr,jc_code";
+						}	
+
+					//echo $sql; die;
+						$jTableResult = array();
+						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$data_pot_chart = array();
+				
+						$i=0;
+						$cum_pot=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_pot_chart = array();
+					
+							$row_pot_chart["jc_code"] = "JC ".$jTableResult['leaddetails'][$i]['jc_code']."Week ".$row_pot_chart["jc_week"] = $jTableResult['leaddetails'][$i]['jc_week'];	
+	
+							$row_pot_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
+							$row_pot_chart["potential"] = $jTableResult['leaddetails'][$i]["potential"];
+
+							//$cum_score=$jTableResult['leaddetails'][$i]["score"];
+
+							$cum_pot=$cum_pot + $jTableResult['leaddetails'][$i]["potential"];
+							$row_pot_chart["cum_pot"] = round($cum_pot, 2);
+						
+							//$data[$i] = $row;
+							$data_pot_chart[$i] = $row_pot_chart;
+							$i++;
+						}
+
+					//	echo"<pre>";print_r($data_pot_chart); echo"</pre>";die;
+						$arr_pot_chart = json_encode($data_pot_chart);
+						$arr_arr_pot_chart['arr_pot_chart']=$arr_pot_chart;
+				 		return $arr_arr_pot_chart;
+		}
+
+		function get_leadlms_potential_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate)
+		{
+			$itemgroup =htmlspecialchars_decode($itemgroup); 
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			$today_date= date("Y-m-d");  
+			$account_yr = $this->get_current_accnt_yr($today_date); 
+			$last_3_jcs=$this->get_last_three_jc($account_yr,$today_date);
+			$last3jc = implode(",",$last_3_jcs);
+
+			$whereParts = array();
+	        if( ($collector) && $collector!='All')     { $whereParts[] = "collector ='$collector' "; }
+	        if ( ($account_yr && $account_yr!='All') ) { $whereParts[] = "fin_yr = '$account_yr' "; }
+	        if ($reportingto!=''){
+	        if( ( $get_assign_to_user_id && $get_assign_to_user_id!='All') ) { $whereParts[] = "assign_to_id IN($get_assign_to_user_id) "; }
+	        }
+	       
+	        if( ( $zone && $zone!='All'))  { $whereParts[] = "mc_zone = '$zone' "; }
+
+	        if( ( $marketcircle && $marketcircle!='All'))  { $whereParts[] = "mc_sub_id = '$marketcircle' "; }
+	        if( ( $itemgroup && $itemgroup!='All'))  { $whereParts[] = "product_group = '$itemgroup' "; }
+	        if( ($fromdate && $fromdate!='All'))  { $whereParts[] = "createddate >= '$fromdate' "; }
+	       if( ( $todate && $todate!='All'))  { $whereParts[] = "createddate <= '$todate' "; }
+
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			
+						if ($reportingto=='')
+						{
+							$sql="SELECT
+									ld.fin_yr,	 
+									ld.jc_code,
+									ld.jc_week,
+									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as potential
+									FROM 
+									(
+
+				 					SELECT fin_yr,jc_code,jc_week,
+                                        sum(prospect) * (0.1) as prospects_sc, 
+                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
+                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
+                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
+                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
+                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
+                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
+
+                                FROM 
+                                        vw_lms_potential_added
+                                WHERE createddate >= '".$fromdate."' AND createddate <= '".$todate."'  AND jc_code in (".$last3jc.") ";
+
+						}
+						else
+						{
+							$sql="SELECT 
+									ld.fin_yr,
+									ld.jc_code,
+									ld.jc_week,
+									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as potential
+									FROM 
+									(
+
+				 					SELECT fin_yr,jc_code,jc_week,
+                                        sum(prospect) * (0.1) as prospects_sc, 
+                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
+                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
+                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
+                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
+                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
+                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
+
+                                FROM 
+                                        vw_lms_potential_added
+                                WHERE createddate >= '".$fromdate."' AND assign_to_id in (".$get_assign_to_user_id.") AND createddate <= '".$todate."'  AND jc_code  in (".$last3jc.") ";
+                                
+						}	
+
+						  if(count($whereParts)) {
+                         	$sql .= " AND ". implode(' AND ', $whereParts);
+        		}
+        		$sql .= '  GROUP BY 
+                                fin_yr,
+                                jc_code,
+                                jc_week
+                                ORDER BY fin_yr
+                                ) ld 
+								GROUP BY  	
+								       ld.fin_yr,jc_code,ld.jc_week
+								ORDER BY fin_yr,jc_code'; 
+			//echo $sql; die;
+
+						$jTableResult = array();
+						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$data_score_chart = array();
+				
+						$i=0;
+						$cum_pot=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_pot_chart = array();
+					
+							$row_pot_chart["jc_code"] = "JC ".$jTableResult['leaddetails'][$i]['jc_code']."Week ".$row_pot_chart["jc_week"] = $jTableResult['leaddetails'][$i]['jc_week'];	
+	
+							$row_pot_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
+							$row_pot_chart["potential"] = $jTableResult['leaddetails'][$i]["potential"];
+
+							//$cum_score=$jTableResult['leaddetails'][$i]["score"];
+
+							$cum_pot=$cum_pot + $jTableResult['leaddetails'][$i]["potential"];
+							$row_pot_chart["cum_pot"] = round($cum_pot, 2);
+						
+							//$data[$i] = $row;
+							$data_pot_chart[$i] = $row_pot_chart;
+							$i++;
+						}
+
+					//	echo"<pre>";print_r($data_pot_chart); echo"</pre>";die;
+						$arr_pot_chart = json_encode($data_pot_chart);
+						$arr_arr_pot_chart['arr_pot_chart']=$arr_pot_chart;
+				 		return $arr_arr_pot_chart;
+		}
+
+		
+		function get_lms_converted_chart($jc_implement_date,$today_date)
+		{
+			$today_date= date("Y-m-d"); 
+			$account_yr = $this->get_current_accnt_yr($today_date); 
+			$last_3_jcs=$this->get_last_three_jc($account_yr,$today_date);
+		//	print_r($last_3_jcs);
+			$last3jc = implode(",",$last_3_jcs);
+			
+
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			
+						if ($reportingto=='')
+						{
+							$sql="SELECT count(leadid) as leadcount,jc_code,jc_week,fin_yr
+									FROM vw_lms_converted_leads 	
+									
+									WHERE fin_yr='".$account_yr."' AND modifieddate >= '".$jc_implement_date."' AND modifieddate <= '".$today_date."'  AND jc_code  in (".$last3jc.")  GROUP BY jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code";
+
+						}
+						else
+						{
+							$sql="SELECT count(leadid) as leadcount,assign_to_id,jc_code,jc_week,fin_yr
+									FROM  vw_lms_converted_leads 	
+									
+									WHERE fin_yr='".$account_yr."' AND assign_to_id in (".$get_assign_to_user_id.") AND modifieddate >= '".$jc_implement_date."' AND modifieddate <= '".$today_date."'  AND jc_code  in (".$last3jc.") GROUP BY assign_to_id,jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code ";
+						}	
+
+					//echo $sql; die;
+						$jTableResult = array();
+						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$data_count_chart = array();
+				
+						$i=0;
+						$lead_count=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_count_chart = array();
+					
+							$row_count_chart["jc_code"] = "JC ".$jTableResult['leaddetails'][$i]['jc_code']."Week ".$row_count_chart["jc_week"] = $jTableResult['leaddetails'][$i]['jc_week'];	
+	
+							$row_count_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
+							$row_count_chart["leadcount"] = $jTableResult['leaddetails'][$i]["leadcount"];
+
+							//$cum_score=$jTableResult['leaddetails'][$i]["score"];
+
+							$lead_count=$lead_count + $jTableResult['leaddetails'][$i]["leadcount"];
+							$row_count_chart["cum_count"] = $lead_count;
+						
+							//$data[$i] = $row;
+							$data_count_chart[$i] = $row_count_chart;
+							$i++;
+						}
+
+					//	echo"<pre>";print_r($data_count_chart); echo"</pre>";die;
+						$arr_count_chart = json_encode($data_count_chart);
+						$arr_arr_count_chart['arr_count_chart']=$arr_count_chart;
+						//echo"<pre>";print_r($arr_arr_count_chart); echo"</pre>";die;
+				 		return $arr_arr_count_chart;
+		}
+
+		function get_lms_converted_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate)
+		{
+			$itemgroup =htmlspecialchars_decode($itemgroup); 
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			$today_date= date("Y-m-d");  
+			$account_yr = $this->get_current_accnt_yr($today_date); 
+			$last_3_jcs=$this->get_last_three_jc($account_yr,$today_date);
+			$last3jc = implode(",",$last_3_jcs);
+
+			$whereParts = array();
+	        if( ($collector) && $collector!='All')     { $whereParts[] = "collector ='$collector' "; }
+	        if ( ($account_yr && $account_yr!='All') ) { $whereParts[] = "fin_yr = '$account_yr' "; }
+	        if ($reportingto!=''){
+	        if( ( $get_assign_to_user_id && $get_assign_to_user_id!='All') ) { $whereParts[] = "assign_to_id IN($get_assign_to_user_id) "; }
+	        }
+	       
+	        if( ( $zone && $zone!='All'))  { $whereParts[] = "mc_zone = '$zone' "; }
+
+	        if( ( $marketcircle && $marketcircle!='All'))  { $whereParts[] = "mc_sub_id = '$marketcircle' "; }
+	        if( ( $itemgroup && $itemgroup!='All'))  { $whereParts[] = "product_group = '$itemgroup' "; }
+	        if( ($fromdate && $fromdate!='All'))  { $whereParts[] = "modifieddate >= '$fromdate' "; }
+	       if( ( $todate && $todate!='All'))  { $whereParts[] = "modifieddate <= '$todate' "; }
+
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			
+						if ($reportingto=='')
+						{
+							$sql="SELECT count(leadid) as leadcount,jc_code,jc_week,fin_yr
+									FROM vw_lms_converted_leads 	
+									
+									WHERE fin_yr='".$account_yr."' AND modifieddate >= '".$fromdate."' AND modifieddate <= '".$todate."'  AND jc_code  in (".$last3jc.")";
+
+						}
+						else
+						{
+							$sql="SELECT count(leadid) as leadcount,assign_to_id,jc_code,jc_week,fin_yr
+									FROM  vw_lms_converted_leads 	
+									
+									WHERE fin_yr='".$account_yr."' AND assign_to_id in (".$get_assign_to_user_id.") AND modifieddate >= '".$fromdate."' AND modifieddate <= '".$todate."'  AND jc_code  in (".$last3jc.") ";
+                                
+						}	
+
+						  if(count($whereParts)) {
+                         	$sql .= " AND ". implode(' AND ', $whereParts);
+        		}
+        		if ($reportingto==''){
+        		$sql .= '   GROUP BY jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code'; 
+        	    }
+        	    else
+        	    {
+        	    	$sql .= '   GROUP BY jc_code,jc_week,fin_yr,assign_to_id ORDER BY fin_yr,jc_code'; 
+        	    }
+			//echo $sql; die;
+
+						$jTableResult = array();
+						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$data_score_chart = array();
+				
+						$i=0;
+						$lead_count=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_count_chart = array();
+					
+							$row_count_chart["jc_code"] = "JC ".$jTableResult['leaddetails'][$i]['jc_code']."Week ".$row_count_chart["jc_week"] = $jTableResult['leaddetails'][$i]['jc_week'];	
+	
+							$row_count_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
+							$row_count_chart["leadcount"] = $jTableResult['leaddetails'][$i]["leadcount"];
+
+							//$cum_score=$jTableResult['leaddetails'][$i]["score"];
+
+							$lead_count=$lead_count + $jTableResult['leaddetails'][$i]["leadcount"];
+							$row_count_chart["cum_count"] = $lead_count;
+						
+							//$data[$i] = $row;
+							$data_count_chart[$i] = $row_count_chart;
+							$i++;
+						}
+
+					//	echo"<pre>";print_r($data_pot_chart); echo"</pre>";die;
+						$arr_count_chart = json_encode($data_count_chart);
+						$arr_arr_count_chart['arr_count_chart']=$arr_count_chart;
+						
+				 		return $arr_arr_count_chart;
 		}
 
 		function get_leadlms_scorecard_withfilters($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate)
@@ -465,8 +736,7 @@ class Lmsscorecard_model extends CI_Model
 										sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
 
 								FROM 
-										vw_lms_scorecard
-								WHERE ";
+										vw_lms_scorecard WHERE ";
 								
 
 
@@ -476,7 +746,7 @@ class Lmsscorecard_model extends CI_Model
                          	$sql .= "". implode('AND ', $whereParts);
         		}
         		$sql .= ' GROUP BY 	collector ORDER BY collector'; 
-		//	echo $sql; die;
+			//echo $sql; 
 
 						$jTableResult = array();
 						
@@ -533,6 +803,136 @@ class Lmsscorecard_model extends CI_Model
 				 		return $arr_arr_sc;
 		}
 
+		function get_leadlms_scorecard_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate)
+		{
+			$itemgroup =htmlspecialchars_decode($itemgroup); 
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			$today_date= date("Y-m-d");  
+			$account_yr = $this->get_current_accnt_yr($today_date); 
+			$last_3_jcs=$this->get_last_three_jc($account_yr,$today_date);
+			$last3jc = implode(",",$last_3_jcs);
+
+			$whereParts = array();
+	        if( ($collector) && $collector!='All')     { $whereParts[] = "collector ='$collector' "; }
+	        if ( ($account_yr && $account_yr!='All') ) { $whereParts[] = "fin_yr = '$account_yr' "; }
+	        if ($reportingto!=''){
+	        if( ( $get_assign_to_user_id && $get_assign_to_user_id!='All') ) { $whereParts[] = "assign_to_id IN($get_assign_to_user_id) "; }
+	        }
+	       
+	        if( ( $zone && $zone!='All'))  { $whereParts[] = "mc_zone = '$zone' "; }
+
+	        if( ( $marketcircle && $marketcircle!='All'))  { $whereParts[] = "mc_sub_id = '$marketcircle' "; }
+	        if( ( $itemgroup && $itemgroup!='All'))  { $whereParts[] = "product_group = '$itemgroup' "; }
+	        if( ($fromdate && $fromdate!='All'))  { $whereParts[] = "createddate >= '$fromdate' "; }
+	       if( ( $todate && $todate!='All'))  { $whereParts[] = "createddate <= '$todate' "; }
+
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			
+						if ($reportingto=='')
+						{
+							$sql="SELECT
+									ld.fin_yr,	 
+									ld.jc_code,
+									ld.jc_week,
+									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
+									FROM 
+									(
+
+				 					SELECT fin_yr,jc_code,jc_week,
+                                        sum(prospect) * (0.1) as prospects_sc, 
+                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
+                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
+                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
+                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
+                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
+                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
+
+                                FROM 
+                                        vw_lms_scorecard
+                                WHERE createddate >= '".$fromdate."' AND createddate <= '".$todate."'  AND jc_code in (".$last3jc.") ";
+
+						}
+						else
+						{
+							$sql="SELECT 
+									ld.fin_yr,
+									ld.jc_code,
+									ld.jc_week,
+									sum(prospects_sc+met_the_customer_sc+credit_sssessment_sc+sample_trails_formalities_sc+enquiry_offer_negotiation_sc+managing_and_implementation_sc+expanding_and_build_relationship_sc) as score
+									FROM 
+									(
+
+				 					SELECT fin_yr,jc_code,jc_week,
+                                        sum(prospect) * (0.1) as prospects_sc, 
+                                        sum(met_the_customer) * (0.2) as met_the_customer_sc, 
+                                        sum(credit_sssessment) * (0.3) as credit_sssessment_sc, 
+                                        sum(sample_trails_formalities) * (0.5) as sample_trails_formalities_sc, 
+                                        sum(enquiry_offer_negotiation) * (0.7) as enquiry_offer_negotiation_sc, 
+                                        sum(managing_and_implementation) * (0.8) as managing_and_implementation_sc, 
+                                        sum(expanding_and_build_relationship) as expanding_and_build_relationship_sc
+
+                                FROM 
+                                        vw_lms_scorecard
+                                WHERE createddate >= '".$fromdate."' AND createddate <= '".$todate."'  AND jc_code  in (".$last3jc.") ";
+                                
+						}	
+
+						  if(count($whereParts)) {
+                         	$sql .= " AND ". implode(' AND ', $whereParts);
+        		}
+        		$sql .= '  GROUP BY 
+                                fin_yr,
+                                jc_code,
+                                jc_week
+                                ORDER BY fin_yr
+                                ) ld 
+								GROUP BY  	
+								       ld.fin_yr,jc_code,ld.jc_week
+								ORDER BY fin_yr,jc_code'; 
+			//echo $sql; die;
+
+						$jTableResult = array();
+						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$data_score_chart = array();
+				
+						$i=0;
+						$cum_score=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_score_chart = array();
+					
+							$row_score_chart["jc_code"] = "JC ".$jTableResult['leaddetails'][$i]['jc_code']."Week ".$row_score_chart["jc_week"] = $jTableResult['leaddetails'][$i]['jc_week'];	
+	
+							$row_score_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
+							$row_score_chart["score"] = $jTableResult['leaddetails'][$i]["score"];
+
+							//$cum_score=$jTableResult['leaddetails'][$i]["score"];
+
+							$cum_score=$cum_score + $jTableResult['leaddetails'][$i]["score"];
+							$row_score_chart["cum_score"] = $cum_score;
+						
+							//$data[$i] = $row;
+							$data_score_chart[$i] = $row_score_chart;
+							$i++;
+						}
+
+						//print_r($data_score_chart); die;
+						$arr_sc_chart = json_encode($data_score_chart);
+						$arr_arr_sc_chart['arr_sc_chart']=$arr_sc_chart;
+				 		return $arr_arr_sc_chart;
+		}
+
+		
 		function get_zones()
 				{
 				
@@ -667,7 +1067,8 @@ class Lmsscorecard_model extends CI_Model
 				}
 		function get_marketcircles_forfilter($collector)
 				{
-				
+				 		$collector =urldecode($collector);
+
 						$reporting_to = $this->session->userdata['reportingto'];
 						$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
 
@@ -685,7 +1086,7 @@ class Lmsscorecard_model extends CI_Model
 											  AND  gc_executive_code in (".$get_assign_to_user_id.") GROUP BY mc_sub_id ORDER BY mc_sub_id";
 				
 						}
-						//echo $sql; die;
+					//	echo $sql; die;
 							$result = $this->db->query($sql);
 							$options = $result->result_array();
 							$all_market_circle =  array('market_circle' =>'All');
@@ -772,7 +1173,7 @@ class Lmsscorecard_model extends CI_Model
 
 		function get_financeyear()
 			{
-				$sql="SELECT finance_year FROM jc_calendar_hdr ORDER BY 1 asc ";
+				$sql="SELECT finance_year FROM jc_calendar_hdr ORDER BY finance_year DESC  LIMIT 2 ";
 				$result = $this->db->query($sql);
 				$options = $result->result_array();
 				array_push($options, "-All-");
@@ -823,7 +1224,45 @@ class Lmsscorecard_model extends CI_Model
                     $accnt_yr = $result->result_array();
              
                 return $accnt_yr[0]['jc_code'];
-            }	
+            }
+
+          public function get_current_accnt_yr($to_date)
+            {
+                 $sql="SELECT * FROM get_acc_yr('".$to_date."')";
+           
+                $result = $this->db->query($sql);
+                    $accnt_yr = $result->result_array();
+             
+                return $accnt_yr[0]['get_acc_yr'];
+            }
+
+          public function get_last_three_jc($account_yr,$today_date)
+          {
+          	$sql="SELECT jc_code FROM jc_calendar_dtl   WHERE  acc_yr='".$account_yr."'  AND line_id <= (SELECT line_id FROM jc_calendar_dtl  WHERE acc_yr='".$account_yr."' AND  '".$today_date."' BETWEEN jc_period_from and jc_period_to ) ORDER BY jc_code DESC LIMIT 3";
+
+          	//echo $sql; die;
+          	 $result = $this->db->query($sql);
+            // $last3jcs = $result->result_array();
+        
+
+             $jcs = $result->result_array();
+            // print_r($jcs);
+			$last3jc =  array();
+			foreach ($jcs as $key => $value) {
+/*				echo "key ".$key;
+				echo"<br>";
+				echo "value ".$value['jc_code'];
+				echo"<br>";*/
+				//echo"key ".$key."<br>";
+				//echo"key ".$value."<br>";
+			array_push($last3jc, $value['jc_code']);
+			
+			}
+			// print_r($last3jc);
+
+			
+			 return $last3jc;
+          }
 
 
 

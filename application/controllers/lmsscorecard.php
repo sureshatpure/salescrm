@@ -32,8 +32,10 @@ class Lmsscorecard extends CI_Controller {
        // $from_date='2015-01-01';
         $from_date='2015-04-01';
         $to_date= date("Y-m-d");  
+        $today_date= date("Y-m-d");  
         $branch="All";
         //$jc_period="1";
+        $jc_implement_date='2015-04-01';
 
         
         $account_yr = $this->Leads_model->get_current_accnt_yr($to_date); 
@@ -68,13 +70,21 @@ class Lmsscorecard extends CI_Controller {
             $leaddata['account_yr'] = $account_yr;
             
             $leaddata['ownbranch'] = "0";
-            $leaddatareturn =$this->lmsscorecard_model->get_leadlms_scorecard();
-            $leaddatareturn_chart =$this->lmsscorecard_model->get_leadlms_scorecard_chart();
+            $leaddatareturn =$this->lmsscorecard_model->get_leadlms_scorecard($jc_implement_date,$today_date);
+            $leaddatareturn_chart =$this->lmsscorecard_model->get_leadlms_scorecard_chart($jc_implement_date,$today_date);
+            $leaddatareturn_pot_chart =$this->lmsscorecard_model->get_leadlms_potential_chart($jc_implement_date,$today_date);
+            $leaddatareturn_con_chart =$this->lmsscorecard_model->get_lms_converted_chart($jc_implement_date,$today_date);
+            
+            //echo"<pre>";print_r($leaddatareturn_con_chart);echo"</pre>";
             $leaddata['data'] = $leaddatareturn['arr'];
             $leaddata['data_sc'] = $leaddatareturn['arr_sc'];
 
             $leaddata['arr_sc_chart'] = $leaddatareturn_chart['arr_sc_chart'];
+            $leaddata['arr_pot_chart'] = $leaddatareturn_pot_chart['arr_pot_chart'];
+            $leaddata['arr_count_chart'] = $leaddatareturn_con_chart['arr_count_chart'];
 
+            
+           // echo"<pre>";print_r($leaddata);echo"</pre>"; die;
             
             $data = array();
             $i = 0;
@@ -98,108 +108,22 @@ class Lmsscorecard extends CI_Controller {
             //$this->load->view('leads/viewleads',$leaddata);   
         }
     }
-
-    function getzone()
-    {
-        $zones = $this->lmsscorecard_model->get_zones();
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $zones;
-    }
-
-
-
-    function getcollectors()
-    {
-        $collectors = $this->lmsscorecard_model->get_collectors();
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $collectors; 
-    }
-
-    function getcollectorsforfilter($zone)
-    {
-        $collectors = $this->lmsscorecard_model->get_collectors_forfilter($zone);
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $collectors; 
-    }
-
-    function getmarketcircles()
-    {
-        $marketcircles = $this->lmsscorecard_model->get_marketcircles();
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $marketcircles;
-    }
-    function getmarketcirclesforfilter($collector)
-    {
-        $marketcircles = $this->lmsscorecard_model->get_marketcircles_forfilter($collector);
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $marketcircles;
-    }
-    function getproductgroups()
-    {
-        $itemgroups = $this->lmsscorecard_model->get_productgroups();
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $itemgroups;
-    }
-
-    function getjchdrforweek($fin_year) 
-    {
-        $jc_headers = $this->lmsscorecard_model->get_jchdr_forweek($fin_year);
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $jc_headers;
-    }
-    
-    function getjcweek_hdr($fin_year,$jc_code) 
-    {
-        $jc_headers = $this->lmsscorecard_model->get_jcweek_hdr($fin_year,$jc_code);
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $jc_headers;
-    }
-
-    function reloadjcweek_hdr($fin_year,$jc_code)
-    {
-         $jc_headers = $this->lmsscorecard_model->reload_jcweek_hdr($fin_year,$jc_code);
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $jc_headers;
-
-    }
-
-    function getjcweekdates($yr,$jc,$weekid)
-    {
-        $this->lmsscorecard_model->fin_year = urldecode($yr);
-        $this->lmsscorecard_model->jc_code = urldecode($jc);
-        $this->lmsscorecard_model->jc_week = urldecode($weekid);
-        
-        $get_jcperiods = $this->lmsscorecard_model->get_jcweek_periods();
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $get_jcperiods;
-
-    }
-
-
-
-    function getfinanceyear() {
-        $jc_finyear = $this->lmsscorecard_model->get_financeyear();
-        header('Content-Type: application/x-json; charset=utf-8');
-        echo $jc_finyear;
-    }
-
-    function getlmswithfilters($fin_year=0,$jccode=0,$jcperiod_week=0,$zone=0,$collector=0,$market_circle=0,$itemgroup=0,$fromdate,$todate)
+     function getlmswithfilters($fin_year=0,$jccode=0,$jcperiod_week=0,$zone=0,$collector=0,$market_circle=0,$itemgroup=0,$fromdate,$todate)
     {
         //print_r($_POST);
        //echo"<pre>";print_r($this->uri->segments);echo"</pre>"; die;
         /*
-        Array
-            (
-                [1] => lmsscorecard
-                [2] => getlmswithfilters
-                [3] => 2016-2017
-                [4] => 53
-                [5] => 59
-                [6] => 2016-2017
-                [7] => All
-                [8] => All
-                [9] => All
-            )
+            [1] => lmsscorecard
+            [2] => getlmswithfilters
+            [3] => 2016-2017
+            [4] => 52
+            [5] => 53
+            [6] => All
+            [7] => All
+            [8] => All
+            [9] => All
+            [10] => 2016-04-01
+            [11] => 2016-05-21
 
         Array
         (
@@ -277,11 +201,16 @@ class Lmsscorecard extends CI_Controller {
             $leaddata['grpperm'] = $arr;
             
         $leaddatareturn =$this->lmsscorecard_model->get_leadlms_scorecard_withfilters($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate);
-        $leaddatareturn_chart =$this->lmsscorecard_model->get_leadlms_scorecard_chart($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate);
+        $leaddatareturn_chart =$this->lmsscorecard_model->get_leadlms_scorecard_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate);
+        $leaddatareturn_pot_chart =$this->lmsscorecard_model->get_leadlms_potential_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate);
+      $leaddatareturn_con_chart =$this->lmsscorecard_model->get_lms_converted_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate);
+      //
       // echo"<pre>";print_r($this->session->userdata);echo"</pre>";
         $leaddata['data'] = $leaddatareturn['arr'];
         $leaddata['data_sc'] = $leaddatareturn['arr_sc'];
         $leaddata['arr_sc_chart'] = $leaddatareturn_chart['arr_sc_chart'];
+        $leaddata['arr_pot_chart'] = $leaddatareturn_pot_chart['arr_pot_chart'];
+        $leaddata['arr_count_chart'] = $leaddatareturn_con_chart['arr_count_chart'];
 
            $this->load->view('lmsdashboard/scorecard', $leaddata); 
         }else {
@@ -294,6 +223,93 @@ class Lmsscorecard extends CI_Controller {
     // echo"<pre>";print_r($leaddata);echo"</pre>";         
 
     }
+
+    function getzone()
+    {
+        $zones = $this->lmsscorecard_model->get_zones();
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $zones;
+    }
+
+
+
+    function getcollectors()
+    {
+        $collectors = $this->lmsscorecard_model->get_collectors();
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $collectors; 
+    }
+
+    function getcollectorsforfilter($zone)
+    {
+        $collectors = $this->lmsscorecard_model->get_collectors_forfilter($zone);
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $collectors; 
+    }
+
+    function getmarketcircles()
+    {
+        $marketcircles = $this->lmsscorecard_model->get_marketcircles();
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $marketcircles;
+    }
+    function getmarketcirclesforfilter($collector)
+    {
+        $collector=html_entity_decode($collector);
+        $marketcircles = $this->lmsscorecard_model->get_marketcircles_forfilter($collector);
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $marketcircles;
+    }
+    function getproductgroups()
+    {
+        $itemgroups = $this->lmsscorecard_model->get_productgroups();
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $itemgroups;
+    }
+
+    function getjchdrforweek($fin_year) 
+    {
+        $jc_headers = $this->lmsscorecard_model->get_jchdr_forweek($fin_year);
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $jc_headers;
+    }
+    
+    function getjcweek_hdr($fin_year,$jc_code) 
+    {
+        $jc_headers = $this->lmsscorecard_model->get_jcweek_hdr($fin_year,$jc_code);
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $jc_headers;
+    }
+
+    function reloadjcweek_hdr($fin_year,$jc_code)
+    {
+         $jc_headers = $this->lmsscorecard_model->reload_jcweek_hdr($fin_year,$jc_code);
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $jc_headers;
+
+    }
+
+    function getjcweekdates($yr,$jc,$weekid)
+    {
+        $this->lmsscorecard_model->fin_year = urldecode($yr);
+        $this->lmsscorecard_model->jc_code = urldecode($jc);
+        $this->lmsscorecard_model->jc_week = urldecode($weekid);
+        
+        $get_jcperiods = $this->lmsscorecard_model->get_jcweek_periods();
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $get_jcperiods;
+
+    }
+
+
+
+    function getfinanceyear() {
+        $jc_finyear = $this->lmsscorecard_model->get_financeyear();
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo $jc_finyear;
+    }
+
+   
     
    
 

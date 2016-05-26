@@ -91,6 +91,9 @@
         var leadata =<?php echo $data; ?>;
         var lmsscorecard =<?php echo $data_sc; ?>;
         var lmsscorecard_chart =<?php echo $arr_sc_chart; ?>;
+        var lmspotential_chart =<?php echo $arr_pot_chart; ?>;
+        var lmsconverted_chart =<?php echo $arr_count_chart; ?>;
+        
         var baseurl = base_url;
 
 
@@ -1020,7 +1023,7 @@
 
               // alert("on collector change is "+item_collect_mc);
               var  collector_for_mc =  $("#collector").jqxDropDownList('getSelectedItem').value; 
-
+            
               var url = base_url + "lmsscorecard/getmarketcirclesforfilter/"+collector_for_mc;
                     mc_source =
                             {
@@ -1094,7 +1097,7 @@
          var setfilters = function (fin_year,jccode,jcperiod_week,zone,collector,market_circle,itemgroup,from_date,to_date) {
 
                         $.ajax({
-                        url: base_url + 'lmsscorecard/getlmswithfilters/' + fin_year + '/' + jccode + '/' + jcperiod_week +'/'+fin_year+'/'+zone+'/'+collector+'/'+market_circle+'/'+encodeURIComponent(itemgroup)+'/'+from_date+'/'+to_date,
+                        url: base_url + 'lmsscorecard/getlmswithfilters/' + fin_year + '/' + jccode + '/' + jcperiod_week +'/'+zone+'/'+collector+'/'+market_circle+'/'+encodeURIComponent(itemgroup)+'/'+from_date+'/'+to_date,
                         success: function () {
                             // i must remove the div
                             //  alert("success");
@@ -1116,10 +1119,12 @@
                 source: lmsscorecard_chart,
                  xAxis: {
                     dataField: "jc_code",
-                    valuesOnTicks: false
+                    valuesOnTicks: false,
+                    title: { text: "Time" }
                 },
                 valueAxis: {
-                    valuesOnTicks: true
+                    valuesOnTicks: true,
+                    title: { text: "Lms Score" }
                 },
                 seriesGroups: [         
                     {
@@ -1136,6 +1141,74 @@
 
             };
 // setup the chart
+  var settings_pot = {
+                title: "LMS & Last 3 JC Pontential",
+                description: "Pontential Added of leads for Last 3 JC Wise",
+                enableAnimations: true,
+                showLegend: true,
+                padding: { left: 5, top: 5, right: 5, bottom: 5 },
+                titlePadding: { left: 90, top: 0, right: 0, bottom: 10 },
+                source: lmspotential_chart,
+                 xAxis: {
+                    dataField: "jc_code",
+                    valuesOnTicks: false,
+                    title: { text: "Time" }
+                },
+                valueAxis: {
+                    valuesOnTicks: true,
+                    title: { text: "Lms Pontential" }
+                },
+                seriesGroups: [         
+                    {
+                        type: "line",
+                        series: [                   
+                            {
+                                dataField: "cum_pot"
+                            }
+                        ]
+                    }
+                ]
+               
+
+
+            };
+
+var settings_conv = {
+                title: "LMS & Last 3 JC converted ",
+                description: "Converted Leads  for Last 3 JC Wise",
+                enableAnimations: true,
+                showLegend: true,
+                padding: { left: 5, top: 5, right: 5, bottom: 5 },
+                titlePadding: { left: 90, top: 0, right: 0, bottom: 10 },
+                source: lmsconverted_chart,
+                 xAxis: {
+                    dataField: "jc_code",
+                    valuesOnTicks: false,
+                    title: { text: "Time" }
+                },
+                valueAxis: {
+                    valuesOnTicks: true,
+                    title: { text: "Convered Leads" }
+                },
+                seriesGroups: [         
+                    {
+                        type: "line",
+                        series: [                   
+                            {
+                                dataField: "cum_count"
+                            },
+
+                            {
+                             dataField: "leadcount"
+                            }
+                        ]
+                    }
+                ]
+               
+
+
+            };
+
 
         $('#chart_lmsscore_card').jqxChart(settings);
         $('#chart_lmsscore_card').jqxChart('addColorScheme', 'myScheme', ['#215BCF', '#CC3300', '#7AA300', '#5C00E6', '#996633', '#FF0066','#CCCC00','#520029']);
@@ -1144,6 +1217,26 @@
         $('#chart_lmsscore_card').jqxChart('colorScheme', 'myScheme');
         $('#chart_lmsscore_card').jqxChart({showLegend: true});
         $('#chart_lmsscore_card').jqxChart({rtl: false});
+
+        $('#chart_lms_pot').jqxChart(settings_pot);
+        $('#chart_lms_pot').jqxChart('addColorScheme', 'myScheme', ['#215BCF', '#CC3300', '#7AA300', '#5C00E6', '#996633', '#FF0066','#CCCC00','#520029']);
+
+        // apply the new scheme by setting the chart's colorScheme property
+        $('#chart_lms_pot').jqxChart('colorScheme', 'myScheme');
+        $('#chart_lms_pot').jqxChart({showLegend: true});
+        $('#chart_lms_pot').jqxChart({rtl: false});
+
+        $('#chart_lms_converted').jqxChart(settings_conv);
+        $('#chart_lms_converted').jqxChart('addColorScheme', 'myScheme', ['#215BCF', '#CC3300', '#7AA300', '#5C00E6', '#996633', '#FF0066','#CCCC00','#520029']);
+
+        // apply the new scheme by setting the chart's colorScheme property
+        $('#chart_lms_converted').jqxChart('colorScheme', 'myScheme');
+        $('#chart_lms_converted').jqxChart({showLegend: true});
+        $('#chart_lms_converted').jqxChart({rtl: false});
+
+
+
+
 
         
 
@@ -1268,19 +1361,49 @@
                         <div style="width:100%; float:left;">
                             <div style="width:100%;"></div>
                             <!-- grid for qnty start -->
-                         <table width="100%">
-                                                     
-                             <tr>
-                                <td>
-                                    <div id='chart_lmsscore_card' style="width:93%; height: 500px"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div id='eventText' style="width:100%; height: 30px"/> 
-                                </td>
-                            </tr>
-                        </table>
+                             <table width="100%">
+                                                         
+                                 <tr>
+                                    <td>
+                                        <div id='chart_lmsscore_card' style="width:93%; height: 500px"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id='eventText' style="width:100%; height: 30px"/> 
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- grid for qnty end -->
+                              <!-- grid for qnty start -->
+                             <table width="100%">
+                                                         
+                                 <tr>
+                                    <td>
+                                        <div id='chart_lms_pot' style="width:93%; height: 500px"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id='eventTextPot' style="width:100%; height: 30px"/> 
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- grid for qnty end -->
+                                <!-- grid for qnty start -->
+                             <table width="100%">
+                                                         
+                                 <tr>
+                                    <td>
+                                        <div id='chart_lms_converted' style="width:93%; height: 500px"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id='eventTextConv' style="width:100%; height: 30px"/> 
+                                    </td>
+                                </tr>
+                            </table>
                             <!-- grid for qnty end -->
                         </div>
 

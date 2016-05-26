@@ -1450,7 +1450,7 @@ class Leads_model extends CI_Model {
  
 //BUILD THE QUERY
           
-            $sql=' SELECT * FROM (
+            $sql='SELECT * FROM (
                     SELECT
                 leaddetails.leadid,
                 0::text as mc_sub_id,
@@ -1652,7 +1652,7 @@ class Leads_model extends CI_Model {
 
             if($jTableResult['leaddetails'][$i]["user_branch"]=="0")
             {
-                $row["branch"] = "NO COLLECTOR";
+                $row["branch"] = "NEW CUSTOMER";
             }
             else
             {
@@ -1759,7 +1759,8 @@ class Leads_model extends CI_Model {
              $sql .= " WHERE " . implode('AND ', $whereParts);
         }*/
         $sql .= ' AND leaddetails.converted=1 ORDER BY leadid DESC';      
-
+ 
+   //echo $sql; die;
         $result = $this->db->query($sql);
         $productdetails = $result->result_array();
         $all_leads_count = count($productdetails);
@@ -2188,17 +2189,10 @@ class Leads_model extends CI_Model {
              INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code
              INNER JOIN ar_collectors ON ar_collectors.name=customermasterhdr.collector  
 
-            INNER JOIN jc_calendar_dtl ON get_acc_yr (
-                leaddetails.createddate :: DATE
-            ) = jc_calendar_dtl.acc_yr
-            WHERE
-                leaddetails.leadid IN (
-                    SELECT
-                        leadid
-                    FROM
-                        leaddetails
-                    WHERE
-                        assignleadchk IN ('.$user_list_ids.')) AND (createddate :: DATE) BETWEEN jc_period_from AND jc_period_to  AND converted = 0 ) leaddetails'; 
+            INNER JOIN jc_calendar_dtl ON get_acc_yr (leaddetails.createddate :: DATE ) = jc_calendar_dtl.acc_yr
+            WHERE  mc_sub_id IN (SELECT mc_sub_id  FROM market_circle_hdr WHERE gc_executive_code in ('.$user_list_ids.')
+
+                        ) AND (createddate :: DATE) BETWEEN jc_period_from AND jc_period_to  AND converted = 0 ) leaddetails'; 
 
 
 
@@ -2211,10 +2205,10 @@ class Leads_model extends CI_Model {
         {
             $sql .= " AND mc_sub_id='".$selectmc_sub_id."'";
         }
-           $sql .= ' AND converted=0 ORDER BY leadid ASC'; 
+           $sql .= ' ORDER BY leadid ASC'; 
        
      
-     //  echo "sql is ".$sql."<br>"; die;
+       //echo "sql is ".$sql."<br>"; die;
         $result = $this->db->query($sql);
         $productdetails = $result->result_array();
         $all_leads_count = count($productdetails); 
@@ -2260,7 +2254,7 @@ class Leads_model extends CI_Model {
 
             if($jTableResult['leaddetails'][$i]["user_branch"]=="0")
             {
-                $row["branch"] = "NO COLLECTOR";
+                $row["branch"] = "NEW CUSTOMER";
             }
             else
             {

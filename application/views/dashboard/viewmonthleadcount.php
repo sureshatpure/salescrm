@@ -48,40 +48,40 @@
 
 </style>
 <script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/scripts/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxcore.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxbuttons.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxscrollbar.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxmenu.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.selection.js"></script> 
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.columnsresize.js"></script> 
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxdata.js"></script> 
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/globalization/globalize.js"></script> 
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/scripts/gettheme.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.edit.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxdatetimeinput.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.columnsreorder.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxcalendar.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxcore.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxbuttons.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxscrollbar.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxmenu.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.selection.js"></script> 
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.columnsresize.js"></script> 
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxdata.js"></script> 
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/globalization/globalize.js"></script> 
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/scripts/gettheme.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.edit.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxdatetimeinput.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.columnsreorder.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxcalendar.js"></script>
 
 
 <!-- sorting and filtering - start -->
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.sort.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.filter.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.selection.js"></script> 
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.aggregates.js"></script> 
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxpanel.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxcheckbox.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxlistbox.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxdropdownlist.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.sort.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.filter.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.selection.js"></script> 
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.aggregates.js"></script> 
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxpanel.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxcheckbox.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxlistbox.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxdropdownlist.js"></script>
 
 <!-- sorting and filtering - end -->
 <!-- paging - start -->
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxgrid.pager.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxgrid.pager.js"></script>
 <!-- paging - end -->
 
 <!-- charts - start -->
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxdata.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets/jqxchart.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxdata.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>public/jqwidgets412/jqxchart.js"></script>
 <!-- charts - end -->
 
 <!-- End of jqwidgets -->
@@ -473,7 +473,7 @@
 
             var toolbarfunc = function (toolbar) {
             var me = this;
-            var theme = getDemoTheme();
+            var theme ='energyblue';
 
 
             var container = $("<div style='width:100%; margin-left: 500px;' id='jqxWidget'>JC Wise lead counts</div>");
@@ -805,7 +805,7 @@
 
             var toolbarfunc_cum = function (toolbar) {
             var me = this;
-            var theme = getDemoTheme();
+            var theme = 'energyblue';
 
 
             var container = $("<div style='width:100%; margin-left: 100px;' id='jqxWidget'>JC Wise Cumulative lead counts</div>");
@@ -1079,7 +1079,7 @@
 
             var toolbarfunc_qnty = function (toolbar) {
             var me = this;
-            var theme = getDemoTheme();
+            var theme ='energyblue';
 
 
             var container = $("<div style='width:100%; margin-left: 325px;' id='jqxWidget'>JC Wise Quantity in Mts</div>");
@@ -1322,7 +1322,7 @@
             
             var toolbarfunc_cum_qnty = function (toolbar) {
             var me = this;
-            var theme = getDemoTheme();
+            var theme = 'energyblue';
 
 
             var container = $("<div style='width:100%; margin-left: 100px;' id='jqxWidget'>JC Wise Quantity in Mts(Cumulative)</div>");
@@ -1449,6 +1449,7 @@
 //             alert("source "+leadata.toSource());
 
         var sampleData = datact;
+
          /*var sampleData = [
          {leadstatusid:"1", leadstatus:"Prospect",zdays:"40", tdays:"21", sdays:"55", ndays:"10", twdays:"12", eidays:"23"}, 
          {leadstatusid:"2", leadstatus:"Met the customer",zdays:"13", tdays:"50", sdays:"90", ndays:"20", twdays:"26", eidays:"32"}, 
@@ -1473,7 +1474,7 @@
             padding: { left: 5, top: 5, right: 5, bottom: 5 },
             titlePadding: { left: 90, top: 0, right: 0, bottom: 10 },
             source: sampleData,
-            categoryAxis:
+           /* categoryAxis:
                     {
                         dataField: 'jcperiod',
                         showGridLines: false,
@@ -1490,21 +1491,20 @@
             
             showToolTips: true,
             enableAnimations: true,
-            columnSeriesOverlap: false,
+            columnSeriesOverlap: false,*/
+              xAxis: {
+                    dataField: "jcperiod",
+                    valuesOnTicks: false,
+                    title: { text: "Time" }
+                },
+                valueAxis: {
+                    valuesOnTicks: true,
+                    title: { text: "Lms Score" }
+                },
             seriesGroups:
                     [
                         {
-                            type: 'stackedcolumn',
-                            valueAxis:
-                                    {
-                                        minValue: 0,
-                                        unitInterval: 25,
-                                        description: 'No of Leads',
-                                        showGridLines: false
-                                    },
-                            mouseover: myEventHandler,
-                            mouseout: myEventHandler,
-                            click: myEventHandler,
+                             type: "line",
                       
                             series: [
                                 {dataField: 'prospect', displayText: 'Prospect'},
@@ -1521,6 +1521,62 @@
                         }   
                     ],
         };
+
+         var settings_qnty = {
+            title: "JC Wise lead counts",
+            description: "Along different lead status's",
+            padding: { left: 5, top: 5, right: 5, bottom: 5 },
+            titlePadding: { left: 90, top: 0, right: 0, bottom: 10 },
+            source: datact_qnty,
+           /* categoryAxis:
+                    {
+                        dataField: 'jcperiod',
+                        showGridLines: false,
+                        flip: false,
+                        unitInterval: 1,
+                        verticalTextAlignment: true,
+                        textRotationAngle: 0,
+                        textOffset: {x: 0, y: 0},
+                        horizontalTextAlignment: 'center',
+                        verticalTextAlignment:'top',
+                        horizontalDescriptionAlignment: 'center',
+                        verticalDescriptionAlignment: 'top'
+                    },
+            
+            showToolTips: true,
+            enableAnimations: true,
+            columnSeriesOverlap: false,*/
+              xAxis: {
+                    dataField: "leadstatus",
+                    valuesOnTicks: false,
+                    title: { text: "Time" }
+                },
+                valueAxis: {
+                    valuesOnTicks: true,
+                    title: { text: "Lms Score" }
+                },
+            seriesGroups:
+                    [
+                        {
+                             type: "line",
+                      
+                            series: [
+                                {dataField: 'jc1', displayText: 'jc1'},
+                                {dataField: 'jc2', displayText: 'jc2'},
+                                {dataField: 'jc3', displayText: 'jc3'},
+                                {dataField: 'jc4', displayText: 'jc4'},
+                                {dataField: 'jc5', displayText: 'jc5'},
+                                {dataField: 'jc6', displayText: 'jc6'},
+                                {dataField: 'jc7', displayText: 'jc7'},
+                                {dataField: 'jc8', displayText: 'jc8'}
+                              
+                                
+                            ]
+                        }   
+                    ],
+        };
+
+         
         function myEventHandler(e)
         {
            // alert(e.toSource());
@@ -1535,6 +1591,17 @@
         $('#chartContainer').jqxChart('colorScheme', 'myScheme');
         $('#chartContainer').jqxChart({showLegend: true});
         $('#chartContainer').jqxChart({rtl: false});
+
+        $('#chartContainer_qnty').jqxChart(settings_qnty);
+        $('#chartContainer_qnty').jqxChart('addColorScheme', 'myScheme', ['#215BCF', '#CC3300', '#7AA300', '#5C00E6', '#996633', '#FF0066','#CCCC00','#520029']);
+
+        // apply the new scheme by setting the chart's colorScheme property
+        $('#chartContainer_qnty').jqxChart('colorScheme', 'myScheme');
+        $('#chartContainer_qnty').jqxChart({showLegend: true});
+        $('#chartContainer_qnty').jqxChart({rtl: false});
+
+
+
 
 
 
@@ -1694,6 +1761,20 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                 <table width="100%">
+                                                     
+                             <tr>
+                                <td>
+                                    <div id='chartContainer_qnty' style="width:93%; height: 500px"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id='eventText_qnty' style="width:100%; height: 30px"/> 
+                                </td>
+                            </tr>
+                        </table>
 
                         </div>
                         
