@@ -262,7 +262,7 @@ class Lmsscorecard_model extends CI_Model
 				 		return $arr_arr_sc_chart;
 		}
 
-		function get_leadlms_potential_chart($jc_implement_date,$today_date)
+		/*function get_leadlms_potential_chart($jc_implement_date,$today_date)
 		{
 			$today_date= date("Y-m-d"); 
 			$account_yr = $this->get_current_accnt_yr($today_date); 
@@ -378,9 +378,80 @@ class Lmsscorecard_model extends CI_Model
 						$arr_pot_chart = json_encode($data_pot_chart);
 						$arr_arr_pot_chart['arr_pot_chart']=$arr_pot_chart;
 				 		return $arr_arr_pot_chart;
+		}*/
+
+		function get_leadlms_potential_chart($jc_implement_date,$today_date)
+		{
+			$today_date= date("Y-m-d"); 
+			$account_yr = $this->get_current_accnt_yr($today_date); 
+			$last_3_jcs=$this->get_last_three_jc($account_yr,$today_date);
+		//	print_r($last_3_jcs);
+			$last3jc = implode(",",$last_3_jcs);
+			
+
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			
+						if ($reportingto=='')
+						{
+							$sql="SELECT sum(potential) as tot_potential,jc_code,jc_week,fin_yr
+									FROM vw_lms_potential_added_new 	
+									
+									WHERE fin_yr='".$account_yr."'  AND createddate >= '".$jc_implement_date."' AND createddate <= '".$today_date."'  AND jc_code  in (".$last3jc.")  GROUP BY jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code";
+
+						}
+						else
+						{
+
+
+							$sql="SELECT sum(potential) as tot_potential,jc_code,jc_week,fin_yr
+									FROM vw_lms_potential_added_new 	
+									
+									WHERE fin_yr='".$account_yr."' AND assign_to_id in (".$get_assign_to_user_id.") AND createddate >= '".$jc_implement_date."' AND createddate <= '".$today_date."'  AND jc_code  in (".$last3jc.")  GROUP BY assign_to_id,jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code";
+						}	
+
+				//	echo $sql; die;
+						$jTableResult = array();
+						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$data_pot_chart = array();
+				
+						$i=0;
+						$cum_pot=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_pot_chart = array();
+					
+							$row_pot_chart["jc_code"] = "JC ".$jTableResult['leaddetails'][$i]['jc_code']."Week ".$row_pot_chart["jc_week"] = $jTableResult['leaddetails'][$i]['jc_week'];	
+	
+							$row_pot_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
+							$row_pot_chart["potential"] = $jTableResult['leaddetails'][$i]["tot_potential"];
+
+							//$cum_score=$jTableResult['leaddetails'][$i]["score"];
+
+							$cum_pot=$cum_pot + $jTableResult['leaddetails'][$i]["tot_potential"];
+							$row_pot_chart["cum_pot"] = round($cum_pot, 2);
+						
+							//$data[$i] = $row;
+							$data_pot_chart[$i] = $row_pot_chart;
+							$i++;
+						}
+
+					//	echo"<pre>";print_r($data_pot_chart); echo"</pre>";die;
+						$arr_pot_chart = json_encode($data_pot_chart);
+						$arr_arr_pot_chart['arr_pot_chart']=$arr_pot_chart;
+				 		return $arr_arr_pot_chart;
 		}
 
-		function get_leadlms_potential_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate)
+		
+		/*function get_leadlms_potential_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate)
 		{
 			$itemgroup =htmlspecialchars_decode($itemgroup); 
 			$reportingto=$this->session->userdata['reportingto'];
@@ -507,6 +578,101 @@ class Lmsscorecard_model extends CI_Model
 						$arr_pot_chart = json_encode($data_pot_chart);
 						$arr_arr_pot_chart['arr_pot_chart']=$arr_pot_chart;
 				 		return $arr_arr_pot_chart;
+		}*/
+
+		function get_leadlms_potential_chart_search($account_yr,$jc_to,$jc_week,$zone,$collector,$marketcircle,$itemgroup,$fromdate,$todate)
+		{
+			$itemgroup =htmlspecialchars_decode($itemgroup); 
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			$today_date= date("Y-m-d");  
+			$account_yr = $this->get_current_accnt_yr($today_date); 
+			$last_3_jcs=$this->get_last_three_jc($account_yr,$today_date);
+			$last3jc = implode(",",$last_3_jcs);
+
+			$whereParts = array();
+	        if( ($collector) && $collector!='All')     { $whereParts[] = "collector ='$collector' "; }
+	        if ( ($account_yr && $account_yr!='All') ) { $whereParts[] = "fin_yr = '$account_yr' "; }
+	        if ($reportingto!=''){
+	        if( ( $get_assign_to_user_id && $get_assign_to_user_id!='All') ) { $whereParts[] = "assign_to_id IN($get_assign_to_user_id) "; }
+	        }
+	       
+	        if( ( $zone && $zone!='All'))  { $whereParts[] = "mc_zone = '$zone' "; }
+
+	        if( ( $marketcircle && $marketcircle!='All'))  { $whereParts[] = "mc_sub_id = '$marketcircle' "; }
+	        if( ( $itemgroup && $itemgroup!='All'))  { $whereParts[] = "product_group = '$itemgroup' "; }
+	        if( ($fromdate && $fromdate!='All'))  { $whereParts[] = "createddate >= '$fromdate' "; }
+	       if( ( $todate && $todate!='All'))  { $whereParts[] = "createddate <= '$todate' "; }
+
+			$reportingto=$this->session->userdata['reportingto'];
+			$get_assign_to_user_id=$this->session->userdata['get_assign_to_user_id'];
+			
+						if ($reportingto=='')
+						{
+							
+
+							$sql="SELECT sum(potential) as tot_potential,jc_code,jc_week,fin_yr
+									FROM vw_lms_potential_added_new 	
+									
+							WHERE fin_yr='".$account_yr."'  AND createddate >= '".$fromdate."' AND createddate <= '".$todate."'  AND jc_code  in (".$last3jc.") ";
+
+						}
+						else
+						{
+							$sql="SELECT sum(potential) as tot_potential,jc_code,jc_week,fin_yr
+									FROM vw_lms_potential_added_new 	
+									
+							WHERE fin_yr='".$account_yr."' AND assign_to_id in (".$get_assign_to_user_id.")  AND createddate >= '".$fromdate."' AND createddate <= '".$todate."'  AND jc_code  in (".$last3jc.") ";
+
+                                
+						}	
+
+                                
+
+				if(count($whereParts)) {
+                         	$sql .= " AND ". implode(' AND ', $whereParts);
+        		}
+        	
+        		$sql .= '   GROUP BY jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code'; 
+        	
+        	 
+			//echo $sql; die;
+
+						$jTableResult = array();
+						
+				    
+						$result = $this->db->query($sql);
+						$jTableResult['leaddetails'] = $result->result_array();
+						$chart_leads_count = count($jTableResult['leaddetails']);
+						$this->session->set_userdata('chart_leads_count',$chart_leads_count);
+						$data = array();
+						$i=0;
+						$cum_pot=0;
+						while($i < count($jTableResult['leaddetails']))
+						{    
+								
+							
+							$row_pot_chart = array();
+					
+							$row_pot_chart["jc_code"] = "JC ".$jTableResult['leaddetails'][$i]['jc_code']."Week ".$row_pot_chart["jc_week"] = $jTableResult['leaddetails'][$i]['jc_week'];	
+	
+							$row_pot_chart["jc_week"] = $jTableResult['leaddetails'][$i]["jc_week"];
+							$row_pot_chart["potential"] = $jTableResult['leaddetails'][$i]["tot_potential"];
+
+							//$cum_score=$jTableResult['leaddetails'][$i]["score"];
+
+							$cum_pot=$cum_pot + $jTableResult['leaddetails'][$i]["tot_potential"];
+							$row_pot_chart["cum_pot"] = round($cum_pot, 2);
+						
+							//$data[$i] = $row;
+							$data_pot_chart[$i] = $row_pot_chart;
+							$i++;
+						}
+
+					//	echo"<pre>";print_r($data_pot_chart); echo"</pre>";die;
+						$arr_pot_chart = json_encode(@$data_pot_chart);
+						$arr_arr_pot_chart['arr_pot_chart']=$arr_pot_chart;
+				 		return $arr_arr_pot_chart;
 		}
 
 		
@@ -532,10 +698,10 @@ class Lmsscorecard_model extends CI_Model
 						}
 						else
 						{
-							$sql="SELECT count(leadid) as leadcount,assign_to_id,jc_code,jc_week,fin_yr
+							$sql="SELECT count(leadid) as leadcount,jc_code,jc_week,fin_yr
 									FROM  vw_lms_converted_leads 	
 									
-									WHERE fin_yr='".$account_yr."' AND assign_to_id in (".$get_assign_to_user_id.") AND modifieddate >= '".$jc_implement_date."' AND modifieddate <= '".$today_date."'  AND jc_code  in (".$last3jc.") GROUP BY assign_to_id,jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code ";
+									WHERE fin_yr='".$account_yr."' AND assign_to_id in (".$get_assign_to_user_id.") AND modifieddate >= '".$jc_implement_date."' AND modifieddate <= '".$today_date."'  AND jc_code  in (".$last3jc.") GROUP BY jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code ";
 						}	
 
 					//echo $sql; die;
@@ -573,7 +739,7 @@ class Lmsscorecard_model extends CI_Model
 						}
 
 					//	echo"<pre>";print_r($data_count_chart); echo"</pre>";die;
-						$arr_count_chart = json_encode($data_count_chart);
+						$arr_count_chart = json_encode(@$data_count_chart);
 						$arr_arr_count_chart['arr_count_chart']=$arr_count_chart;
 						//echo"<pre>";print_r($arr_arr_count_chart); echo"</pre>";die;
 				 		return $arr_arr_count_chart;
@@ -616,7 +782,7 @@ class Lmsscorecard_model extends CI_Model
 						}
 						else
 						{
-							$sql="SELECT count(leadid) as leadcount,assign_to_id,jc_code,jc_week,fin_yr
+							$sql="SELECT count(leadid) as leadcount,jc_code,jc_week,fin_yr
 									FROM  vw_lms_converted_leads 	
 									
 									WHERE fin_yr='".$account_yr."' AND assign_to_id in (".$get_assign_to_user_id.") AND modifieddate >= '".$fromdate."' AND modifieddate <= '".$todate."'  AND jc_code  in (".$last3jc.") ";
@@ -626,13 +792,9 @@ class Lmsscorecard_model extends CI_Model
 						  if(count($whereParts)) {
                          	$sql .= " AND ". implode(' AND ', $whereParts);
         		}
-        		if ($reportingto==''){
+        		
         		$sql .= '   GROUP BY jc_code,jc_week,fin_yr ORDER BY fin_yr,jc_code'; 
-        	    }
-        	    else
-        	    {
-        	    	$sql .= '   GROUP BY jc_code,jc_week,fin_yr,assign_to_id ORDER BY fin_yr,jc_code'; 
-        	    }
+        	
 			//echo $sql; die;
 
 						$jTableResult = array();
@@ -669,7 +831,7 @@ class Lmsscorecard_model extends CI_Model
 						}
 
 					//	echo"<pre>";print_r($data_pot_chart); echo"</pre>";die;
-						$arr_count_chart = json_encode($data_count_chart);
+						$arr_count_chart = json_encode(@$data_count_chart);
 						$arr_arr_count_chart['arr_count_chart']=$arr_count_chart;
 						
 				 		return $arr_arr_count_chart;

@@ -907,7 +907,7 @@
                  var value_finyear = item_finyear.value;
 
                  var jcperiod_in_finyear =  $("#finance_year").jqxDropDownList('getSelectedItem'); 
-                  alert(" in finance_year on change jcperiod_in_finyear is "+jcperiod_in_finyear.value);
+                 // alert(" in finance_year on change jcperiod_in_finyear is "+jcperiod_in_finyear.value);
 
               var url_finyr = base_url + "lmsscorecard/getjchdrforweek/"+value_finyear;
             jc_source_from =
@@ -1119,20 +1119,22 @@
                 source: lmsscorecard_chart,
                  xAxis: {
                     dataField: "jc_code",
-                    valuesOnTicks: false,
+                    valuesOnTicks: true,
                     title: { text: "Time" }
                 },
                 valueAxis: {
                     valuesOnTicks: true,
+                    labels:true,
+                    displayValueAxis: true,
                     title: { text: "Lms Score" }
                 },
                 seriesGroups: [         
                     {
                         type: "line",
+                        labels:true,
                         series: [                   
                             {
-                                dataField: "cum_score"
-                            }
+                                dataField: "cum_score", displayText: 'Cummulative LMS Score',tickMarks:true }
                         ]
                     }
                 ]
@@ -1161,10 +1163,10 @@
                 seriesGroups: [         
                     {
                         type: "line",
+                        labels:false,
                         series: [                   
-                            {
-                                dataField: "cum_pot"
-                            }
+                            { dataField: "potential",displayText: 'Pontential' },
+                            { dataField: "cum_pot",  displayText: 'Cummulative Pontential'}
                         ]
                     }
                 ]
@@ -1193,14 +1195,11 @@ var settings_conv = {
                 seriesGroups: [         
                     {
                         type: "line",
+                        labels:true,
                         series: [                   
-                            {
-                                dataField: "cum_count"
-                            },
+                            { dataField: "cum_count",displayText: 'No of leads' },
 
-                            {
-                             dataField: "leadcount"
-                            }
+                            { dataField: "leadcount", displayText: 'Cummulative no of leads'}
                         ]
                     }
                 ]
@@ -1339,6 +1338,55 @@ var settings_conv = {
                     </div>
                       <div id="wrapper">
                         <div id="header"><h1></h1></div>
+                        <div style="width:100%; float:left;">
+                            <div style="width:100%;"></div>
+                            <!-- grid for qnty start -->
+                             <table width="100%">
+                                                         
+                                 <tr>
+                                    <td>
+                                        <div id='chart_lmsscore_card' style="width: 100%; height: 400px; float: left;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id='eventText' style="width: 100%; height: 50px; float: left;">
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- grid for qnty end -->
+                              <!-- grid for qnty start -->
+                             <table width="100%">
+                                                         
+                                 <tr>
+                                    <td>
+                                        <div id='chart_lms_pot' style="width: 100%; height: 400px; float: left;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id='eventTextPot' style="width: 100%; height: 50px; float: left;">
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- grid for qnty end -->
+                                <!-- grid for qnty start -->
+                             <table width="100%">
+                                                         
+                                 <tr>
+                                    <td>
+                                        <div id='chart_lms_converted' style="width: 100%; height: 400px; float: left;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id='eventTextConv' style="width: 100%; height: 50px; float: left;">
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- grid for qnty end -->
+                        </div>
+
                         <div id="sub-main">
                             <div id="sub-left">
                                 <div id='jqxWidget'>
@@ -1357,54 +1405,6 @@ var settings_conv = {
                                     <div id="lmsscore_card" ></div>
                                 </div>
                             </div>
-                        </div>
-                        <div style="width:100%; float:left;">
-                            <div style="width:100%;"></div>
-                            <!-- grid for qnty start -->
-                             <table width="100%">
-                                                         
-                                 <tr>
-                                    <td>
-                                        <div id='chart_lmsscore_card' style="width:93%; height: 500px"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div id='eventText' style="width:100%; height: 30px"/> 
-                                    </td>
-                                </tr>
-                            </table>
-                            <!-- grid for qnty end -->
-                              <!-- grid for qnty start -->
-                             <table width="100%">
-                                                         
-                                 <tr>
-                                    <td>
-                                        <div id='chart_lms_pot' style="width:93%; height: 500px"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div id='eventTextPot' style="width:100%; height: 30px"/> 
-                                    </td>
-                                </tr>
-                            </table>
-                            <!-- grid for qnty end -->
-                                <!-- grid for qnty start -->
-                             <table width="100%">
-                                                         
-                                 <tr>
-                                    <td>
-                                        <div id='chart_lms_converted' style="width:93%; height: 500px"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div id='eventTextConv' style="width:100%; height: 30px"/> 
-                                    </td>
-                                </tr>
-                            </table>
-                            <!-- grid for qnty end -->
                         </div>
 
 
