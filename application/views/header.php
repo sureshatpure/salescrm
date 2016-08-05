@@ -25,7 +25,7 @@
         <script type="text/javascript" src="<?= base_url() ?>public/jquery/jqueryui.js"></script>
         <script src="<?= base_url() ?>public/js/jquery.validate.min.js"></script>
         <script src="<?= base_url() ?>public/js/additional-methods.js"></script>
-        <script src="<?= base_url() ?>public/js/validation_rules.js"></script> 
+<!--         <script src="<?=base_url()?>public/js/validation_rules.js"></script>  -->
 
 
 

@@ -854,6 +854,21 @@
             }
 
 
+            var updateJcWeekdatefy = function (jcweek) {
+                fin_year =  $("#finance_year").jqxDropDownList('val');
+                jccode =  $("#jcperiod_from").jqxDropDownList('val');  
+              //  jccode =  $("#jcperiod_from").jqxDropDownList('val');  
+               // alert("jccode line_id "+jccode);              
+              //  alert("jc_week line_id "+jcweek);
+                $.ajax({
+                    url: baseurl + "lmsscorecard/getjcweekdates/" + fin_year+"/"+jccode+"/"+jcweek,
+                    dataType: "json",
+                    success: function (jc_week_dates) {
+                       SetJcWeekdate(jc_week_dates);
+                    }
+                });
+            }
+
         
             // Create a jqxDropDownList
            
@@ -963,7 +978,7 @@
             });
 
              var updateJcweekDatefy = function (jccode) {
-               alert('updateJcweekDatefy'+jccode);
+              // alert('updateJcweekDatefy'+jccode);
             fin_year =  $("#finance_year").jqxDropDownList('val');
             jccode =  $("#jcperiod_from").jqxDropDownList('val');
             jcweek =  $("#jcperiod_week").jqxDropDownList('val');

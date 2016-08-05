@@ -908,7 +908,7 @@ class Lmsscorecard_model extends CI_Model
                          	$sql .= "". implode('AND ', $whereParts);
         		}
         		$sql .= ' GROUP BY 	collector ORDER BY collector'; 
-			//echo $sql; 
+			//echo $sql; die
 
 						$jTableResult = array();
 						
@@ -1143,6 +1143,7 @@ class Lmsscorecard_model extends CI_Model
 											$sql="SELECT a.name as collectors
 													FROM  ar_collectors a,market_circle_hdr m
 													WHERE a.collector_id = m.collector_id 
+													AND a.name NOT IN ('BANGALORE - LU AUTO','BANGALORE - LU IND','BANGALORE - TC','BANGALORE-TRADERS','BELLARY - LUBE IND','CHENNAI - LC','CHENNAI-RPO','CHENNAI - SPLC','CHENNAI - TC','COIMBATORE - TC','DELHI-RPO','DELHI-TC','KOLKATA-TC','MUMBAI - GBL','MUMBAI - MKT')
 													GROUP BY collectors ORDER BY collectors";
 						} else
 						{
@@ -1154,10 +1155,11 @@ class Lmsscorecard_model extends CI_Model
 										$sql="SELECT a.name as collectors
 												FROM  ar_collectors a,market_circle_hdr m
 												WHERE a.collector_id = m.collector_id 
+												AND a.name NOT IN ('BANGALORE - LU AUTO','BANGALORE - LU IND','BANGALORE - TC','BANGALORE-TRADERS','BELLARY - LUBE IND','CHENNAI - LC','CHENNAI-RPO','CHENNAI - SPLC','CHENNAI - TC','COIMBATORE - TC','DELHI-RPO','DELHI-TC','KOLKATA-TC','MUMBAI - GBL','MUMBAI - MKT')
 												AND  gc_executive_code in (".$get_assign_to_user_id.") 	GROUP BY collectors ORDER BY collectors";
 				
 						}
-						//echo $sql; die;
+					//	echo $sql; die;
 							$result = $this->db->query($sql);
 							$options = $result->result_array();
 							$all_collectors =  array('collectors' =>'All');
@@ -1175,7 +1177,7 @@ class Lmsscorecard_model extends CI_Model
 						{
 											$sql="SELECT a.name as collectors
 													FROM  ar_collectors a,market_circle_hdr m
-													WHERE a.collector_id = m.collector_id 
+													WHERE a.collector_id = m.collector_id AND a.name NOT IN ('BANGALORE - LU AUTO','BANGALORE - LU IND','BANGALORE - TC','BANGALORE-TRADERS','BELLARY - LUBE IND','CHENNAI - LC','CHENNAI-RPO','CHENNAI - SPLC','CHENNAI - TC','COIMBATORE - TC','DELHI-RPO','DELHI-TC','KOLKATA-TC','MUMBAI - GBL','MUMBAI - MKT')
 													AND m.mc_zone='".$zone."'
 													GROUP BY collectors ORDER BY collectors";
 						} else
@@ -1187,7 +1189,7 @@ class Lmsscorecard_model extends CI_Model
 
 										$sql="SELECT a.name as collectors
 												FROM  ar_collectors a,market_circle_hdr m
-												WHERE a.collector_id = m.collector_id 
+												WHERE a.collector_id = m.collector_id AND a.name NOT IN ('BANGALORE - LU AUTO','BANGALORE - LU IND','BANGALORE - TC','BANGALORE-TRADERS','BELLARY - LUBE IND','CHENNAI - LC','CHENNAI-RPO','CHENNAI - SPLC','CHENNAI - TC','COIMBATORE - TC','DELHI-RPO','DELHI-TC','KOLKATA-TC','MUMBAI - GBL','MUMBAI - MKT')
 												AND m.mc_zone='".$zone."'
 												AND  gc_executive_code in (".$get_assign_to_user_id.") 	GROUP BY collectors ORDER BY collectors";
 				

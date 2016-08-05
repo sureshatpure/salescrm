@@ -71,7 +71,7 @@ class Company extends CI_Controller {
 
 
             //$cust_syn_id = "TEMP".$company_nextid;
-            $cust_ref_id = "TEMP/" . $temp_custid;
+            $cust_ref_id = "TEMP/" . $temp_custid_nextid;
 
             $user_id = $this->input->post('hdn_userid');
             $companydetails = array(

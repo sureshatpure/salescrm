@@ -745,7 +745,7 @@ class Leads_model extends CI_Model {
         $collector = urldecode($collector);
         
         $sql = "select * from  fn_lead_customer_group_mc('".$collector."','".$marketcircle."') ORDER BY tempcustname";
-//        echo $sql; die;
+      //  echo $sql; die;
         $result = $this->db->query($sql);
         //  print_r($result->result_array());
         $options = $result->result_array();

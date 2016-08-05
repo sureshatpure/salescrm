@@ -341,8 +341,8 @@ class dailyactivity extends CI_Controller {
                             'last_modified' => date('Y-m-d:H:i:s'),
                             'created_user' => $login_user_id,
                             /*'email_id' => trim($customer_address[0]['contact_mailid']),*/
-                            'email_id' => trim($customer_email_id),
-                            'firstname' => trim($customer_address[0]['contact_person']),
+                            'email_id' => trim(@$customer_email_id),
+                            'firstname' => trim(@$customer_address[0]['contact_person']),
                             'industry_id' => 63,
                             'uploaded_date' => $hrd_currentdate,
                             'crd_id' => 8,
@@ -549,7 +549,7 @@ class dailyactivity extends CI_Controller {
                          /* End for inserting into leadproducts*/
 
                          /* Start for inserting into lead_prod_potential_types*/
-                          $product_sale_type = $this->Leads_model->get_leadproduct_saletype();
+                           $product_sale_type = $this->Leads_model->get_leadproduct_saletype();
                             $lpid_seq = $this->Leads_model->GetNextlpid($lead_id);
                             $lpid_seq = $lpid_seq;
  
@@ -1349,8 +1349,8 @@ class dailyactivity extends CI_Controller {
                             'last_modified' => date('Y-m-d:H:i:s'),
                             'created_user' => $login_user_id,
                             /*'email_id' => trim($customer_address[0]['contact_mailid']),*/
-                            'email_id' => trim($customer_email_id),
-                            'firstname' => trim($customer_address[0]['contact_person']),
+                            'email_id' => trim(@$customer_email_id),
+                            'firstname' => trim(@$customer_address[0]['contact_person']),
                             'industry_id' => 63,
                             'uploaded_date' => $hrd_currentdate,
                             'crd_id' => 8,
@@ -1386,11 +1386,11 @@ class dailyactivity extends CI_Controller {
                          /* End for inserting into leadproducts*/
 
                          /* Start for inserting into lead_prod_potential_types update form*/
-
+                            $k = 0;
                             $product_sale_type = $this->Leads_model->get_leadproduct_saletype();
                             $lpid_seq = $this->Leads_model->GetNextlpid($lead_id);
                             $lpid_seq = $lpid_seq;
- 
+            
                             for ($k = 0; $k < count($product_sale_type); $k++) 
                             {
                                 $lead_prod_poten_type[$k]['leadid'] = $lead_id;

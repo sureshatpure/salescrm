@@ -624,7 +624,7 @@ class dailyactivity_model extends CI_Model
 					INNER JOIN customermasterhdr ON leaddetails.company = customermasterhdr.id 
 					INNER JOIN view_tempitemmaster_grp ON view_tempitemmaster_grp.id=leadproducts.productid 
 					WHERE replace(trim(customermasterhdr.customergroup),'''','')='".$custgrp."' AND trim(view_tempitemmaster_grp.itemgroup)='".$prodgrp."' AND leaddetails.lead_close_status=0 and converted=0";
-				
+				//echo $sql;
 				$result = $this->db->query($sql);
 			//	$arr =  json_encode($result->result_array());
 				$arr = "{\"leadid\":" .json_encode($result->result_array()). "}";
@@ -1607,14 +1607,11 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 
 			function get_customerhdr_id($custgrp)
 			{
-				$this->db->select('id');
-		        $this->db->from('customermasterhdr');
-		        $this->db->where('customergroup', html_entity_decode($custgrp));
-		        $result = $this->db->get();
-		        $cust_grpid = $result->result_array();
-		        //print_r($ld_status); die;
-		        //return @$cust_grpid[0]['id'];
-		        $arr =  json_encode($cust_grpid[0]['id']);
+								
+				$sql ="SELECT min(id) as id FROM customermasterhdr WHERE replace(customergroup,'''', '' ) = '".$custgrp."'";
+                $result = $this->db->query($sql);
+                $cust_grpid = $result->result_array();
+                $arr =  json_encode($cust_grpid[0]['id']);
 				$arr =	 '{ "rows" :'.$arr.' }';
 				return $arr;
 			}

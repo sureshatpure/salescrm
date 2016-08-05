@@ -467,6 +467,7 @@
                                                         //validateProductName.html(response.msg);
                                                              //alert("This product group has been already billed for this customer")
                                                             g_create_lead_add=0;
+                                                            
                                                              validateProductName_add.html(response.msg);
                                                             // editor.jqxCheckBox({ checked: false, hasThreeStates:false});
                                                             $("#jqxgrid_add").jqxGrid('setcellvalue', row, "create_lead",0);
@@ -931,7 +932,7 @@
                                   switch(data.result_type){
                                      case 'Value':
                                        editor.jqxDropDownList(
-                                        {source: ["E-mail", "Phone", "Visit"],autoDropDownHeight: true
+                                        {source: ["Visit", "Phone", "E-mail"],autoDropDownHeight: true,selectedIndex:0
                                         });
                                      break;
                                      case 'Select':
@@ -1595,7 +1596,7 @@
                                   switch(data.result_type){
                                      case 'Value':
                                        editor.jqxDropDownList(
-                                        {source: ["E-mail", "Phone", "Visit"],autoDropDownHeight: true});
+                                        {source: ["Visit", "Phone", "E-mail"],autoDropDownHeight: true,selectedIndex:0});
                                      break;
                                      case 'Select':
 
@@ -2343,7 +2344,7 @@
 
                                                                      
 
-                                                                {text: 'Mode of Contact', datafield: 'modeofcontact', width: 100, cellsalign: 'left', cellbeginedit:Resultsupdate.initResultsEditorcon, createeditor: Resultsupdate.resultsEditorcon, cellsrenderer: Resultsupdate.renderUnitsst
+                                                                {text: 'Mode of Contact', datafield: 'modeofcontact', width: 100, cellsalign: 'left',selectedIndex: 1, cellbeginedit:Resultsupdate.initResultsEditorcon, createeditor: Resultsupdate.resultsEditorcon, cellsrenderer: Resultsupdate.renderUnitsst
                                                                 },
                                                                 {text: 'Time Spent (Hrs)', datafield: 'hour_s', width: 75, cellsalign: 'left', columntype: 'dropdownlist',
                                                                     createeditor: function (row, cellvalue, editor) {
@@ -2482,7 +2483,7 @@
                                         {text: 'UID', datafield: 'uid', width: 150, cellsalign: 'left', hidden: true},
                                         {text: 'LineId', datafield: 'line_id', width: 150, cellsalign: 'left', hidden: true},
                                         {text: 'Customer Group', datafield: 'custgroup', width: 100, editable: false},
-                                        {text: 'Cust Id', datafield: 'id', width: 100, editable: false,hidden: true},
+                                        {text: 'Cust Id', datafield: 'id', width: 100, editable: false,hidden: false},
                                         {text: 'Product Group', datafield: 'itemgroup', width: 150, cellsalign: 'left', editable: false},   
                                         {text: 'Prod Id', datafield: 'itemid', width: 100, editable: false,hidden: true},
                                         { text: 'Show products', datafield: 'Edit', columntype: 'button', cellsrenderer: function () {
@@ -3260,7 +3261,7 @@
                             var todayDate = new Date();
 
                             var max_date=   todayDate.toISOString().substring(0, 10); //todayDate 2015-08-18
-                            var min_date =  todayDate.setDate(todayDate.getDate() - 8);
+                            var min_date =  todayDate.setDate(todayDate.getDate() - 60);
                             //alert("max date"+max_date);
                            // alert("min date before "+min_date);
                             min_date =convert(min_date);
@@ -3301,9 +3302,11 @@
                             var cg_id = $('#jqxgrid_add').jqxGrid('getcellvalue', max_len, "id");
                             var cp_hour = $('#jqxgrid_add').jqxGrid('getcellvalue', max_len, "hour");
                             var cp_minute = $('#jqxgrid_add').jqxGrid('getcellvalue', max_len, "minute");
-                          /*  alert("cust hidden id"+cg_id);
+                            var cp_Mode_Of_Contact = $('#jqxgrid_add').jqxGrid('getcellvalue', max_len, "Mode_Of_Contact");
+                         /*   alert("cust hidden id"+cg_id);
                             alert("cp_hour"+cp_hour);
-                            alert("cp_minute"+cp_minute);*/
+                            alert("cp_minute"+cp_minute);
+                            alert("cp_Mode_Of_Contact"+cp_Mode_Of_Contact);*/
                              var datarow = {};
                             datarow["id"] = cg_id;
                             datarow["custgroup"] = cg_value;
@@ -3312,8 +3315,10 @@
                             datarow["result_type"] = 'Value';
                             datarow['statusid']='No Status';
                             datarow['leadsubstatusid']='No SubStatus';
+                            datarow['Mode_Of_Contact']=cp_Mode_Of_Contact;
                             datarow['hour']=cp_hour;
                             datarow['minute']=cp_minute;
+                 
                             
                             
                             var commit = $('#jqxgrid_add').jqxGrid('addrow', null, datarow);
@@ -3404,6 +3409,7 @@
                             var valid_lms_pot=0;
                             var entrydate = $('#addcurrentdate').val();
                             entrydate = convertdmy_ymd(entrydate);
+                            
                             for (var k = 0; k < rowscount; k++)
                             {
                                 var selected_collector = $("#collector").jqxDropDownList('getSelectedItem'); 
@@ -3422,6 +3428,7 @@
                                 var noofleads = $('#jqxgrid_add').jqxGrid('getcellvalue', k, "noofleads");
                                 var select_leadid = $('#jqxgrid_add').jqxGrid('getcellvalue', k, "leadid");
                                 var prod_grp = $('#jqxgrid_add').jqxGrid('getcellvalue', k, "itemgroup");
+                                var create_lead_add = $('#jqxgrid_add').jqxGrid('getcellvalue', k, "create_lead");
                             /*    alert("typeof prodgroup  "+typeof(prod_grp));
                                 alert(" prodgroup  "+prod_grp);
                                 alert("noofleads "+noofleads);
@@ -3613,11 +3620,15 @@
                                 {
                                     valid_moc = 1;
                                 }
-
+                                /*alert("loop index "+k);*/
                                 var lms_potential = $('#jqxgrid_add').jqxGrid('getcellvalue', k, "actualpotenqty");
-                    /*            alert("lms_potential "+lms_potential);
+                               /* alert("lms_potential "+lms_potential);
                                 alert("lms_potential type  "+typeof(lms_potential));
-                                alert("lead_status "+lead_status);*/
+                                alert("lead_status "+lead_status);
+                                alert("create_lead_add "+create_lead_add);*/
+
+                                
+                                
                                 if(lead_status=='Prospect' && (lms_potential<=0 || typeof(lms_potential)=='undefined') )
                                  {
                                    
@@ -3632,13 +3643,21 @@
                                   valid_lms_pot = 1; 
                                   
                                 }
-                                else
+                                
+                                else if (create_lead_add==1)
                                 {
                                    // alert("in lead_status  not matched");
-                                    $("#jqxgrid_add").jqxGrid('showvalidationpopup', k, "actualpotenqty", "Potential value cannot be zero for this status");
-                                    valid_lms_pot = 0;
+                                   // $("#jqxgrid_add").jqxGrid('showvalidationpopup', k, "actualpotenqty", "Potential value cannot be zero for this status");
+                                    valid_lms_pot = 1;
                                     break;
                                 }
+                                if (create_lead_add==0)
+                                {
+                                     
+                                     valid_lms_pot = 1; 
+                                }
+                               
+
 
 
                             }
@@ -3841,6 +3860,7 @@
                             var cg_id = $('#jqxgrid_n').jqxGrid('getcellvalue', max_len, "custid");
                             var cp_hour = $('#jqxgrid_n').jqxGrid('getcellvalue', max_len, "hour_s");
                             var cp_minute = $('#jqxgrid_n').jqxGrid('getcellvalue', max_len, "minit");
+                            var cp_modeofcontact = $('#jqxgrid_n').jqxGrid('getcellvalue', max_len, "modeofcontact");
                            // alert("cust hidden id"+cg_id);
                            // alert("cp_hour"+cp_hour);
                            // alert("cp_minute"+cp_minute);
@@ -3875,6 +3895,8 @@
                             datarow_update['leadsubstatusid']='No SubStatus';*/
                             datarow_update['hour_s']=cp_hour;
                             datarow_update['minit']=cp_minute;
+                            datarow_update['modeofcontact']=cp_modeofcontact;
+                            
                             var commit = $("#jqxgrid_n").jqxGrid('addrow', null, datarow_update);
                             //var commit = $("#jqxgrid_n").jqxGrid('addrow', null, {});
                         });
@@ -4108,8 +4130,8 @@
                                 else
                                 {
                                    // alert("in update lead_status  not matched");
-                                    $("#jqxgrid_n").jqxGrid('showvalidationpopup', k, "actualpotenqty", "Potential value cannot be zero for this status");
-                                    valid_lms_pot = 0;
+                                   // $("#jqxgrid_n").jqxGrid('showvalidationpopup', k, "actualpotenqty", "Potential value cannot be zero for this status");
+                                    valid_lms_pot = 1;
                                     break; 
                                 }
 

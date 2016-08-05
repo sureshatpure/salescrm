@@ -182,7 +182,7 @@ $message_content="Welcome to email templating";
 					$mail->AddAddress( $ed2, "" );
 					$mail->AddAddress( $cmd, "" );
 					$mail->AddAddress( $gm, "" );
-					$mail->AddAddress( $analyst, "" );
+					//$mail->AddAddress( $analyst, "" );
 					$mail->addBCC('webdevelopment@pure-chemical.com');
 					$mail->addCC('sureshatpure@gmail.com');
 					//$mail->addCC($bm_emailid);

@@ -99,7 +99,7 @@ $message_content="Welcome to email templating";
 					 
 					// Setup PHPMailer
 					$mail = new PHPMailer();
-					$mail->IsSMTP();
+					//$mail->IsSMTP();
 					// This is the SMTP mail server
 					$mail->Host = 'smtp.gmail.com';
 					// Remove these next 3 lines if you dont need SMTP authentication

@@ -74,10 +74,10 @@ class Dashboard extends CI_Controller {
           /*  $leaddata['data'] = $leaddatareturn['arr'];
             
 */
-           $leaddata['datact'] =$leaddatareturn1['arrct'];
-                
-        $leaddata['test'] =$leaddatareturn['test'];
-        $leaddata['status_name'] =$leaddatareturn['status_name'];
+            $leaddata['datact'] =$leaddatareturn1['arrct'];
+                    
+            $leaddata['test'] =$leaddatareturn['test'];
+            $leaddata['status_name'] =$leaddatareturn['status_name'];
 
 
             $leaddatareturn_qnty =$this->dashboard_model->get_month_wise_lead_qnty($branch,$jc_from,$jc_to,$account_yr);

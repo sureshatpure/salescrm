@@ -634,7 +634,7 @@
 <!-- Added in the end since it should be after less file loaded -->
 <script type="text/javascript" src="<?= base_url() ?>public/vdfiles/less.js"></script>
 
-<?php $this->load->view('include_idletimeout.php'); ?>
+<!-- <?php //$this->load->view('include_idletimeout.php'); ?> -->
 
 
 

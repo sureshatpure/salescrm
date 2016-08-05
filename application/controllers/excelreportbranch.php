@@ -637,14 +637,16 @@ class Excelreportbranch extends CI_Controller {
 
 
     function visitreportwithfilter($itemgroup,$customergrp,$branch,$from_date, $to_date) {
+        // print_r($this->session->userdata); 
+         //print_r($_POST); die;
                 $users = $_POST['userArray'];
                 @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
                 @$reportingto= $this->session->userdata['reportingto'];
                 $itemgroup = urldecode($itemgroup);
                 $customergrp =urldecode($customergrp);
-                $branch = strtoupper($branch);
+                $branch = strtoupper(urldecode($branch));
                 $whereParts = array();
-/*                echo"branch ".$branch."<br>";
+               /* echo"branch ".$branch."<br>";
                 echo"itemgroup ".$itemgroup."<br>";
                 echo"customergrp ".$customergrp."<br>";
                 echo"users ".$users."<br>";*/
@@ -653,7 +655,8 @@ class Excelreportbranch extends CI_Controller {
                 if($to_date)      { $whereParts[] = "leaddetails.assignleadchk = $assigntouserid "; }*/
                 if($itemgroup)  { $whereParts[] = "itemgroup = '".$itemgroup."' "; }
                 if($customergrp)  { $whereParts[] = "custgroup = '".$customergrp."' "; }
-                if($users!='undefined')   { $whereParts[] = "exename  IN (".$users.") "; }
+                if($users!='undefined' or $users!='' )   { $whereParts[] = "exename  IN (".$users.") "; }
+                
                 
                 $whereParts[]="currentdate::DATE BETWEEN  '".$from_date."'::DATE AND  '".$to_date."'::DATE";
               
@@ -670,7 +673,7 @@ class Excelreportbranch extends CI_Controller {
                                     creationdate as Creation_Date, 
                                     updatedate as Date_of_Update 
                                 FROM 
-                                    dailactivityhistory ";
+                                    dailactivityhistory";
                     
                     }
                  else {
@@ -695,7 +698,7 @@ class Excelreportbranch extends CI_Controller {
                 }
                 $sql .= ' ORDER BY 3 ASC'; 
 
-         // echo $sql; die;
+          echo $sql; die;
         $result = $this->db->query($sql);
         //  print_r($result); die;
         if (@$result) {
@@ -758,7 +761,7 @@ class Excelreportbranch extends CI_Controller {
                 if($to_date)      { $whereParts[] = "leaddetails.assignleadchk = $assigntouserid "; }*/
                 if($itemgroup)  { $whereParts[] = "itemgroup = '".$itemgroup."'"; }
                 if($customergrp)  { $whereParts[] = "custgroup = '".$customergrp."' "; }
-                if($users!='undefined')  { $whereParts[] = "exename  IN (".$users.") "; }
+                if($users!='undefined' or $users!='')  { $whereParts[] = "exename  IN (".$users.") "; }
                 
                 $whereParts[]="currentdate::DATE BETWEEN  '".$from_date."'::DATE AND  '".$to_date."'::DATE";
               
