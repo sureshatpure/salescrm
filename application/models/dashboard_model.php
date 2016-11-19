@@ -697,19 +697,24 @@ class Dashboard_model extends CI_Model
 				
 				$reporting_to = $this->session->userdata['reportingto'];
 				$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+				$designation_role = trim($this->session->userdata['designation']);
 
 				if (@$reporting_to=="")
 				{
-									$sql="SELECT DISTINCT a.branch FROM ( SELECT 	header_user_id,	UPPER(trim(location_user)) AS branch FROM vw_web_user_login WHERE LENGTH (location_user) > 2) a ORDER BY a.branch";
-				} else
+						$sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
+				} 
+ 				elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+				 {
+				 	$sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
+				 }
+				else
 				{
-
-								 
-								//$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
-								$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
-								
-
-								$sql="SELECT DISTINCT a.branch FROM ( SELECT 	header_user_id,	UPPER(trim(location_user)) AS branch FROM vw_web_user_login WHERE header_user_id IN (".$get_assign_to_user_id.") and LENGTH (location_user) > 2) a ORDER BY a.branch";
+					//$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+					$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+							
+					$sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id AND 
+                    v.header_user_id IN (".$get_assign_to_user_id.")";
 		
 				}
 				//echo $sql; die;

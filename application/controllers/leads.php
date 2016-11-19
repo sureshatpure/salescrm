@@ -52,7 +52,7 @@ class Leads extends CI_Controller {
            // echo" selectedIndex_val "+$leaddata['selectedIndex_val']; die;
             $allgroups = $this->admin_auth->groups()->result();
             $usergroups = $this->admin_auth->group($this->session->userdata['user_id']);
-            //	print_r($usergroups);  die;
+            	//print_r($this->session->userdata);  die;
             
             $leaddata['permission'] = $usergroups->_cache_user_in_group[$this->session->userdata['user_id']];
 
@@ -77,7 +77,7 @@ class Leads extends CI_Controller {
     }
     function index_search()
     {
-        //echo"<pre>";print_r($_POST);echo"</pre>"; die;
+       // echo"<pre>";print_r($_POST);echo"</pre>";
         @$from_date =$_POST['fromdate']; //10-Nov-2015
         @$to_date =$_POST['todate'];
         @$branch =$_POST['selectbranch'];
@@ -90,7 +90,8 @@ class Leads extends CI_Controller {
         @$customerid =$_POST['customer'];
         @$productid =$_POST['product'];
       //  $date_filter =$_POST['date_filter'];
-  
+      
+
         if (@$_POST['fromdate']!="")
         {
             $fromdate = DateTime::createFromFormat('j-M-Y', $from_date);    
@@ -110,6 +111,7 @@ class Leads extends CI_Controller {
          $todate="";   
         }    
         
+      
 
         if (!$this->admin_auth->logged_in()) {
             //redirect them to the login page
@@ -141,7 +143,7 @@ class Leads extends CI_Controller {
                 $leaddata['data'] = $this->Leads_model->get_lead_details_all_srch($branch,$selectuserid,$assigntouserid,$statusid,$substatusid,$customerid,$productid,$fromdate,$todate);
                 
             } else {
-                $leaddata['data'] = $this->Leads_model->get_lead_details_srch($branch,$selectmc_sub_id,$assigntouserid,$statusid,$substatusid,$customerid,$productid,$from_date,$to_date,$this->session->userdata['reportingto']);
+                $leaddata['data'] = $this->Leads_model->get_lead_details_srch($branch,$selectmc_sub_id,$assigntouserid,$statusid,$substatusid,$customerid,$productid,$fromdate,$todate,$this->session->userdata['reportingto']);
 
                
             }
@@ -230,6 +232,7 @@ class Leads extends CI_Controller {
         //echo "last word is ".@$last_word; die;
         //  echo"Rep To ".$this->session->userdata['reportingto'];
         $this->load->helper(array('form', 'url'));
+        $designation_role = trim($this->session->userdata['designation']);
         $data['optionslst'] = $this->Leads_model->get_leadstatus_add();
 
 
@@ -257,10 +260,19 @@ class Leads extends CI_Controller {
             'Domestic' => 'Domestic',
             'Domestic and Import' => 'Domestic and Import'
         );
-        if (@$this->session->userdata['reportingto'] == "") {
+        if (@$this->session->userdata['reportingto'] == "") 
+        {
             $data['optionsasto'] = $this->Leads_model->get_assignto_users();
             $data['optionslocuser'] = $this->Leads_model->get_locationuser_add();
-        } else {
+        } 
+       elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+         {
+          $data['optionsasto'] = $this->Leads_model->get_assignto_users();
+          $data['optionslocuser'] = $this->Leads_model->get_locationuser_add();
+         }
+
+        else 
+        {
 
             $data['optionsasto'] = $this->Leads_model->get_assignto_users_order($this->session->userdata['reportingto']);
             $data['optionslocuser'] = $this->Leads_model->get_locationuser_add_order();
@@ -1386,7 +1398,12 @@ class Leads extends CI_Controller {
 
             $this->session->set_flashdata('message', "Lead Created Successfully with follwing leadid(s)- ".$leads);
             //echo "ref page ".$reffer_page; 		echo $url =base_url();
-
+            if($this->input->post('branch')=='CHENNAI - GC')
+            {
+                require('../mobileapps/release2D/staging/class_sendnewleads.php');
+                $objA = new A();
+                $objA->foo();  
+            }
             if ($reffer_page == "dailycall") {
                 redirect($url . 'dailycall');
             } else {
@@ -1420,7 +1437,7 @@ class Leads extends CI_Controller {
             $appiontment_date = $dates;
             $mail_alert_date = $appiontment_date;
         }
-        //echo"<pre>";print_r($_POST); echo"</pre>";
+        echo"<pre>";print_r($_POST); echo"</pre>";
         $login_user_id = $this->session->userdata['user_id'];
         $login_username = $this->session->userdata['username'];
         $duser = $this->session->userdata['loginname'];
@@ -1522,6 +1539,7 @@ class Leads extends CI_Controller {
                 'lead_close_option' => $lead_close_option,
                 'lead_close_comments' => $_POST['closingcomments'],
                 'lead_crm_soc_no' => $crm_first_soc_no,
+                'app_sync_flag' => 'N',
                 'converted' => $ld_converted,
                 'comments' => $this->input->post('comments'),
                 'producttype' => trim($this->input->post('producttype')),
@@ -1996,6 +2014,7 @@ class Leads extends CI_Controller {
                     'description' => $this->input->post('description'),
                     'ldsubstatus' => $this->revert_substatus($substatus_id[0],$samle_reject_count),
                     'lead_crm_soc_no' => $crm_first_soc_no,
+                    'app_sync_flag' => 'N',
                     'converted' => $ld_converted,
                     'comments' => $this->input->post('comments'),
                     'producttype' => trim($this->input->post('producttype')),
@@ -2103,6 +2122,13 @@ class Leads extends CI_Controller {
                 /* End revert back sub log details  */
             }
 
+            if($this->input->post('branch')== 'CHENNAI - GC')
+            {
+                require('../mobileapps/release2D/staging/class_sendleads.php');
+                $objA = new A();
+                $objA->foo();  
+            }
+           
             
             redirect('leads/viewleaddetails/'.$leadid);
         }
@@ -2527,7 +2553,7 @@ class Leads extends CI_Controller {
         $substatus_id = explode("-", $this->input->post('leadsubstatus'));
         $sample_rejected_reason = $this->input->post('sample_rejected_reason');
         $order_cancelled_reason = $this->input->post('order_cancelled_reason');
-       //echo"<pre>"; print_r($_POST); echo"<pre>"; 
+      // echo"<pre>"; print_r($_POST); echo"<pre>"; 
         $samle_reject_count=0;
 
         if ($this->input->post('updateleadstatus')) {
@@ -2626,6 +2652,7 @@ class Leads extends CI_Controller {
                 'lead_close_comments' => $_POST['closingcomments'],
                 'firstname' => $this->input->post('firstname'),
                 'lastname' => $this->input->post('lastname'),
+                'app_sync_flag' => 'N',
                 'converted' => $ld_converted,
                 'nextstepdate' => date('Y-m-d'),
                 'last_modified' => date('Y-m-d:H:i:s'),
@@ -3211,8 +3238,14 @@ class Leads extends CI_Controller {
 
                 // End leadsubstatus validation for reverting back 
             }
+             if (trim($this->input->post('hdn_user_branch'))=="CHENNAI")
+             {
 
-
+                require('../mobileapps/release2D/staging/class_sendleads.php');
+                $objA = new A();
+                $objA->foo();
+             }
+       
             redirect('leads/viewleaddetails/' . $leadid);
         }
     }

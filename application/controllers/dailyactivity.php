@@ -343,7 +343,7 @@ class dailyactivity extends CI_Controller {
                             /*'email_id' => trim($customer_address[0]['contact_mailid']),*/
                             'email_id' => trim(@$customer_email_id),
                             'firstname' => trim(@$customer_address[0]['contact_person']),
-                            'industry_id' => 63,
+                            'industry_id' => 33,
                             'uploaded_date' => $hrd_currentdate,
                             'crd_id' => 8,
                             'crd_assesment' =>'Update Later',
@@ -560,6 +560,10 @@ class dailyactivity extends CI_Controller {
                                 $lead_prod_poten_type[$k]['product_type_id'] =$product_sale_type[$k]['n_value_id'];
 
                                  if ($product_sale_type[$k]['n_value_id'] == $sales_type_id) {
+                                    if($val['actualpotenqty']==""){
+                                       $val['actualpotenqty']=0; 
+                                    }
+
                                     $lead_prod_poten_type[$k]['potential'] = $val['actualpotenqty'];
                                 } else {
                                     $lead_prod_poten_type[$k]['potential'] = 0;
@@ -1351,7 +1355,7 @@ class dailyactivity extends CI_Controller {
                             /*'email_id' => trim($customer_address[0]['contact_mailid']),*/
                             'email_id' => trim(@$customer_email_id),
                             'firstname' => trim(@$customer_address[0]['contact_person']),
-                            'industry_id' => 63,
+                            'industry_id' => 33,
                             'uploaded_date' => $hrd_currentdate,
                             'crd_id' => 8,
                             'lead_crm_soc_no' => $crm_first_soc_no,
@@ -1398,6 +1402,9 @@ class dailyactivity extends CI_Controller {
                                 $lead_prod_poten_type[$k]['product_type_id'] =$product_sale_type[$k]['n_value_id'];
 
                                  if ($product_sale_type[$k]['n_value_id'] == $sales_type_id) {
+                                    if($val['actualpotenqty']==""){
+                                       $val['actualpotenqty']=0; 
+                                    }
                                     $lead_prod_poten_type[$k]['potential'] = $val['actualpotenqty'];
                                 } else {
                                     $lead_prod_poten_type[$k]['potential'] = 0;
@@ -2320,7 +2327,7 @@ class dailyactivity extends CI_Controller {
     {
        // $data['optionscollector'] = $this->Leads_model->get_collectors($this->session->userdata['get_assign_to_user_id']);
         $data = array();
-        $data = $this->dailyactivity_model->get_collectors();
+        $data = $this->dailyactivity_model->get_collectors($this->session->userdata['get_assign_to_user_id']);
         print_r($data);
     }
   

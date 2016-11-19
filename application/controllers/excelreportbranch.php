@@ -29,24 +29,24 @@ class Excelreportbranch extends CI_Controller {
     }
 
     function exgetdatawithfilter($branch, $user_id = 0) {
-        
+        $branch=urldecode($branch);
                 @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
                 @$reportingto= $this->session->userdata['reportingto'];
               $branch=urldecode($branch);
        $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch','Collector','MarketCircle','Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','lead_created_date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername','customertype','Financial Yr','JC_Code');
         if ($reportingto == "") {
             if ($user_id == "") {
-                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . strtoupper($branch) . "' order by 1 desc";
+                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  customers_collector='" . strtoupper($branch) . "' order by 1 desc";
             } else {
                 //$sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND created_user IN (".$user_id.")"; 
-                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $user_id . ") order by 1 desc";
+                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  customers_collector='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $user_id . ") order by 1 desc";
             }
         } else {
             if ($user_id == "") {
-                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $get_assign_to_user_id . ") order by 1 desc";
+                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  customers_collector='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $get_assign_to_user_id . ") order by 1 desc";
             } else {
                 //$sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND created_user IN (".$user_id.")"; 
-                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $user_id . ") order by 1 desc";
+                $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  customers_collector='" . strtoupper($branch) . "' AND asignedto_userid IN (" . $user_id . ") order by 1 desc";
             }
         }
 
@@ -109,15 +109,15 @@ class Excelreportbranch extends CI_Controller {
         @$reportingto = $this->session->userdata['reportingto'];
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
 
-
+        $branch =urldecode($branch);
 
        $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch','Collector','MarketCircle','Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername', 'customertype','Financial Yr','JC_Code');
 
         if ($reportingto == "") {
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . $branch . "'  AND asignedto_userid IN (" . $user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  customers_collector='" . $branch . "'  AND asignedto_userid IN (" . $user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         } else {
             //$sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND created_user IN (".$user_id.")"; 
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . $branch . "' AND asignedto_userid IN (" . $user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  customers_collector='" . $branch . "' AND asignedto_userid IN (" . $user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         }
 
       //   echo $sql; die;
@@ -178,15 +178,16 @@ class Excelreportbranch extends CI_Controller {
 
     function exgetdatabranch_dt_filter($branch, $from_date, $to_date) {
         //   @$reportingto = $this->session->userdata['reportingto'];
+        $branch =urldecode($branch);
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
         @$reportingto = $this->session->userdata['reportingto'];
          $headings = array('leadid', 'lead_no', 'email_id', 'firstname', 'lastname','Contact Person','phone_no','Branch','Collector','MarketCircle','Comments', 'Converted', 'uploadeddate', 'description', 'address', 'secondaryemail', 'AssignedToUserID', 'AssignTo', 'Created Date','Lead Date', 'CreatedMonth', 'Created By', 'Lastupdate Date', 'Lastupdated By', 'sent_mail_alert', 'leadsource', 'lead_close_status', 'primarystatus', 'substatusname','BusinessType', 'Immediate_Requirement', 'Potential_Repack', 'Potential_Intact', 'Potential_Bulk', 'Potential_Small Packing', 'Potential_Single Tanker', 'Potential_Part Tanker','Potential_Indent Bulk','Potential_FCL','Potential_ISO Container', 'productupdatedate', 'productcreatedate', 'industrysegment', 'ProdcutId', 'productname', 'itemgroup', 'uom', 'customername','customertype','Financial Yr','JC_Code');
         if ($reportingto == "") {
-            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . $branch . "' AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT  * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  customers_collector='" . $branch . "' AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         } else {
 
             //  $sql = "SELECT * FROM vw_lead_export_excel WHERE  branchname='".$branch."' AND asignedto_userid IN (".$user_id.") AND createddate::DATE  between '".$from_date."'::DATE  and '".$to_date."'::DATE"; 
-            $sql = "SELECT * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  branchname='" . $branch . "' AND asignedto_userid IN (" . $get_assign_to_user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
+            $sql = "SELECT * FROM vw_lead_export_to_exceljcwise_fn_mc WHERE  customers_collector='" . $branch . "' AND asignedto_userid IN (" . $get_assign_to_user_id . ") AND createddate::DATE  between '" . $from_date . "'::DATE  and '" . $to_date . "'::DATE order by 1 desc";
         }
 
        // echo $sql; die;
@@ -637,16 +638,19 @@ class Excelreportbranch extends CI_Controller {
 
 
     function visitreportwithfilter($itemgroup,$customergrp,$branch,$from_date, $to_date) {
-        // print_r($this->session->userdata); 
-         //print_r($_POST); die;
                 $users = $_POST['userArray'];
                 @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
                 @$reportingto= $this->session->userdata['reportingto'];
                 $itemgroup = urldecode($itemgroup);
                 $customergrp =urldecode($customergrp);
                 $branch = strtoupper(urldecode($branch));
+                if(strtoupper($branch)=='CHENNAI - GC')  
+                {
+                   $branch='CHENNAI';
+                }
+                
                 $whereParts = array();
-               /* echo"branch ".$branch."<br>";
+/*                echo"branch ".$branch."<br>";
                 echo"itemgroup ".$itemgroup."<br>";
                 echo"customergrp ".$customergrp."<br>";
                 echo"users ".$users."<br>";*/
@@ -673,7 +677,7 @@ class Excelreportbranch extends CI_Controller {
                                     creationdate as Creation_Date, 
                                     updatedate as Date_of_Update 
                                 FROM 
-                                    dailactivityhistory";
+                                    dailactivityhistory ";
                     
                     }
                  else {
@@ -698,7 +702,7 @@ class Excelreportbranch extends CI_Controller {
                 }
                 $sql .= ' ORDER BY 3 ASC'; 
 
-          echo $sql; die;
+         // echo $sql; die;
         $result = $this->db->query($sql);
         //  print_r($result); die;
         if (@$result) {
@@ -750,7 +754,7 @@ class Excelreportbranch extends CI_Controller {
                 @$reportingto= $this->session->userdata['reportingto'];
                 $itemgroup = urldecode($itemgroup);
                 $customergrp =urldecode($customergrp);
-                $branch = strtoupper($branch);
+                $branch = strtoupper(urldecode($branch));
 /*                echo"branch ".$branch."<br>";
                 echo"itemgroup ".$itemgroup."<br>";
                 echo"customergrp ".$customergrp."<br>";

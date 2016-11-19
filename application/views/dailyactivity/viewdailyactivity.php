@@ -3173,6 +3173,7 @@
                                     {
                                         alert("Please select the collector first");
                                     }
+                                    
                                     else
                                     {
                                         var marketcircle = $("#marketcircle").jqxDropDownList('getSelectedItem'); 
@@ -3261,7 +3262,7 @@
                             var todayDate = new Date();
 
                             var max_date=   todayDate.toISOString().substring(0, 10); //todayDate 2015-08-18
-                            var min_date =  todayDate.setDate(todayDate.getDate() - 60);
+                            var min_date =  todayDate.setDate(todayDate.getDate() - 80);
                             //alert("max date"+max_date);
                            // alert("min date before "+min_date);
                             min_date =convert(min_date);

@@ -51,12 +51,19 @@ class Leads_model extends CI_Model {
 
                 $reporting_to = $this->session->userdata['reportingto'];
                 $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+                 $designation_role = trim($this->session->userdata['designation']);
 
                 if (@$reporting_to=="")
                 {
                     $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
                     m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
-                } else
+                } 
+                 elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+                 {
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
+                 }
+                else
                 {
 
                     $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
@@ -228,6 +235,7 @@ class Leads_model extends CI_Model {
 
     public function get_collectors($reporting_user_id) 
     {
+         $designation_role = trim($this->session->userdata['designation']);
         if (@$this->session->userdata['reportingto'] == "")
         {
             $sql = "SELECT  a.collector FROM (
@@ -236,6 +244,18 @@ class Leads_model extends CI_Model {
                  AS collector
                 FROM customermasterhdr ) a GROUP BY  a.collector ORDER BY collector";
         }
+
+        elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+       {
+           $sql="SELECT collector FROM customermasterhdr  WHERE cust_account_id is NOT NULL  and cust_account_id >0 AND  mc_code in (
+                SELECT  
+                mc_sub_id
+                FROM vw_web_user_login 
+                 JOIN market_circle_hdr on market_circle_hdr.gc_executive_code= vw_web_user_login.header_user_id 
+                ) GROUP BY collector
+                 UNION SELECT 'NO COLLECTOR' as collector";
+
+       }
         else
         {
             $sql="SELECT collector FROM customermasterhdr  WHERE cust_account_id is NOT NULL  and cust_account_id >0 AND  mc_code in (
@@ -519,6 +539,7 @@ class Leads_model extends CI_Model {
     {
             echo"get_leaddetails_for_grid_srch<br>"; 
 
+
         $jTableResult = array();
         $jTableResult['leaddetails'] = $this->get_lead_details_all_srch($branch=null,$selectuserid=0,$selectassigntoid=0,$statusid=0,$substatusid=0,$customerid=0,$productid=0,$from_date=null,$to_date=null);
 
@@ -767,6 +788,7 @@ class Leads_model extends CI_Model {
         //echo "collector_id".$collectorid['0']['collector_id'];
         $collector_id =$collectorid['0']['collector_id'];
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+        $designation_role = trim($this->session->userdata['designation']);
         if (@$this->session->userdata['reportingto'] == "")
         {
 
@@ -781,6 +803,18 @@ class Leads_model extends CI_Model {
                     c.collector_id=".$collector_id."
                     GROUP BY c.collector_id,m.mc_code,m.mc_zone,m.mc_sub_id";
         }
+         elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+         {
+            $sql="SELECT c.collector_id,m.mc_code,m.mc_zone,m.mc_sub_id 
+                    FROM market_circle_hdr m,
+                                            ar_collectors c,
+                                            vw_web_user_login v
+                    WHERE 
+                    m.collector_id = c.collector_id AND 
+                    m.gc_executive_code=v.header_user_id 
+                                     AND      c.collector_id=".$collector_id."
+                    GROUP BY c.collector_id,m.mc_code,m.mc_zone,m.mc_sub_id";
+         }
         else
         {
             /*$sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." AND gc_executive_code=".$this->session->userdata['user_id']." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";*/
@@ -817,12 +851,15 @@ class Leads_model extends CI_Model {
         //echo " check ".$this->brach_sel; die;
         @$this->session->set_userdata($get_assign_to_user_id);
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+         $executive_role = trim($this->session->userdata['executive_role']);
         //if ($get_assign_to_user_id == "") {
         if (@$this->session->userdata['reportingto'] == "") {
             $sql = "select header_user_id,displayname , branch from 
 								(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from 
 								 vw_web_user_login ) a where upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";
-        } else {
+        } 
+        else 
+        {
             $sql = "select header_user_id,displayname , branch from 
 								(select header_user_id,upper(location_user) as branch , upper(location_user) || '-' || upper(empname) as displayname from 
 								 vw_web_user_login ) a where header_user_id IN (" . $get_assign_to_user_id . ")  and upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";
@@ -851,6 +888,8 @@ class Leads_model extends CI_Model {
         //echo " check ".$this->brach_sel; die;
         @$this->session->set_userdata($get_assign_to_user_id);
         @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+         $designation_role = trim($this->session->userdata['designation']);
+
         //if ($get_assign_to_user_id == "") {
         if (@$this->session->userdata['reportingto'] == "") {
            /* $sql = "select header_user_id,displayname , branch from 
@@ -860,7 +899,15 @@ class Leads_model extends CI_Model {
                             SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(v.empname)  || '-' || upper(c.name) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id  AND m.gc_executive_code=v.header_user_id AND upper(c.name)=upper('".urldecode($this->brach_sel)."') GROUP BY  v.header_user_id,upper(v.empname), c.name,m.mc_sub_id ) a 
                                   where upper(branch)=upper('".urldecode($this->brach_sel)."') GROUP BY header_user_id, displayname , branch order by displayname";
 
-        } else {
+        } 
+         elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+         {
+              $sql="select header_user_id,displayname,branch from (
+                            SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(v.empname)  || '-' || upper(c.name) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id  AND m.gc_executive_code=v.header_user_id AND upper(c.name)=upper('".urldecode($this->brach_sel)."') GROUP BY  v.header_user_id,upper(v.empname), c.name,m.mc_sub_id ) a 
+                                  where upper(branch)=upper('".urldecode($this->brach_sel)."') GROUP BY header_user_id, displayname , branch order by displayname";
+         }
+        else 
+        {
             /*$sql = "select header_user_id,displayname , branch from 
                                 (select header_user_id,upper(location_user) as branch ,upper(location_user) || '-' || upper(empname) as displayname1,upper(empname) || '-' || upper(location_user) as displayname from 
                                  vw_web_user_login ) a where header_user_id IN (" . $get_assign_to_user_id . ")  and upper(branch)=upper('" . urldecode($this->brach_sel) . "') order by displayname";*/
@@ -868,7 +915,6 @@ class Leads_model extends CI_Model {
              $sql="select header_user_id,displayname,branch from (
                             SELECT  v.header_user_id,c.name as branch,m.mc_sub_id,  upper(v.empname)  || '-' || upper(c.name) as displayname  FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE  m.collector_id = c.collector_id  AND m.gc_executive_code=v.header_user_id AND upper(c.name)=upper('".urldecode($this->brach_sel)."') GROUP BY  v.header_user_id,upper(v.empname), c.name,m.mc_sub_id ) a 
                                   where upper(branch)=upper('".urldecode($this->brach_sel)."') and  header_user_id IN (".$get_assign_to_user_id.") GROUP BY header_user_id, displayname , branch order by displayname";
-
 
         }
 
@@ -1422,7 +1468,7 @@ class Leads_model extends CI_Model {
 
     function get_lead_details_all_srch($branch=null,$selectuserid=0,$assigntouserid=0,$statusid=0,$substatusid=0,$customerid=0,$productid=0,$fromdate=null,$todate=null) 
         {
-
+       //print_r($this->session->userdata); die;
       /*  echo" branch ".$branch."<br>";
         echo" selectuserid ".$selectuserid."<br>";
         echo" assigntouserid ".$assigntouserid."<br>";
@@ -1602,8 +1648,40 @@ class Leads_model extends CI_Model {
             // $sql .= " WHERE " . implode('AND ', $whereParts);
              $sql .= " WHERE " . implode('AND ', $whereParts);
         }
+
+        if($this->session->userdata['executive_role']=='PM')
+        {
+            $sql .=' AND leadid in (
+                    SELECT 
+                    leaddetails.leadid
+                    FROM
+                    leaddetails,
+                    leadproducts,
+                    lms_pm_list,
+                    vw_web_user_login_mob
+
+                    WHERE 
+                              leaddetails.leadid=leadproducts.leadid 
+                    AND leadproducts.productid=lms_pm_list.productid 
+                    AND trim(vw_web_user_login_mob.aliasloginname)= trim(lms_pm_list.lms_pm_name)
+
+                    AND  lms_pm_name is NOT NULL 
+                    AND  pm_name is NOT NULL 
+                    AND leaddetails.lead_close_status=0 
+                    AND leaddetails.converted=0 
+                    AND leaddetails.leadstatus!=8
+                    AND vw_web_user_login_mob.header_user_id='.$this->session->userdata['user_id'].'
+
+                    GROUP BY 
+                    leaddetails.leadid,
+                    leadproducts.productid,
+                    lms_pm_list.itemgroup,
+                    lms_pm_list.pm_name,
+                    vw_web_user_login_mob.aliasloginname )';
+        }
+
         $sql .= ' AND converted=0 ORDER BY leadid ASC'; 
-  //    echo $sql; die;
+      //echo $sql; die;
          $result = $this->db->query($sql);
         $productdetails = $result->result_array();
 // echo"count of all leads ".count($productdetails); die;
@@ -2016,7 +2094,7 @@ class Leads_model extends CI_Model {
         $this->session->set_userdata('user_leads_converted_count', $user_leads_count); // added by perusu
         return $productdetails;
     }
-    function get_lead_details_srch($branch=null,$selectmc_sub_id=0,$assigntouserid=0,$statusid=0,$substatusid=0,$customerid=0,$productid=0,$fromdate=null,$todate=null,$id)
+    function get_lead_details_srch($branch=null,$selectuserid=0,$assigntouserid=0,$statusid=0,$substatusid=0,$customerid=0,$productid=0,$fromdate=null,$todate=null,$id)
         {
         $reportingid = $this->session->userdata['loginname'];
         //echo"b".$user_list_ids = $this->get_user_list_ids($reportingid); replaced by SELECT get_hierarchical_user_id on 5-mar-2015
@@ -2024,191 +2102,122 @@ class Leads_model extends CI_Model {
         $user_list_ids=$this->session->userdata['get_assign_to_user_id'];
         $get_assign_to_user_id = array('get_assign_to_user_id' => $user_list_ids); //put list of id's into an array
         $this->session->set_userdata($get_assign_to_user_id); // set the list of ids in a session variable
-
          
         $whereParts = array();
-        //if($branch)     { $whereParts[] = "leaddetails.user_branch ='$branch' "; }
-        //if($selectuserid) { $whereParts[] = "leaddetails.created_user = $selectuserid "; }
+        $whereParts_in ="";
+        if($branch)     { $whereParts[] = "leaddetails.user_branch ='$branch' "; }
+        if($selectuserid) { $whereParts[] = "leaddetails.created_user = $selectuserid "; }
         if($assigntouserid) { $whereParts[] = "leaddetails.assignleadchk = $assigntouserid "; }
         if($statusid)  { $whereParts[] = "leaddetails.leadstatus = $statusid "; }
         if($substatusid)  { $whereParts[] = "leaddetails.ldsubstatus = $substatusid "; }
         if($customerid)  { $whereParts[] = "leaddetails.customer_id = $customerid "; }
-        if($productid)  { $whereParts[] = "leadproducts.productid::TEXT = '$productid'"; }
+        if($productid)  { $whereParts_in = " AND leadproducts.productid::TEXT = '$productid'"; }
         if($fromdate)  { $whereParts[] = "leaddetails.createddate::DATE >= '$fromdate' "; }
         if($todate)  { $whereParts[] = "leaddetails.createddate::DATE <= '$todate' "; }
+        //$whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
         //if($selectmc_sub_id) { $whereParts[] = "leaddetails.mc_sub_id = '$selectmc_sub_id' "; }
       //  $whereParts[]="(createddate::DATE )  BETWEEN  jc_period_from and  jc_period_to ";
       // echo"<pre>";print_r($whereParts); echo"</pre>";
 //BUILD THE QUERY
-      
-            $sql = 'SELECT * FROM ( SELECT
-                leaddetails.leadid,
-                0::text as mc_sub_id,
-                leaddetails.lead_no,
-                leaddetails.email_id,
-                leaddetails.firstname,
-                leaddetails.lastname,
-                leaddetails.industry,
-                leaddetails.website,
-                0::text as user_branch,
-                leaddetails.converted,
-                leaddetails.designation,
-                leaddetails.lead_crm_soc_no,
-                leaddetails.lead_close_status,
-                leaddetails.lead_close_option,
-                leaddetails.lead_close_comments,
-                leaddetails.comments,
-                leaddetails.uploaded_date,
-                leaddetails.description,
-                leaddetails.ldsubstatus,
-                leaddetails.secondaryemail,
-                leaddetails.assignleadchk,
-                leaddetails.createddate,
-                leaddetails.leadstatus AS leadstatusid,
-                leaddetails.leadsource AS leadsourceid,
-                leadstatus.leadstatus,
-                leadsubstatus.lst_name AS substatusname,
-                leadsource.leadsource,
-                leaddetails.company,
-                leaddetails.customer_id,
-                leaddetails.created_user,
-                leaddetails.last_modified,
-                leaddetails.last_updated_user,
-                leaddetails.sent_mail_alert,
-                leaddetails.industry_id,
-                leadproducts.productid,
-                leadproducts.product_group,
-                view_tempitemmaster.description AS productname,
-                leadproducts.product_itemname,
-                vw_web_user_login.empname AS assign_from_name,
-                assignedfrom.empname,
-                view_tempcustomermaster.tempcustname,
-                get_acc_yr (
-                    leaddetails.createddate :: DATE
-                ) AS fin_yr,
-                CASE
-            WHEN (createddate :: DATE) BETWEEN jc_period_from
-            AND jc_period_to THEN
-                jc_code
-            ELSE
-                0
-            END AS JCODE
-            FROM
-                leaddetails
-            INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
-            INNER JOIN leadstatus ON leadstatus.leadstatusid = leaddetails.leadstatus
-            INNER JOIN leadsource ON leadsource.leadsourceid = leaddetails.leadsource
-            INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
-            INNER JOIN vw_web_user_login AS assignedfrom ON leaddetails.assignleadchk = assignedfrom.header_user_id
-            INNER JOIN view_tempcustomermaster ON leaddetails.company = view_tempcustomermaster.id
-            INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
-            INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
-            INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company  AND (cust_account_id is NULL  OR  cust_account_id =0 ) 
-
-            INNER JOIN jc_calendar_dtl ON get_acc_yr (
-                leaddetails.createddate :: DATE
-            ) = jc_calendar_dtl.acc_yr
-            WHERE
-                leaddetails.leadid IN (
+         if($this->session->userdata['executive_role']=='PM')
+         {
+         $pm_query=" UNION SELECT leaddetails.leadid, leaddetails.lead_no, leaddetails.email_id, leaddetails.firstname, leaddetails.lastname, leaddetails.industry, leaddetails.website, ar_collectors. NAME AS user_branch, leaddetails.converted, leaddetails.designation, leaddetails.lead_crm_soc_no, leaddetails.lead_close_status, leaddetails.lead_close_option, leaddetails.lead_close_comments, leaddetails.comments, leaddetails.uploaded_date, leaddetails.description, leaddetails.ldsubstatus, leaddetails.secondaryemail, leaddetails.assignleadchk, leaddetails.createddate, leaddetails.leadstatus AS leadstatusid, leaddetails.leadsource AS leadsourceid, leadstatus.leadstatus, leadsubstatus.lst_name AS substatusname, leadsource.leadsource, leaddetails.company, leaddetails.customer_id, leaddetails.created_user, leaddetails.last_modified, leaddetails.last_updated_user, leaddetails.sent_mail_alert, leaddetails.industry_id, leadproducts.productid, leadproducts.product_group, view_tempitemmaster.description AS productname, leadproducts.product_itemname, vw_web_user_login.empname AS assign_from_name, assignedfrom.empname, view_tempcustomermaster.tempcustname, get_acc_yr ( leaddetails.createddate :: DATE ) AS fin_yr, CASE WHEN (createddate :: DATE) BETWEEN jc_period_from AND jc_period_to THEN jc_code ELSE 0 END AS JCODE FROM leaddetails INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus INNER JOIN leadstatus ON leadstatus.leadstatusid = leaddetails.leadstatus INNER JOIN leadsource ON leadsource.leadsourceid = leaddetails.leadsource INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id INNER JOIN vw_web_user_login AS assignedfrom ON leaddetails.assignleadchk = assignedfrom.header_user_id INNER JOIN view_tempcustomermaster ON leaddetails.company = view_tempcustomermaster. ID INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid INNER JOIN customermasterhdr ON customermasterhdr. ID = leaddetails.company INNER JOIN ar_collectors ON ar_collectors. NAME = customermasterhdr.collector INNER JOIN jc_calendar_dtl ON get_acc_yr ( leaddetails.createddate :: DATE ) = jc_calendar_dtl.acc_yr WHERE leaddetails.leadid IN ( SELECT leaddetails.leadid FROM leaddetails, leadproducts, lms_pm_list, vw_web_user_login_mob WHERE leaddetails.leadid = leadproducts.leadid AND leadproducts.productid = lms_pm_list.productid AND TRIM ( vw_web_user_login_mob.aliasloginname ) = TRIM (lms_pm_list.lms_pm_name) AND lms_pm_name IS NOT NULL AND pm_name IS NOT NULL AND leaddetails.lead_close_status = 0 AND leaddetails.converted = 0 AND leaddetails.leadstatus != 8 AND vw_web_user_login_mob.header_user_id IN (".$this->session->userdata['user_id'].") ".$whereParts_in." GROUP BY leaddetails.leadid, leadproducts.productid, lms_pm_list.itemgroup, lms_pm_list.pm_name, vw_web_user_login_mob.aliasloginname ) AND (createddate :: DATE) BETWEEN jc_period_from AND jc_period_to ";
+         }
+         else
+         {
+          $pm_query="";  
+         }
+            $sql = 'SELECT * FROM 
+                    (
                     SELECT
-                        leadid
+                        leaddetails.leadid,
+                        leaddetails.lead_no,
+                        leaddetails.email_id,
+                        leaddetails.firstname,
+                        leaddetails.lastname,
+                        leaddetails.industry,
+                        leaddetails.website,
+                        leaddetails.user_branch,
+                        leaddetails.converted,
+                        leaddetails.designation,
+                        leaddetails.lead_crm_soc_no,
+                        leaddetails.lead_close_status,
+                        leaddetails.lead_close_option,
+                        leaddetails.lead_close_comments,
+                        leaddetails.comments,
+                        leaddetails.uploaded_date,
+                        leaddetails.description,
+                        leaddetails.ldsubstatus,
+                        leaddetails.secondaryemail,
+                        leaddetails.assignleadchk,
+                        leaddetails.createddate,
+                        leaddetails.leadstatus AS leadstatusid,
+                        leaddetails.leadsource AS leadsourceid,
+                        leadstatus.leadstatus,
+                        leadsubstatus.lst_name AS substatusname,
+                        leadsource.leadsource,
+                        leaddetails.company,
+                        leaddetails.customer_id,
+                        leaddetails.created_user,
+                        leaddetails.last_modified,
+                        leaddetails.last_updated_user,
+                        leaddetails.sent_mail_alert,
+                        leaddetails.industry_id,
+                        leadproducts.productid,
+                        leadproducts.product_group,
+                        view_tempitemmaster.description AS productname,
+                        leadproducts.product_itemname,
+                        vw_web_user_login.empname AS assign_from_name,
+                        assignedfrom.empname,
+                        view_tempcustomermaster.tempcustname,
+                        get_acc_yr (
+                            leaddetails.createddate :: DATE
+                        ) AS fin_yr,
+                        CASE
+                    WHEN (createddate :: DATE) BETWEEN jc_period_from
+                    AND jc_period_to THEN
+                        jc_code
+                    ELSE
+                        0
+                    END AS JCODE
                     FROM
                         leaddetails
+                    INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
+                    INNER JOIN "leadstatus" ON "leadstatus"."leadstatusid" = "leaddetails"."leadstatus"
+                    INNER JOIN "leadsource" ON "leadsource"."leadsourceid" = "leaddetails"."leadsource"
+                    INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
+                    INNER JOIN "vw_web_user_login" AS assignedfrom ON "leaddetails"."assignleadchk" = "assignedfrom"."header_user_id"
+                    INNER JOIN "view_tempcustomermaster" ON "leaddetails"."company" = "view_tempcustomermaster"."id"
+                    INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
+                    INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
+                    INNER JOIN jc_calendar_dtl ON get_acc_yr (
+                        leaddetails.createddate :: DATE
+                    ) = jc_calendar_dtl.acc_yr
                     WHERE
-                        assignleadchk IN ('.$user_list_ids.')
-                )
-            AND (createddate :: DATE) BETWEEN jc_period_from AND jc_period_to  AND converted = 0
+                        leaddetails.leadid IN (
+                            SELECT
+                                leadid
+                            FROM
+                                leaddetails
+                            WHERE
+                                created_user IN ('.$user_list_ids.')
+                            OR assignleadchk IN ('.$user_list_ids.')
+                        ) '.$whereParts_in.'
 
 
-            UNION
+                     '.$pm_query.'          
 
-            SELECT
-                leaddetails.leadid,
-                market_circle_hdr.mc_sub_id,
-                leaddetails.lead_no,
-                leaddetails.email_id,
-                leaddetails.firstname,
-                leaddetails.lastname,
-                leaddetails.industry,
-                leaddetails.website,
-                ar_collectors.name as user_branch,
-                leaddetails.converted,
-                leaddetails.designation,
-                leaddetails.lead_crm_soc_no,
-                leaddetails.lead_close_status,
-                leaddetails.lead_close_option,
-                leaddetails.lead_close_comments,
-                leaddetails.comments,
-                leaddetails.uploaded_date,
-                leaddetails.description,
-                leaddetails.ldsubstatus,
-                leaddetails.secondaryemail,
-                leaddetails.assignleadchk,
-                leaddetails.createddate,
-                leaddetails.leadstatus AS leadstatusid,
-                leaddetails.leadsource AS leadsourceid,
-                leadstatus.leadstatus,
-                leadsubstatus.lst_name AS substatusname,
-                leadsource.leadsource,
-                leaddetails.company,
-                leaddetails.customer_id,
-                leaddetails.created_user,
-                leaddetails.last_modified,
-                leaddetails.last_updated_user,
-                leaddetails.sent_mail_alert,
-                leaddetails.industry_id,
-                leadproducts.productid,
-                leadproducts.product_group,
-                view_tempitemmaster.description AS productname,
-                leadproducts.product_itemname,
-                vw_web_user_login.empname AS assign_from_name,
-                assignedfrom.empname,
-                view_tempcustomermaster.tempcustname,
-                get_acc_yr (
-                    leaddetails.createddate :: DATE
-                ) AS fin_yr,
-                CASE
-            WHEN (createddate :: DATE) BETWEEN jc_period_from
-            AND jc_period_to THEN
-                jc_code
-            ELSE
-                0
-            END AS JCODE
-            FROM
-                leaddetails
-            INNER JOIN leadsubstatus ON leadsubstatus.lst_sub_id = leaddetails.ldsubstatus
-            INNER JOIN leadstatus ON leadstatus.leadstatusid = leaddetails.leadstatus
-            INNER JOIN leadsource ON leadsource.leadsourceid = leaddetails.leadsource
-            INNER JOIN vw_web_user_login ON leaddetails.created_user = vw_web_user_login.header_user_id
-            INNER JOIN vw_web_user_login AS assignedfrom ON leaddetails.assignleadchk = assignedfrom.header_user_id
-            INNER JOIN view_tempcustomermaster ON leaddetails.company = view_tempcustomermaster.id
-            INNER JOIN leadproducts ON leadproducts.leadid = leaddetails.leadid
-            INNER JOIN view_tempitemmaster ON view_tempitemmaster. ID = leadproducts.productid
-
-             INNER JOIN customermasterhdr ON customermasterhdr.id = leaddetails.company
-             INNER JOIN market_circle_hdr ON market_circle_hdr.mc_sub_id=customermasterhdr.mc_code
-             INNER JOIN ar_collectors ON ar_collectors.name=customermasterhdr.collector  
-
-            INNER JOIN jc_calendar_dtl ON get_acc_yr (leaddetails.createddate :: DATE ) = jc_calendar_dtl.acc_yr
-            WHERE  mc_sub_id IN (SELECT mc_sub_id  FROM market_circle_hdr WHERE gc_executive_code in ('.$user_list_ids.')
-
-                        ) AND (createddate :: DATE) BETWEEN jc_period_from AND jc_period_to  AND converted = 0 ) leaddetails'; 
-
-
-
+                    ) leaddetails WHERE 1=1 ';   
         if(count($whereParts)) {
-             $sql .= " WHERE " . implode('AND ', $whereParts);
+             $sql .= " AND " . implode('AND ', $whereParts);
            //  $sql .= "WHERE" . implode('AND ', $whereParts);
         }
-        
-        if($selectmc_sub_id!="")
-        {
-            $sql .= " AND mc_sub_id='".$selectmc_sub_id."'";
-        }
-           $sql .= ' ORDER BY leadid ASC'; 
-       
+
+        $sql .= " AND converted=0 ORDER BY leadid DESC";
+
+      
      
-       //echo "sql is ".$sql."<br>"; die;
+      // echo "sql is ".$sql."<br>"; die;
         $result = $this->db->query($sql);
         $productdetails = $result->result_array();
         $all_leads_count = count($productdetails); 
@@ -3743,22 +3752,29 @@ presentsource,suppliername,decisionmaker,branchname,comments,uploadeddate,descri
 
      function get_mcbranches()
                 {
-                
+               
                 $reporting_to = $this->session->userdata['reportingto'];
                 $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
-
+                $designation_role = trim($this->session->userdata['designation']);
                 if (@$reporting_to=="")
                 {
                     $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
                     m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
-                } else
+                } 
+                elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+                {
+                    $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
+                    m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id";
+                }
+                else
+
                 {
 
                     $sql="SELECT DISTINCT c.name as branch FROM  ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE 
                     m.collector_id = c.collector_id AND  m.gc_executive_code=v.header_user_id AND 
                     v.header_user_id IN (".$get_assign_to_user_id.")";
                 }
-                //echo $sql; die;
+               // echo $sql; die;
                     $result = $this->db->query($sql);
                     $options = $result->result_array();
                     $arr =  json_encode($options); 

@@ -26,6 +26,7 @@ $config['tables']['login_attempts']  = 'login_attempts';
 */
 
 //$config['tables']['users']           = 'vw_web_user_login'; //changed on 4th Sept jsuresh for capturing designation
+//$config['tables']['users']           = 'vw_web_user_login_desg';
 $config['tables']['users']           = 'vw_web_user_login_desg';
 $config['tables']['groups']          = 'groups_adm';
 $config['tables']['users_groups']    = 'users_groups';

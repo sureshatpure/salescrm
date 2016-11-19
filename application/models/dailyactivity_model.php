@@ -811,6 +811,7 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
     {
         $reporting_to = $this->session->userdata['reportingto'];
         $get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
+        $designation_role = trim($this->session->userdata['designation']);
         if (@$this->session->userdata['reportingto'] == "")
         {
            /*  $sql = "SELECT  a.collector FROM (
@@ -821,6 +822,11 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
 
             $sql="SELECT DISTINCT c.name as collector FROM ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE m.collector_id = c.collector_id AND m.gc_executive_code=v.header_user_id";
         }
+
+        elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+                {
+                    $sql="SELECT DISTINCT c.name as collector FROM ar_collectors c, market_circle_hdr m, vw_web_user_login v WHERE m.collector_id = c.collector_id AND m.gc_executive_code=v.header_user_id";
+                }
         else
         {
            /* $sql="SELECT collector FROM customermasterhdr  WHERE cust_account_id is NOT NULL  and cust_account_id >0 AND  mc_code in (
@@ -862,6 +868,7 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
     public function get_collector_mc($collector) {
 
         $collector = urldecode($collector);
+         $designation_role = trim($this->session->userdata['designation']);
        $sql_collector = "SELECT id as collector_id  FROM collectormaster WHERE upper(collectorname) ='".strtoupper($collector)."'";
        @$get_assign_to_user_id = $this->session->userdata['get_assign_to_user_id'];
         $result_collector = $this->db->query($sql_collector);
@@ -873,6 +880,10 @@ WHERE  leaddetails.lead_close_status=0 and converted=0 AND leaddetails.leadid=".
         {
         	$sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";
     	}
+    	elseif($designation_role =='CO-ORDINATOR' || $designation_role =='ASSISTANT MANAGER' || $designation_role =='PM')
+                {
+                    $sql="SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." GROUP BY collector_id,mc_code,mc_zone,mc_sub_id";
+                }
     	else
     	{
     	 $sql = "SELECT collector_id,mc_code,mc_zone,mc_sub_id FROM market_circle_hdr WHERE collector_id=".$collector_id." AND 

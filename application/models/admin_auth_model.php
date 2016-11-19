@@ -970,7 +970,7 @@ public function hash_password_db($id, $password, $use_sha1_override=FALSE)
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', aliasloginname,duser,empcode,user_mail_id, header_user_id, pwd,reportingto,active, last_login')
+		$query = $this->db->select($this->identity_column . ', aliasloginname,duser,empcode,user_mail_id, header_user_id, pwd,reportingto,active, last_login,executive_role,designation')
 //		$query = $this->db->select($this->identity_column . ', aliasloginname,duser,header_user_id, pwd,reportingto,active, last_login')
 		                  ->where($this->identity_column, $this->db->escape_str($identity))
 		                  ->where('active', '1')
@@ -991,6 +991,7 @@ public function hash_password_db($id, $password, $use_sha1_override=FALSE)
 		if ($query->num_rows() === 1)
 		{
 			$user = $query->row();
+			
 		 	$password = $this->hash_password_db($user->header_user_id, $password);
 		//echo"password"; print_r($password); 
 			if ($password === TRUE)
@@ -1005,9 +1006,12 @@ public function hash_password_db($id, $password, $use_sha1_override=FALSE)
 					return FALSE;
 				}
 			    $user_list_ids = $this->get_reportingto_ids($user->duser);
+			   
 			    $this->set_session($user);
 	    		//$this->session->set_userdata('user_list_ids', $user_list_ids); 
 	    		$this->session->set_userdata('get_assign_to_user_id', $user_list_ids); 
+	    		$this->session->set_userdata('executive_role', $user->executive_role); 
+	    		$this->session->set_userdata('designation', strtoupper($user->designation)); 
 	    		
 	    		// Added by jsuresh on mar-6-2015 to replace the subquery concept of getting reporting to ids
 	    		//	echo"<pre>";print_r($this->session->userdata); echo"done</pre>";die;

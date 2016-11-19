@@ -19,7 +19,13 @@ $message_content="Welcome to email templating";
             {
                  $sql= 'SELECT 
 						a.mail_alert_id,ld.assignleadchk as executiveid,u.aliasloginname AS createdby,
-						v.sales_ref_mailid,v."2ND_LVL_MAIL_ID" AS bm_mailid,ld.user_branch,a.leadid,a.appointment_due_date as appointment_date,a.lead_substatus_id,a.substatus_updated_date,a.mail_alert_date,a.status_action_type,
+						v.sales_ref_mailid,
+						--v."2ND_LVL_MAIL_ID" AS bm_mailid,
+						CASE 
+						WHEN v."2ND_LVL_MAIL_ID" is NULL  THEN v."1ST_LVL_ MAIL ID"
+				            ELSE  v."2ND_LVL_MAIL_ID"
+				       END as bm_mailid,
+						ld.user_branch,a.leadid,a.appointment_due_date as appointment_date,a.lead_substatus_id,a.substatus_updated_date,a.mail_alert_date,a.status_action_type,
            					b.content_text as alert_text,
            					m.description as ProductName,m.itemgroup,
            					c.tempcustname,c.stdname,c.customer_name
@@ -99,13 +105,13 @@ $message_content="Welcome to email templating";
 					 
 					// Setup PHPMailer
 					$mail = new PHPMailer();
-					//$mail->IsSMTP();
+					$mail->IsSMTP();
 					// This is the SMTP mail server
 					$mail->Host = 'smtp.gmail.com';
 					// Remove these next 3 lines if you dont need SMTP authentication
 					$mail->SMTPAuth = true;
 					$mail->SMTPSecure = 'tls';     
-					$mail->Username = 'lms.alert@pure-chemical.com';
+					$mail->Username = '	';
 					$mail->Password = 'pure@123';
 					// Set who the email is coming from
 					$mail->SetFrom('lms.alert@pure-chemical.com', 'LMS Admin');

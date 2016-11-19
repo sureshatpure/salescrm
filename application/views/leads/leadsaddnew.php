@@ -105,7 +105,7 @@
 
                 var todayDate = new Date();
                 var max_date=   todayDate.toISOString().substring(0, 10); //todayDate 2015-08-18
-                var min_date =  todayDate.setDate(todayDate.getDate() - 8);
+                var min_date =  todayDate.setDate(todayDate.getDate() - 120);
                 min_date =convert(min_date);
                 min_date=convertmindate(min_date);
 

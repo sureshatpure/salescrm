@@ -92,7 +92,7 @@
 
                                 },
                       createeditor: function (row, cellvalue, editor) {
-                                    editor.jqxDropDownList({source: ["Executive", "Branch Manager", "Regional Manager","Co-ordinator"],autoDropDownHeight: true});
+                                    editor.jqxDropDownList({source: ["Executive", "Branch Manager", "Regional Manager","Co-ordinator","PM"],autoDropDownHeight: true});
                                   }
                    }
                   
